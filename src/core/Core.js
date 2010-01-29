@@ -49,7 +49,9 @@ Element.prototype.getAbsolutePosition = function ()
  */
 Element.prototype.moveBy = function (delta)
 {
-  if (this.style.position != 'absolute')
+  if (this.style.position != 'absolute' ||
+      !('' + this.style.left).match (/px$/) ||
+      !('' + this.style.top).match (/px$/))
     {
       var pos = this.getAbsolutePosition ();
       this.style.position = 'absolute';
@@ -58,8 +60,8 @@ Element.prototype.moveBy = function (delta)
       this.style.top  = pos['y'] + 'px';
     }
 
-  this.style.left = parseInt (this.style.left) + delta['x'] + 'px';
-  this.style.top = parseInt (this.style.top) + delta['y'] + 'px';
+  this.style.left = parseInt (this.style.left || '0') + delta['x'] + 'px';
+  this.style.top = parseInt (this.style.top || '0') + delta['y'] + 'px';
 }
 
 /**
@@ -80,3 +82,41 @@ Element.prototype.onEndMove = function ()
 {
   this.style.zIndex = this.style.__zIndex;
 }
+
+/****
+ * Implement IUIResize methods on Elements
+ *
+ * This is useful for DOM element resizing
+ */
+
+/**
+ * Resize DOM element by given coordinates deltas
+ */
+Element.prototype.resizeBy = function (delta)
+{
+  this.style.width = parseInt (this.style.width || '0') + delta['x'] + 'px';
+  this.style.height = parseInt (this.style.height || '0') + delta['y'] + 'px';
+}
+
+Element.prototype.onBeginResize = function ()
+{
+  this.style.width = this.offsetWidth + 'px';
+  this.style.height = this.offsetHeight + 'px';
+}
+
+/**
+ * Get area, by which DOM element could be resized
+ */
+Element.prototype.getResizeArea = function ()
+{
+  return null;
+}
+
+/***
+ * Stubs
+ */
+
+/**
+ * IUIResizable stubs
+ */
+Element.prototype.onEndResize = function () {}

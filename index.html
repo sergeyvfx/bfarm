@@ -10,7 +10,9 @@
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
     <script type="text/javascript" src="src/ui/UIManager.js"></script>
+    <script type="text/javascript" src="src/ui/UIDragProvider.js"></script>
     <script type="text/javascript" src="src/ui/UIMovable.js"></script>
+    <script type="text/javascript" src="src/ui/UIResizable.js"></script>
   </head>
 
   <body>
@@ -18,22 +20,25 @@
     text text text text text text<br>
     text text text text text text<br>
     text text text text text text
-    <div id="myDiv" style="background: red; width: 100px; padding: 2px;">
-        <div id="myDiv2" style="background: blue; width: 100px; cursor: pointer;">
-          title
-        </div>
+    <div id="myDiv" style="position: relative; background: red; width: 100px; padding: 2px;">
+      <div id="myDiv2" style="background: blue; cursor: pointer;">
+        title
+      </div>
       text text text text text text
+      <div id="myDiv5" style="background: green; width: 10px; height: 10px; position: absolute; bottom: 0px; right: 0px; cursor: se-resize;"></div>
     </div>
 
-    <div id="myDiv3" style="background: green; width: 100px; padding: 2px;">
-        <div id="myDiv4" style="background: blue; width: 100px; cursor: pointer;">
-          title
-        </div>
+    <div id="myDiv3" style="position: relative; background: green; width: 100px; padding: 2px;">
+      <div id="myDiv4" style="background: blue; width: 100px; cursor: pointer;">
+        title
+      </div>
       text text text text text text
     </div>
     <script type="text/javascript"language="javascript">
       UI_MakeMovable (getElementById ('myDiv'), {'moveArea': getElementById ('myDiv2')});
       UI_MakeMovable (getElementById ('myDiv3'), {'moveArea': getElementById ('myDiv4')});
+
+      UI_MakeResizable (getElementById ('myDiv'), {'resizeArea': getElementById ('myDiv5')});
     </script>
   </body>
 </html>
