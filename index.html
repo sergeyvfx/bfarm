@@ -5,6 +5,8 @@
     <meta http-equiv="content-language" content="ru">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
+    <script type="text/javascript" src="src/jquery.js"></script>
+
     <script type="text/javascript" src="src/builtin.js"></script>
     <script type="text/javascript" src="src/core/Core.js"></script>
     <script type="text/javascript" src="src/core/IObject.js"></script>
@@ -35,10 +37,10 @@
       text text text text text text
     </div>
     <script type="text/javascript"language="javascript">
-      UI_MakeMovable (getElementById ('myDiv'), {'moveArea': getElementById ('myDiv2')});
-      UI_MakeMovable (getElementById ('myDiv3'), {'moveArea': getElementById ('myDiv4')});
+      UI_MakeMovable ($('#myDiv')[0], {'moveArea': $('#myDiv2')[0]});
+      UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
-      UI_MakeResizable (getElementById ('myDiv'), {'resizeArea': getElementById ('myDiv5')});
+      UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});
     </script>
   </body>
 </html>

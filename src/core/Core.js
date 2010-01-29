@@ -33,9 +33,9 @@ if (!window.Element)
 /**
  * Get DOM element's absolute position
  */
-Element.prototype.getAbsolutePosition = function ()
+Element.prototype.offset = function ()
 {
-  return getElementAbsolutePos (this);
+  return $(this).offset ();
 };
 
 /****
@@ -53,11 +53,11 @@ Element.prototype.moveBy = function (delta)
       !('' + this.style.left).match (/px$/) ||
       !('' + this.style.top).match (/px$/))
     {
-      var pos = this.getAbsolutePosition ();
+      var pos = this.offset ();
       this.style.position = 'absolute';
 
-      this.style.left = pos['x'] + 'px';
-      this.style.top  = pos['y'] + 'px';
+      this.style.left = pos['left'] + 'px';
+      this.style.top  = pos['top'] + 'px';
     }
 
   this.style.left = parseInt (this.style.left || '0') + delta['x'] + 'px';

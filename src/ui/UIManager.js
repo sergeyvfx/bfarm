@@ -40,12 +40,12 @@ function UIManager ()
                 }
             }
           } (this, context, evt);
-          attachEvent (context, evt, handler);
+          $(context) [evt] (handler);
         }
     };
 
   /**
-   * Handler of event occurance in specified UI context
+   * Handler of event occurrence in specified UI context
    */
   this.onContextEvent = function (context, event, userData)
     {
