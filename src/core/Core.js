@@ -72,16 +72,11 @@ Element.prototype.getMoveArea = function ()
   return this;
 }
 
-Element.prototype.onBeginMove = function ()
-{
-  this.style.__zIndex = this.style.zIndex;
-  this.style.zIndex = '1000';
-}
-
-Element.prototype.onEndMove = function ()
-{
-  this.style.zIndex = this.style.__zIndex;
-}
+/**
+ * Stubs
+ */
+Element.prototype.onBeginMove = function () {}
+Element.prototype.onEndMove = function () {}
 
 /****
  * Implement IUIResize methods on Elements

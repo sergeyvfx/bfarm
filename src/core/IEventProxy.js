@@ -28,13 +28,21 @@ function IEventProxy ()
    	};
 
   /**
+   * Get list of handlers, which will be called for handle specified event
+   */
+  this.getHandlersForEvent = function (event, userData)
+    {
+      return this.handlers[event];
+    };
+
+  /**
    * Call event handlers
    */
   this.event = function (event, userData)
     {
-      var handlers = this.handlers[event];
+      var handlers = this.getHandlersForEvent (event, userData);
 
-      if (typeof handlers == 'undefined')
+      if (!handlers)
         {
           /* No handlers to call */
           return;

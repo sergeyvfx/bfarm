@@ -11,10 +11,10 @@
     <script type="text/javascript" src="src/core/Core.js"></script>
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
-    <script type="text/javascript" src="src/ui/UIManager.js"></script>
-    <script type="text/javascript" src="src/ui/UIDragProvider.js"></script>
-    <script type="text/javascript" src="src/ui/UIMovable.js"></script>
-    <script type="text/javascript" src="src/ui/UIResizable.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIManager.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIDragProvider.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIMovable.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIResizable.js"></script>
   </head>
 
   <body>
@@ -41,6 +41,8 @@
       UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
       UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});
+
+      uiManager.registerContext ($('#myDiv')[0]);
     </script>
   </body>
 </html>
