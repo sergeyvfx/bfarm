@@ -83,6 +83,12 @@ function UIManager ()
       context = context || document;
       parent = parent || null;
 
+      if (context.UIContextRegistered)
+        {
+          /* Context has been already registered */
+          return;
+        }
+
       if (context != document && parent == null)
         {
           parent = document;
@@ -90,6 +96,8 @@ function UIManager ()
 
       context.parentContext = parent;
       this.setContextHandlers (context);
+
+      context.UIContextRegistered = true;
     };
 
   /**
@@ -105,6 +113,11 @@ function UIManager ()
               var evt = domEvent || window.event;
 
               self.onContextEvent (context, event, {'domEvent': evt});
+
+              if (evt.cancelBubble)
+                {
+                  return false;
+                }
             }
           } (this, context, evt);
           $(context) [evt] (handler);
@@ -119,9 +132,9 @@ function UIManager ()
       userData = userData || {};
       userData['context'] = context;
 
-      this.event(event, userData);
+      this.event (event, userData);
 
-      if (context == document)
+      if (context == document || this.cancelFlag)
         {
           /* Reset handlers' state, so they all will try */
           /* to call next time when event occurs */
@@ -129,8 +142,20 @@ function UIManager ()
         }
     };
 
+  /**
+   * Break executing of event handlers
+   */
+  this.cancel = function (userData) {
+    this.cancelFlag = true;
+
+    if (userData['domEvent'])
+      {
+        stopEvent (userData['domEvent']);
+      }
+  };
+
   this.defaultEvents = ['click', 'mousedown', 'mouseup', 'mouseover',
-                        'mouseout', 'mousemove'];
+                        'mouseout', 'mousemove', 'keypress', 'keydown', 'keyup'];
 
   /* Register root context */
   this.registerContext();

@@ -52,9 +52,16 @@ function UIDragProvider ()
             };
           } (this, object);
 
+      /* Handler for preveinting raising of `click` event */
+      var stubHandler = function (event) {
+        stopEvent (event || window.event);
+        return false;
+      }
+
       for (var i = 0, n = area.length; i < n; ++i)
         {
           area[i].onmousedown = handler (area[i].onmousedown);
+          area[i].onclick = stubHandler;
         }
     };
 

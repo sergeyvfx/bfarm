@@ -48,11 +48,27 @@ function IEventProxy ()
           return;
         }
 
+      /* Reset breaking execution flag */
+      this.cont ();
+
+      userData.cancel = function (self, userData) {return function () {
+            self.cancel (userData);
+          }
+        } (this, userData);
+
       for (var i = 0, n = handlers.length; i < n; ++i)
         {
+          var handler = handlers[i]['handler'];
+          var regData = handlers[i]['regData'];
+
           //try
             {
-              handlers[i]['handler'] (userData, handlers[i]['regData']);
+              var ret = handler (userData, regData);
+
+              if (this.cancelFlag)
+                {
+                  break;
+                }
             }
           //catch (e)
             {
@@ -60,6 +76,20 @@ function IEventProxy ()
             }
         }
     };
+
+  /**
+   * Break executing of event handlers
+   */
+  this.cancel = function (userData) {
+    this.cancelFlag = true;
+  };
+
+  /**
+   * Continue executing of event handlers
+   */
+  this.cont = function () {
+    this.cancelFlag = false;
+  };
 
   /**
    * Destructor
@@ -72,7 +102,11 @@ function IEventProxy ()
       IObject.prototype.destroy.call (this);
     };
 
+  /* Hasn of {event}=>{list of handlers} */
   this.handlers = {};
+
+  /* Flag of breaking executing of event handlers */
+  this.cancelFlag = false;
 }
 
 IEventProxy.prototype = new IObject;

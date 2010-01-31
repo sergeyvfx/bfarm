@@ -30,6 +30,22 @@ if (!window.Element)
     }
 }
 
+if (!Array.indexOf)
+{
+  Array.prototype.indexOf = function(obj)
+    {
+      for (var i = 0; i < this.length; i++)
+        {
+          if (this[i] == obj)
+            {
+              return i;
+            }
+        }
+
+      return -1;
+    }
+}
+
 /**
  * Get DOM element's absolute position
  */
@@ -37,81 +53,3 @@ Element.prototype.offset = function ()
 {
   return $(this).offset ();
 };
-
-/****
- * Implement IUIMovable methods on Elements
- *
- * This is useful for DOM element moving
- */
-
-/**
- * Move DOM element by given coordinates deltas
- */
-Element.prototype.moveBy = function (delta)
-{
-  if (this.style.position != 'absolute' ||
-      !('' + this.style.left).match (/px$/) ||
-      !('' + this.style.top).match (/px$/))
-    {
-      var pos = this.offset ();
-      this.style.position = 'absolute';
-
-      this.style.left = pos['left'] + 'px';
-      this.style.top  = pos['top'] + 'px';
-    }
-
-  this.style.left = parseInt (this.style.left || '0') + delta['x'] + 'px';
-  this.style.top = parseInt (this.style.top || '0') + delta['y'] + 'px';
-}
-
-/**
- * Get area, by which DOM element could be moved
- */
-Element.prototype.getMoveArea = function ()
-{
-  return this;
-}
-
-/**
- * Stubs
- */
-Element.prototype.onBeginMove = function () {}
-Element.prototype.onEndMove = function () {}
-
-/****
- * Implement IUIResize methods on Elements
- *
- * This is useful for DOM element resizing
- */
-
-/**
- * Resize DOM element by given coordinates deltas
- */
-Element.prototype.resizeBy = function (delta)
-{
-  this.style.width = parseInt (this.style.width || '0') + delta['x'] + 'px';
-  this.style.height = parseInt (this.style.height || '0') + delta['y'] + 'px';
-}
-
-Element.prototype.onBeginResize = function ()
-{
-  this.style.width = this.offsetWidth + 'px';
-  this.style.height = this.offsetHeight + 'px';
-}
-
-/**
- * Get area, by which DOM element could be resized
- */
-Element.prototype.getResizeArea = function ()
-{
-  return null;
-}
-
-/***
- * Stubs
- */
-
-/**
- * IUIResizable stubs
- */
-Element.prototype.onEndResize = function () {}

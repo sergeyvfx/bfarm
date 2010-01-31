@@ -5,16 +5,22 @@
     <meta http-equiv="content-language" content="ru">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 
-    <script type="text/javascript" src="src/jquery.js"></script>
+    <script type="text/javascript" src="src/jquery/jquery.js"></script>
+<!--     <script type="text/javascript" src="src/jquery/rightClick.js"></script>-->
 
     <script type="text/javascript" src="src/builtin.js"></script>
     <script type="text/javascript" src="src/core/Core.js"></script>
+    <script type="text/javascript" src="src/core/proto/UIObject.js"></script>
+    <script type="text/javascript" src="src/core/proto/UIMovable.js"></script>
+    <script type="text/javascript" src="src/core/proto/UIResizable.js"></script>
+    <script type="text/javascript" src="src/core/proto/UIPopup.js"></script>
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIManager.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIDragProvider.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIMovable.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIResizable.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIPopup.js"></script>
   </head>
 
   <body>
@@ -36,13 +42,41 @@
       </div>
       text text text text text text
     </div>
+
+    <div id="popup" style="border: 1px #999 solid; position: absolute; background: red; width: 100px; padding: 2px; display: none">
+      text text text text text text
+      <div id="popupSizer" style="background: green; width: 10px; height: 10px; position: absolute; bottom: 0px; right: 0px; cursor: se-resize;"></div>
+    </div>
+
+    <div id="popup2" style="border: 1px #999 solid; position: absolute; background: red; width: 100px; padding: 2px; display: none">
+      text text text text text text
+    </div>
+
     <script type="text/javascript"language="javascript">
       UI_MakeMovable ($('#myDiv')[0], {'moveArea': $('#myDiv2')[0]});
       UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
       UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});
+      UI_MakeResizable ($('#popup')[0], {'resizeArea': $('#popupSizer')[0]});
 
       uiManager.registerContext ($('#myDiv')[0]);
+      uiManager.registerContext ($('#myDiv3')[0]);
+      uiManager.registerContext ($('#popup')[0]);
+
+      uiManager.addHandler ('click', function (userData) {
+           var e = userData['domEvent'];
+           uiPopupManager.popup ($('#popup2')[0], {'x': e.pageX,
+                                                  'y': e.pageY});
+        }, {'affectContext': $('#popup')[0]});
+
+      uiManager.addHandler ('click', function (userData) {
+          if (userData['context'] == document)
+            {
+              var e = userData['domEvent'];
+              uiPopupManager.popup ($('#popup')[0], {'x': e.pageX,
+                                                     'y': e.pageY});
+            }
+        });
     </script>
   </body>
 </html>

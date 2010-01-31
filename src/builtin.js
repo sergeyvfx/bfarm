@@ -6,3 +6,12 @@ function isUnknown(obj)
 {
   return typeof obj == 'unknown' || !obj;
 }
+
+function stopEvent (e)
+{
+  e.cancelBubble = true;
+  if (e.stopPropagation)
+    {
+      e.stopPropagation ();
+    }
+}

@@ -14,7 +14,7 @@ function IObject ()
    */
   this.destroy = function ()
     {
-    }
+    };
 
   /**
    * Contructor is going here
