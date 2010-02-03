@@ -4,9 +4,10 @@
   <head>
     <meta http-equiv="content-language" content="ru">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>ui-dev</title>
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
-<!--     <script type="text/javascript" src="src/jquery/rightClick.js"></script>-->
+    <script type="text/javascript" src="src/jquery/rightClick.js"></script>
 
     <script type="text/javascript" src="src/builtin.js"></script>
     <script type="text/javascript" src="src/core/Core.js"></script>
@@ -24,10 +25,12 @@
   </head>
 
   <body>
-    text text text text text text<br>
-    text text text text text text<br>
-    text text text text text text<br>
-    text text text text text text
+    <p>
+      text text text text text text<br>
+      text text text text text text<br>
+      text text text text text text<br>
+      text text text text text text
+    </p>
     <div id="myDiv" style="position: relative; background: red; width: 100px; padding: 2px;">
       <div id="myDiv2" style="background: blue; cursor: pointer;">
         title
@@ -52,7 +55,7 @@
       text text text text text text
     </div>
 
-    <script type="text/javascript"language="javascript">
+    <script type="text/javascript">
       UI_MakeMovable ($('#myDiv')[0], {'moveArea': $('#myDiv2')[0]});
       UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
@@ -66,7 +69,7 @@
       uiManager.addHandler ('click', function (userData) {
            var e = userData['domEvent'];
            uiPopupManager.popup ($('#popup2')[0], {'x': e.pageX,
-                                                  'y': e.pageY});
+                                                   'y': e.pageY});
         }, {'affectContext': $('#popup')[0]});
 
       uiManager.addHandler ('click', function (userData) {
