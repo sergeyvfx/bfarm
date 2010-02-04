@@ -47,6 +47,7 @@ function UIDragProvider ()
 
                 self.onBeginDrag (object, evt);
 
+                stopEvent (event);
                 return false;
               }
             };
@@ -54,7 +55,7 @@ function UIDragProvider ()
 
       /* Handler for preveinting raising of `click` event */
       var stubHandler = function (event) {
-        stopEvent (event || window.event);
+        stopEvent (event);
         return false;
       }
 

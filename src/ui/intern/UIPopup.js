@@ -167,6 +167,12 @@ function UIPopupManager ()
       };
     } (this));
 
+  uiManager.addHandler (['mousedownCancel', 'clickCancel'], function (self) {
+    return function (userData) {
+      self.hideFromContext (userData['context']);
+    };
+  } (this));
+
   /* Use keyup instead of keypress to get ompatibility with more browsers */
   uiManager.addHandler ('keyup', function (self) {
       return function (userData) {

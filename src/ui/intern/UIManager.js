@@ -98,6 +98,7 @@ function UIManager ()
       this.setContextHandlers (context);
 
       context.UIContextRegistered = true;
+      context.isUIContext = true;
     };
 
   /**
@@ -108,19 +109,28 @@ function UIManager ()
       for (var i = 0, n = this.defaultEvents.length; i < n; ++i)
         {
           var evt = this.defaultEvents[i];
-          var handler = function (self, context, event) {
-            return function (domEvent) {
-              var evt = domEvent || window.event;
+          var handler = function (self, context) {
+            return function (event) {
+              return function (domEvent) {
+                var evt = domEvent || window.event;
 
-              self.onContextEvent (context, event, {'domEvent': evt});
+                self.onContextEvent (context, event, {'domEvent': evt});
 
-              if (evt.cancelBubble)
-                {
-                  return false;
-                }
+                if (event.match(/Cancel$/))
+                  {
+                    self.resetHandlersState (event);
+                  }
+
+                if (evt.cancelBubble)
+                  {
+                    return false;
+                  }
+              }
             }
-          } (this, context, evt);
-          $(context) [evt] (handler);
+          } (this, context);
+
+          $(context) [evt] (handler (evt));
+          context[evt + 'Cancel'] = handler (evt + 'Cancel');
         }
     };
 
@@ -145,9 +155,7 @@ function UIManager ()
   /**
    * Break executing of event handlers
    */
-  this.cancel = function (userData) {
-    this.cancelFlag = true;
-
+  this.onCancel = function (userData) {
     if (userData['domEvent'])
       {
         stopEvent (userData['domEvent']);

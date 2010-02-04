@@ -12,9 +12,9 @@ function IEventProxy ()
   IObject.call (this);
 
   /**
-   * Add new event handler
+   * Add new event handler (event is string only)
    */
-  this.addHandler = function (event, handler, regData)
+  this.doAddHandler = function (event, handler, regData)
     {
       if (typeof this.handlers[event] == 'undefined')
         {
@@ -26,6 +26,23 @@ function IEventProxy ()
 
       return handlerData;
    	};
+
+  /**
+   * Add new event handler (event is string or iist)
+   */
+  this.addHandler = function (event, handler, regData) {
+    if (typeof event == 'string')
+      {
+        this.doAddHandler (event, handler, regData);
+      }
+    else
+      {
+        for (var i = 0, n = event.length; i < n; ++i)
+          {
+            this.doAddHandler (event[i], handler, regData);
+          }
+      }
+  }
 
   /**
    * Get list of handlers, which will be called for handle specified event
@@ -41,6 +58,7 @@ function IEventProxy ()
   this.event = function (event, userData)
     {
       var handlers = this.getHandlersForEvent (event, userData);
+      var field = '__IEventProxy_stop'
 
       if (!handlers)
         {
@@ -48,13 +66,10 @@ function IEventProxy ()
           return;
         }
 
-      /* Reset breaking execution flag */
-      this.cont ();
-
-      userData.cancel = function (self, userData) {return function () {
-            self.cancel (userData);
+      userData.cancel = function (self, userData, field) {return function () {
+            userData[field] = true;
           }
-        } (this, userData);
+        } (this, userData, field);
 
       for (var i = 0, n = handlers.length; i < n; ++i)
         {
@@ -67,7 +82,7 @@ function IEventProxy ()
             {
               var ret = handler (userData, regData);
 
-              if (this.cancelFlag)
+              if (userData[field])
                 {
                   break;
                 }
@@ -80,18 +95,9 @@ function IEventProxy ()
     };
 
   /**
-   * Break executing of event handlers
+   * Handler of breaking handlers executing
    */
-  this.cancel = function (userData) {
-    this.cancelFlag = true;
-  };
-
-  /**
-   * Continue executing of event handlers
-   */
-  this.cont = function () {
-    this.cancelFlag = false;
-  };
+  this.onCancel = function (userData) {};
 
   /**
    * Destructor
@@ -106,9 +112,6 @@ function IEventProxy ()
 
   /* Hasn of {event}=>{list of handlers} */
   this.handlers = {};
-
-  /* Flag of breaking executing of event handlers */
-  this.cancelFlag = false;
 }
 
 IEventProxy.prototype = new IObject;
