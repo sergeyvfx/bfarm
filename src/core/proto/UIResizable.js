@@ -19,8 +19,10 @@ Element.prototype.resizeBy = function (delta)
 
 Element.prototype.onBeginResize = function ()
 {
-  this.style.width = this.offsetWidth + 'px';
-  this.style.height = this.offsetHeight + 'px';
+  //this.style.width = this.offsetWidth + 'px';
+  var selector = $(this);
+  this.style.width = selector.width() + 'px';
+  this.style.height = selector.height() + 'px';
 }
 
 /**

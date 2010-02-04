@@ -5,29 +5,37 @@
 /***
  * Hack for sucky IE
  */
+
 if (!window.Element)
 {
   Element = function () {}
 
-  var __createElement = document.createElement;
-  document.createElement = function(tagName)
+  function _ (element)
     {
-      var element = __createElement(tagName);
-
       for (var key in Element.prototype)
         element[key] = Element.prototype[key];
-
       return element;
     }
 
-  var __getElementById = document.getElementById
-  document.getElementById = function(id)
+  var handle = ['createElement', 'getElementById',
+                'getElementsByTagName', 'getElementsByName'];
+
+  for (var i = 0, n = handle.length; i < n; ++i)
     {
-      var element = __getElementById(id);
-      for(var key in Element.prototype)
-        element[key] = Element.prototype[key];
-      return element;
+      var h = handle[i];
+      document['__' + h] = document[h];
+      document[h] = function (h) {return function (x) {
+           return _(document['__' + h] (x));
+          }
+        } (h);
     }
+
+  var _$ = $;
+  $ = function (selector) {
+    var result = _$ (selector);
+    result.each (function (i) { _(this); } );
+    return result;
+  }
 }
 
 if (!Array.indexOf)
