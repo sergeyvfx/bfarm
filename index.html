@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" type="text/css" href="styles/ui.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/button.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/entry.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
@@ -32,6 +33,7 @@
 
     <script type="text/javascript" src="src/ui/widgets/UIWidget.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
   </head>
 
   <body>
@@ -76,17 +78,48 @@
       uiManager.registerContext ($('.UIPopup')[0]);
 
       var cnt = $('.UIPopup')[0];
-      var imgs = ['camera','config' ]
+      var imgs = ['camera', null ]
       var buttons = [];
       for (var i =0; i < 2; ++i)
         {
+          var img = imgs[i] ? ('pics/buttons/' + imgs[i] + '.gif') : null;
           buttons[i] = new UIButton ({'parent': cnt,
                                       'title': 'Нажми меня ' + (i + 1),
-                                      'image': 'pics/buttons/' + imgs[i] + '.gif'
+                                      'image': img
 //                                      'click': function (e) { alert (e); }
                                       });
           cnt.appendChild (buttons[i].build ());
         }
+
+      var simpleEntry = new UIEntry ({'parent': cnt});
+      cnt.appendChild (simpleEntry.build ());
+
+      var entry = new UIEntry ({'parent': cnt,
+                                'text'  : 'Hi!',
+                                'image' : 'pics/buttons/search.gif'});
+      cnt.appendChild (entry.build ());
+
+      buttons[0].onClick = function (btn, entries) { return function () {
+            btn.setImage ('pics/buttons/config.gif');
+            btn.setTitle ('Changed');
+
+            entries[0].setSensitive (!entries[0].getSensitive ());
+            entries[1].setSensitive (!entries[0].getSensitive ());
+
+            entries[0].setFocus ();
+          }
+        } (buttons[1], [entry, simpleEntry]);
+
+      buttons[1].onClick = function (e) { return function () {
+            e.setText ('Hello, World!');
+            e.setFocus ();
+          }
+        } (entry);
+
+      entry.onChanged = function (btn) { return function (newText) {
+            btn.setTitle (newText);
+          }
+        } (buttons[1]);
 
       uiManager.addHandler ('click', function (userData) {
            var e = userData['domEvent'];

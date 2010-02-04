@@ -8,12 +8,13 @@ DIV.UIButton {
 
 	background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
 	text-align: center;
-	padding: 2px;
+	padding-top: 1px;
 	cursor: pointer;
 	color: #333;
 	margin: 4px;
 
 	overflow: hidden;
+	height: 18px;
 }
 
 DIV.UIButton:hover {
@@ -23,6 +24,7 @@ DIV.UIButton:hover {
 DIV.UIButton IMG {
   vertical-align: middle;
   margin-right: 6px;
+  position: relative;
 }
 
 DIV.UIButton A {

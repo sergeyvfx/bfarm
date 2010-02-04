@@ -13,21 +13,32 @@ function UIButton (opts)
     {
       var result = createElement ('DIV');
       result.className = 'UIButton';
+      this.imageElement = null;
 
       var innerHTML = '';
       if (this.image)
         {
           innerHTML += '<img src="' + this.image + '">';
         }
-      innerHTML += this.title;
+      innerHTML += '<span>' + this.title + '</span>';
 
       var text = voidLink (innerHTML/*, {'canfocus': false} */);
+
+      if (this.image)
+        {
+          this.imageElement = text.childNodes[0];
+          this.titleElement = text.childNodes[1];
+        }
+      else
+        {
+          this.titleElement = text.childNodes[0];
+        }
 
       result.appendChild (text);
 
       this.focusDOM = text;
 
-      this.atttachEvent (result, 'click', 'onClickHandler');
+      this.attachEvent (result, 'click', 'onClickHandler');
 
       return result;
     };
@@ -55,14 +66,46 @@ function UIButton (opts)
    */
 
   /**
+   * Get button's image
+   */
+  this.getImage = function ()
+    {
+      return this.image;
+    };
+
+  /**
    * Set button's image
    */
   this.setImage = function (image)
     {
       this.image = image;
-      this.rebuild ();
+
+      if (this.imageElement)
+        {
+          this.imageElement.src = image;
+        }
+      else
+        {
+          this.rebuild ();
+        }
     };
 
+  /**
+   * Get button's title
+   */
+  this.getTitle = function ()
+    {
+      return this.title;
+    };
+
+    /**
+     * Set button's title
+     */
+    this.setTitle = function (title)
+    {
+      this.title = title;
+      this.titleElement.innerHTML = title;
+    };
   /* Title which will be displayed */
   this.title = opts['title'];
 
@@ -74,6 +117,9 @@ function UIButton (opts)
 
   /* Button's image */
   this.image = opts['image'];
+
+  this.titleElement = null; /* DOM element for title */
+  this.imageElement = null; /* DOM element for image */
 }
 
 UIButton.prototype = new UIWidget;

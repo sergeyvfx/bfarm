@@ -75,6 +75,7 @@ function UIWidget (opts)
   this.build = function ()
     {
       this.dom = this.doBuild ();
+      this.attachStoppers ();
       return this.dom;
     };
 
@@ -83,9 +84,13 @@ function UIWidget (opts)
    */
   this.rebuild = function ()
     {
-      /**
-       * TODO: Need to implement
-       */
+      var oldDOM = this.dom;
+      var newDOM = this.build ();
+
+      if (oldDOM && oldDOM.parentNode)
+        {
+        oldDOM.parentNode.replaceChild (newDOM, oldDOM);
+        }
     };
 
   /****
@@ -115,7 +120,7 @@ function UIWidget (opts)
    * DOM events
    */
 
-  this.atttachEvent = function (element, event, handlerName)
+  this.attachEvent = function (element, event, handlerName)
     {
       var handler;
 
@@ -137,6 +142,25 @@ function UIWidget (opts)
       $(element) [event] (handler);
     };
 
+  /**
+   * Attach stoppers of events, which widget doesn't want
+   * to bubble to it's parent
+   */
+  this.attachStoppers = function ()
+    {
+      if (!this.dom)
+        {
+         /* There is no DOM node to attach events to */
+         return;
+        }
+
+      for (var i = 0, n = this.stopEvents.length; i < n; ++i)
+        {
+          var event = this.stopEvents[i];
+          $(this.dom)[event] (stopEvent);
+        }
+    };
+
   /***
    * Constructor
    */
@@ -154,6 +178,9 @@ function UIWidget (opts)
 
   this.dom = null;       /* DOM-tree */
   this.focusDOM = null;  /* DOM element for setting focus */
+
+  /* List of events, which soudn't been bubbled */
+  this.stopEvents = [];
 }
 
 UIWidget.prototype = new UIObject;

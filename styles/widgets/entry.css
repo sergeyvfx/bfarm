@@ -1,0 +1,58 @@
+DIV.UIEntry {
+	border: 1px #666 solid;
+
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-khtml-border-radius: 6px;
+
+	background: #c0c0c0 url(../../pics/ui/entry_bg.gif) 0 0 repeat-x;
+	color: #333;
+	margin: 4px;
+
+	padding: 0 4px;
+	height: 18px;
+	overflow: hidden;
+}
+
+DIV.UIEntry DIV.UIEntryInputHolder {
+}
+
+DIV.UIEntry DIV.UIEntryInputHolder INPUT {
+	border: 0;
+	padding: 0;
+	margin: 1px 0;
+	height: 16px;
+	width: 100%;
+	color: #333;
+	background:  transparent;
+}
+
+DIV.UIEntry:hover {
+	background: #c0c0c0 url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIEntryWImage {
+	padding-left: 24px;
+	position: relative;
+}
+
+DIV.UIEntryWImage IMG {
+	position: absolute;
+	top: 1px;
+	left: 4px;
+}
+
+DIV.UIReadonlyEntry {
+  color: #333;
+  margin: 4px;
+
+  padding: 2px 5px 0 5px;
+  height: 18px;
+  overflow: hidden;
+}
+
+DIV.UIEntryROWImage IMG {
+	vertical-align: middle;
+	margin-right: 4px;
+}
