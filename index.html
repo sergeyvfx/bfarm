@@ -6,10 +6,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>ui-dev</title>
 
+    <link rel="stylesheet" type="text/css" href="styles/ui.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/button.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
+
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
-    <script type="text/javascript" src="src/jquery/rightClick.js"></script>
+<!--    <script type="text/javascript" src="src/jquery/rightClick.js"></script>
+    <script type="text/javascript" src="src/jquery/corner.js"></script>-->
 
     <script type="text/javascript" src="src/builtin.js"></script>
+
     <script type="text/javascript" src="src/core/Core.js"></script>
     <script type="text/javascript" src="src/core/proto/UIObject.js"></script>
     <script type="text/javascript" src="src/core/proto/UIMovable.js"></script>
@@ -17,11 +23,15 @@
     <script type="text/javascript" src="src/core/proto/UIPopup.js"></script>
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIObject.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIManager.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIDragProvider.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIMovable.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIResizable.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIPopup.js"></script>
+
+    <script type="text/javascript" src="src/ui/widgets/UIWidget.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
   </head>
 
   <body>
@@ -46,12 +56,11 @@
       text text text text text text
     </div>
 
-    <div id="popup" style="border: 1px #999 solid; position: absolute; background: red; width: 100px; padding: 2px; display: none">
-      text text text text text text
-      <div id="popupSizer" style="background: green; width: 10px; height: 10px; position: absolute; bottom: 0px; right: 0px; cursor: se-resize;"></div>
+    <div class="UIPopup" style="width: 120px;">
+      <div id="popupSizer" class="UIPopupSizer"></div>
     </div>
 
-    <div id="popup2" style="border: 1px #999 solid; position: absolute; background: red; width: 100px; padding: 2px; display: none">
+    <div class="UIPopup" style="width: 100px;">
       text text text text text text
     </div>
 
@@ -60,26 +69,46 @@
       UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
       UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});
-      UI_MakeResizable ($('#popup')[0], {'resizeArea': $('#popupSizer')[0]});
+      UI_MakeResizable ($('.UIPopup')[0], {'resizeArea': $('#popupSizer')[0]});
 
       uiManager.registerContext ($('#myDiv')[0]);
       uiManager.registerContext ($('#myDiv3')[0]);
-      uiManager.registerContext ($('#popup')[0]);
+      uiManager.registerContext ($('.UIPopup')[0]);
+
+      var cnt = $('.UIPopup')[0];
+      var imgs = ['camera','config' ]
+      var buttons = [];
+      for (var i =0; i < 2; ++i)
+        {
+          buttons[i] = new UIButton ({'parent': cnt,
+                                      'title': 'Нажми меня ' + (i + 1),
+                                      'image': 'pics/buttons/' + imgs[i] + '.gif'
+//                                      'click': function (e) { alert (e); }
+                                      });
+          cnt.appendChild (buttons[i].build ());
+        }
 
       uiManager.addHandler ('click', function (userData) {
            var e = userData['domEvent'];
+<<<<<<< HEAD
            uiPopupManager.popup ($('#popup2')[0], {'x': e.pageX,
                                                    'y': e.pageY});
         }, {'affectContext': $('#popup')[0]});
+=======
+           uiPopupManager.popup ($('.UIPopup')[1], {'x': e.pageX,
+                                                    'y': e.pageY});
+        }, {'affectContext': $('.UIPopup')[0]});
+>>>>>>> Basic implementation of widgets:
 
       uiManager.addHandler ('click', function (userData) {
           if (userData['context'] == document)
             {
               var e = userData['domEvent'];
-              uiPopupManager.popup ($('#popup')[0], {'x': e.pageX,
+              uiPopupManager.popup ($('.UIPopup')[0], {'x': e.pageX,
                                                      'y': e.pageY});
+              userData['global']['focusTo'].setFocus ();
             }
-        });
+        }, {'focusTo': buttons[0]});
     </script>
   </body>
 </html>

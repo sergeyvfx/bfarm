@@ -1,0 +1,37 @@
+DIV.UIButton {
+	border: 1px #666 solid;
+
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-border-radius: 6px;
+	-khtml-border-radius: 6px;
+
+	background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+	text-align: center;
+	padding: 2px;
+	cursor: pointer;
+	color: #333;
+	margin: 4px;
+
+	overflow: hidden;
+}
+
+DIV.UIButton:hover {
+  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIButton IMG {
+  vertical-align: middle;
+  margin-right: 6px;
+}
+
+DIV.UIButton A {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  width: 100%;
+}
+
+DIV.UIButton A IMG {
+  border: 0;
+}

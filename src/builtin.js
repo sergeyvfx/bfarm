@@ -9,9 +9,44 @@ function isUnknown(obj)
 
 function stopEvent (e)
 {
-  e.cancelBubble = true;
-  if (e.stopPropagation)
+  var evt = e || window.event;
+
+  evt.cancelBubble = true;
+  if (evt.stopPropagation)
     {
-      e.stopPropagation ();
+      evt.stopPropagation ();
     }
+}
+
+function createElement (element)
+{
+  return document.createElement (element);
+}
+
+function Void() {}
+
+function voidLink(content, opts)
+{
+  var result = createElement ('A');
+
+  result.href = 'JavaScript:Void(0)';
+
+  if (typeof content == 'string')
+    {
+      result.innerHTML = content;
+    }
+  else
+    {
+      result.appendChild (content);
+    }
+
+  if (opts)
+    {
+      if (!opts['canfocus'])
+        {
+          $(result).click (function () { this.blur (); });
+        }
+    }
+
+  return  result;
 }

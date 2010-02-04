@@ -61,6 +61,8 @@ function IEventProxy ()
           var handler = handlers[i]['handler'];
           var regData = handlers[i]['regData'];
 
+          userData['global'] = regData;
+
           //try
             {
               var ret = handler (userData, regData);
