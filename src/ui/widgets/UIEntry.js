@@ -64,7 +64,9 @@ function UIEntry (opts)
           result.appendChild (img);
         }
 
-      result.innerHTML += this.text;
+      this.textElement = createElement ('SPAN');
+      this.textElement.innerHTML = this.text;
+      result.appendChild (this.textElement);
 
       return result;
     };
