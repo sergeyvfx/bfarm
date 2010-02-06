@@ -22,5 +22,5 @@ function IObject ()
 }
 
 
-IObject.prototype = new IObject;
+//IObject.prototype = new IObject;
 IObject.prototype.constructor = IObject;

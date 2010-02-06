@@ -25,7 +25,7 @@ function IEventProxy ()
       this.handlers[event].push (handlerData);
 
       return handlerData;
-   	};
+    };
 
   /**
    * Add new event handler (event is string or iist)

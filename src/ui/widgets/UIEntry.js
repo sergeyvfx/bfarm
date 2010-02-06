@@ -4,6 +4,8 @@
 
 function UIEntry (opts)
 {
+  opts = opts || {};
+
   UIWidget.call (this, opts);
 
   /**
@@ -105,7 +107,7 @@ function UIEntry (opts)
     }
 
   /**
-   * Get text
+   * Set text
    */
   this.setText = function (text)
     {
@@ -125,7 +127,7 @@ function UIEntry (opts)
     }
 
   /**
-   * Get button's image
+   * Get image
    */
   this.getImage = function ()
     {
@@ -133,7 +135,7 @@ function UIEntry (opts)
     };
 
   /**
-   * Set button's image
+   * Set image
    */
   this.setImage = function (image)
     {

@@ -4,9 +4,6 @@
 
 function UIManager ()
 {
-  /* Implement event proxy methods */
-  IEventProxy.call (this);
-
   /**
    * Get list of handlers, which will be called for handle specified event
    */

@@ -7,7 +7,7 @@
  */
 function isUnknown(obj)
 {
-  return typeof obj == 'unknown' || !obj;
+  return typeof obj == 'unknown' || obj == null;
 }
 
 /**

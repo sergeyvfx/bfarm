@@ -4,6 +4,8 @@
 
 function UIButton (opts)
 {
+  opts = opts || {};
+
   UIWidget.call (this, opts);
 
   /**

@@ -11,9 +11,9 @@ function UIObject ()
    */
   this.getUIContext = function ()
     {
-      
+
     };
 }
 
-UIObject.prototype = new IObject;
+//UIObject.prototype = new UIObject;
 UIObject.prototype.constructor = UIObject;

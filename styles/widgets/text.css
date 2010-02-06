@@ -1,0 +1,40 @@
+DIV.UIText {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #e7e7e7 url(../../pics/ui/entry_bg.gif) 0 0 repeat-x;
+  color: #333;
+  margin: 4px;
+
+  padding: 0 4px;
+}
+
+DIV.UIText DIV.UITextInputHolder {
+}
+
+DIV.UIText DIV.UITextInputHolder TEXTAREA {
+  border: 0;
+  padding: 0;
+  margin: 1px 0;
+  width: 100%;
+  color: #333;
+  background:  transparent;
+  display: block;
+}
+
+DIV.UIText DIV.UITextInputHolder TEXTAREA.UITextExpandable {
+  min-height: 30px;
+  height: 30px;
+  max-height: 180px;
+}
+
+DIV.UIReadonlyText {
+  color: #333;
+  margin: 4px;
+
+  padding: 2px 5px 2px 5px;
+}

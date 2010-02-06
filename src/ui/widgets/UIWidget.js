@@ -4,6 +4,8 @@
 
 function UIWidget (opts)
 {
+  opts = opts || {};
+
   UIObject.call (this);
 
   /****
@@ -74,6 +76,11 @@ function UIWidget (opts)
 
   this.build = function ()
     {
+      if (!this.visible)
+        {
+          return null;
+        }
+
       this.dom = this.doBuild ();
       this.attachStoppers ();
       return this.dom;
@@ -167,14 +174,17 @@ function UIWidget (opts)
 
   /** Properties **/
 
-  opts = opts || {};
-
   /* List of attached events */
   this.events = [];
 
-  this.parent    = opts['parent'] || null;   /* Widget's parent */
-  this.visible   = true;             /* Is widget visible */
-  this.sensitive = true;             /* Is widget sensitive */
+  /* Widget's parent */
+  this.parent = opts['parent'] || null;
+
+  /* Is widget visible */
+  this.visible = isUnknown (opts['visible']) ? true : opts['visible'];
+
+  /* Is widget sensitive */
+  this.sensitive = isUnknown (opts['sensitive']) ? true : opts['sensitive'];
 
   this.dom = null;       /* DOM-tree */
   this.focusDOM = null;  /* DOM element for setting focus */
@@ -183,5 +193,5 @@ function UIWidget (opts)
   this.stopEvents = [];
 }
 
-UIWidget.prototype = new UIObject;
+//UIWidget.prototype = new UIWidget;
 UIWidget.prototype.constructor = UIWidget;
