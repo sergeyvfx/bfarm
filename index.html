@@ -99,7 +99,7 @@
 
       var text = new UIText ({'parent'     : cnt,
                               'text'       : 'Hi!',
-                              'autoexpand' : false,
+                              'autoexpand' : true,
                               'sensitive'  : true});
       cnt.appendChild (text.build ());
 
@@ -113,6 +113,11 @@
             text.setSensitive (!text.getSensitive ());
           }
         } (text);
+
+      buttons[1].onClick = function (button) {return function (){
+            button.setSensitive (!button.getSensitive ());
+          }
+        } (buttons[0]);
 
       uiManager.addHandler ('click', function (userData) {
           if (userData['context'] == document)
