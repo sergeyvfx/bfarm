@@ -6,8 +6,6 @@ function UIButton (opts)
 {
   opts = opts || {};
 
-  UIWidget.call (this, opts);
-
   /**
    * Build DOM tree for button
    */
@@ -54,12 +52,12 @@ function UIButton (opts)
    */
   this.onClickHandler = function (event)
     {
+      stopEvent (event);
+
       if (this.sensitive && this.onClick)
         {
           this.onClick (event);
         }
-
-      stopEvent (event);
     };
 
   /**

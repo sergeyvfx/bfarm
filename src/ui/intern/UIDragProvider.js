@@ -38,6 +38,7 @@ function UIDragProvider ()
       var handler = function (self, object) { return function (oldHandler) {
               return function (event) {
                 var evt = event || window.event;
+                stopEvent (evt);
 
                 /* Call previous handler */
                 if (oldHandler)
@@ -47,7 +48,6 @@ function UIDragProvider ()
 
                 self.onBeginDrag (object, evt);
 
-                stopEvent (event);
                 return false;
               }
             };

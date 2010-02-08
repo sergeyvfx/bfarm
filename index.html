@@ -10,6 +10,7 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/button.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/entry.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/text.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/grid.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
@@ -31,11 +32,13 @@
     <script type="text/javascript" src="src/ui/intern/UIMovable.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIResizable.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIPopup.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIWidget.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIContainer.js"></script>
 
-    <script type="text/javascript" src="src/ui/widgets/UIWidget.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIText.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UIGrid.js"></script>
   </head>
 
   <body>
@@ -60,7 +63,7 @@
       text text text text text text
     </div>
 
-    <div class="UIPopup" style="width: 120px;">
+    <div class="UIPopup" style="width: 250px;">
       <div id="popupSizer" class="UIPopupSizer"></div>
     </div>
 
@@ -80,6 +83,11 @@
       uiManager.registerContext ($('.UIPopup')[0]);
 
       var cnt = $('.UIPopup')[0];
+
+      var grid = new UIGrid ({'rows': 2,
+                              'cols': 2,
+                              'padding': 2});
+
       var imgs = ['camera', 'config' ]
       var buttons = [];
       for (var i =0; i < 2; ++i)
@@ -89,30 +97,36 @@
                                       'title': 'Нажми меня ' + (i + 1),
                                       'image': img
                                       });
-          cnt.appendChild (buttons[i].build ());
+          grid.add (buttons[i]);
         }
 
       var entry = new UIEntry ({'parent': cnt,
                                 'text'  : 'Hi!',
+                                'margin': [10, 0],
                                 'image' : 'pics/buttons/search.gif'});
-      cnt.appendChild (entry.build ());
+      grid.add (entry);
 
       var text = new UIText ({'parent'     : cnt,
                               'text'       : 'Hi!',
                               'autoexpand' : true,
                               'sensitive'  : true});
-      cnt.appendChild (text.build ());
+      grid.add (text);
 
-      uiManager.addHandler ('click', function (userData) {
-           var e = userData['domEvent'];
-           uiPopupManager.popup ($('.UIPopup')[1], {'x': e.pageX,
-                                                    'y': e.pageY});
-        }, {'affectContext': $('.UIPopup')[0]});
+      cnt.appendChild (grid.build ());
 
-      buttons[0].onClick = function (text) {return function (){
-            text.setSensitive (!text.getSensitive ());
+      buttons[0].onClick = function (grid) {return function () {
+            if (grid.getCols () == 2)
+              {
+                grid.setCols (1);
+                grid.setRows (4);
+              }
+            else
+              {
+                grid.setCols (2);
+                grid.setRows (2);
+              }
           }
-        } (text);
+        } (grid);
 
       buttons[1].onClick = function (button) {return function (){
             button.setSensitive (!button.getSensitive ());
@@ -120,14 +134,19 @@
         } (buttons[0]);
 
       uiManager.addHandler ('click', function (userData) {
+           var e = userData['domEvent'];
+           uiPopupManager.popup ($('.UIPopup')[1], {'x': e.pageX,
+                                                    'y': e.pageY});
+        }, {'affectContext': $('.UIPopup')[0]});
+
+      uiManager.addHandler ('click', function (userData) {
           if (userData['context'] == document)
             {
               var e = userData['domEvent'];
               uiPopupManager.popup ($('.UIPopup')[0], {'x': e.pageX,
                                                        'y': e.pageY});
-              userData['global']['focusTo'].setFocus ();
             }
-        }, {'focusTo': buttons[0]});
+        });
     </script>
   </body>
 </html>

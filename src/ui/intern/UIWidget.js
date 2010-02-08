@@ -65,6 +65,27 @@ function UIWidget (opts)
       this.rebuild ();
     };
 
+  /**
+   * Get widget margin
+   */
+  this.getMargin = function ()
+    {
+      return this.margin;
+    };
+
+  /**
+   * Set widget margin
+   */
+  this.setMargin = function (margin)
+    {
+      this.margin = margin;
+
+      if (this.dom)
+        {
+          this.rebuild ();
+        }
+    };
+
   /****
    * DOM functions
    */
@@ -82,6 +103,16 @@ function UIWidget (opts)
         }
 
       this.dom = this.doBuild ();
+
+      if (this.dom)
+        {
+          var marginStr = getSpacingStr (this.margin);
+          if (marginStr)
+            {
+              this.dom.style.margin = marginStr;
+            }
+        }
+
       this.attachStoppers ();
       return this.dom;
     };
@@ -181,16 +212,18 @@ function UIWidget (opts)
   this.parent = opts['parent'] || null;
 
   /* Is widget visible */
-  this.visible = isUnknown (opts['visible']) ? true : opts['visible'];
+  this.visible = defVal (opts['visible'], true);
 
   /* Is widget sensitive */
-  this.sensitive = isUnknown (opts['sensitive']) ? true : opts['sensitive'];
+  this.sensitive = defVal (opts['sensitive'], true);
 
   this.dom = null;       /* DOM-tree */
   this.focusDOM = null;  /* DOM element for setting focus */
 
   /* List of events, which soudn't been bubbled */
   this.stopEvents = [];
+
+  this.margin = defVal (opts['margin'], null);
 }
 
 //UIWidget.prototype = new UIWidget;

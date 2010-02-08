@@ -108,3 +108,60 @@ function voidLink(content, opts)
 
   return  result;
 }
+
+/**
+ * rReturn value if it's known and def otherwise
+ */
+function defVal (val, def)
+{
+  return isUnknown (val) ? def : val;
+}
+
+/**
+ * Add first, last and lonely classes to element
+ */
+function addNumberClass (element, i, n, prefix)
+{
+  var suffix = '';
+
+  if (n == 1)
+    {
+      suffix = 'Lonely';
+    }
+  else if (i == 0)
+    {
+      suffix = 'First'
+    }
+  else if (i == n - 1)
+    {
+      suffix = 'Last'
+    }
+
+  if (suffix)
+    {
+      element.className += ' ' + prefix + suffix;
+    }
+}
+
+/**
+ * Get spacing (padding/margin) string for style from option
+ */
+function getSpacingStr (spacing)
+{
+  if (isUnknown (spacing))
+    {
+      return '';
+    }
+
+  if (typeof spacing == 'number')
+    {
+      return spacing + 'px';
+    }
+
+  if (spacing.length >= 1 && spacing.length <= 4)
+    {
+      return spacing.join ('px ') + 'px';
+    }
+
+  return '';
+}
