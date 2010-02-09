@@ -22,7 +22,7 @@ function UIButton (opts)
         }
       innerHTML += '<span>' + this.title + '</span>';
 
-      var text = voidLink (innerHTML/*, {'canfocus': false} */);
+      var text = voidLink (innerHTML, {'canFocus': this.sensitive});
 
       if (this.image)
         {

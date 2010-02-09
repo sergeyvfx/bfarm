@@ -89,6 +89,13 @@ function voidLink(content, opts)
 
   result.href = 'JavaScript:Void(0)';
 
+  $(result).click (function () {
+      if (!this.canFocus)
+        {
+          this.blur ();
+        }
+    });
+
   if (typeof content == 'string')
     {
       result.innerHTML = content;
@@ -100,10 +107,7 @@ function voidLink(content, opts)
 
   if (opts)
     {
-      if (!opts['canfocus'])
-        {
-          $(result).click (function () { this.blur (); });
-        }
+      result.canFocus = defVal (opts['canFocus'], true);
     }
 
   return  result;

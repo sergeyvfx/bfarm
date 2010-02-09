@@ -84,9 +84,12 @@
 
       var cnt = $('.UIPopup')[0];
 
-      var grid = new UIGrid ({'rows': 2,
+      var grid = new UIGrid ({'rows': 3,
                               'cols': 2,
                               'padding': 2});
+
+      grid.setCellStyle (1, 0, {'colspan': 2});
+      grid.setCellStyle (2, 0, {'colspan': 2});
 
       var imgs = ['camera', 'config' ]
       var buttons = [];
@@ -102,7 +105,6 @@
 
       var entry = new UIEntry ({'parent': cnt,
                                 'text'  : 'Hi!',
-                                'margin': [10, 0],
                                 'image' : 'pics/buttons/search.gif'});
       grid.add (entry);
 
@@ -114,23 +116,10 @@
 
       cnt.appendChild (grid.build ());
 
-      buttons[0].onClick = function (grid) {return function () {
-            if (grid.getRows () == 2)
-              {
-                grid.clearCellStyles ();
-                grid.setCols (2);
-                grid.setRows (3);
-                grid.setCellStyle (0, 0, {'colspan': 2});
-                grid.setCellStyle (1, 0, {'colspan': 2});
-              }
-            else
-              {
-                grid.clearCellStyles ();
-                grid.setCols (2);
-                grid.setRows (2);
-              }
+      buttons[0].onClick = function (entry) {return function (){
+            entry.setText ('Hi, Ky3bMu4');
           }
-        } (grid);
+        } (entry);
 
       buttons[1].onClick = function (button) {return function (){
             button.setSensitive (!button.getSensitive ());

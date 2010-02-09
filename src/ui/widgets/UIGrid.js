@@ -155,7 +155,7 @@ function UIGrid (opts)
     };
 
   /**
-   * Clear all cell-specified stlyes
+   * Clear all cell-specified styles
    */
   this.clearCellStyles = function ()
     {
