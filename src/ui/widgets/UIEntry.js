@@ -6,8 +6,6 @@ function UIEntry (opts)
 {
   opts = opts || {};
 
-  UIWidget.call (this, opts);
-
   /**
    * Build editable entry
    */
