@@ -115,13 +115,17 @@
       cnt.appendChild (grid.build ());
 
       buttons[0].onClick = function (grid) {return function () {
-            if (grid.getCols () == 2)
+            if (grid.getRows () == 2)
               {
-                grid.setCols (1);
-                grid.setRows (4);
+                grid.clearCellStyles ();
+                grid.setCols (2);
+                grid.setRows (3);
+                grid.setCellStyle (0, 0, {'colspan': 2});
+                grid.setCellStyle (1, 0, {'colspan': 2});
               }
             else
               {
+                grid.clearCellStyles ();
                 grid.setCols (2);
                 grid.setRows (2);
               }

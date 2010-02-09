@@ -6,6 +6,35 @@ function UIGrid (opts)
 {
   opts = opts || {};
 
+  /**
+   * Clear all custom styles from cell
+   */
+  this.clearCellStyle = function (cell)
+    {
+      cell.colSpan = 1;
+      cell.style.padding = getSpacingStr (this.padding);
+    };
+
+  /**
+   * Apply custom styles to cell
+   */
+  this.applyCellStyle = function (cell, i, j)
+    {
+      var style = this.getCellStyle (i, j);
+      if (style)
+        {
+          cell.colSpan       = defVal (style['colspan'], 1);
+          if (!isUnknown (style['padding']))
+            {
+              cell.style.padding = getSpacingStr (style['padding']);
+            }
+        }
+      else
+        {
+          this.clearCellStyle (cell);
+        }
+    };
+
   this.getHolders = function ()
     {
       var table = createElement ('TABLE');
@@ -22,7 +51,8 @@ function UIGrid (opts)
           tr.className = 'UIGridRow';
           addNumberClass (tr, i, this.rows, 'UIGridRow');
 
-          for (var j = 0; j < this.cols; ++j)
+          var m = this.cols;
+          for (var j = 0; j < m; ++j)
             {
               var td = createElement ('TD');
               td.className = 'UIGridCell';
@@ -31,6 +61,13 @@ function UIGrid (opts)
               if (paddingString)
                 {
                   td.style.padding = paddingString;
+                }
+
+              this.applyCellStyle (td, i, j);
+
+              if (td.colSpan > 1)
+                {
+                  m -= td.colSpan - 1;
                 }
 
               holders.push (td);
@@ -88,6 +125,44 @@ function UIGrid (opts)
         }
     };
 
+  /**
+   * Set specified cell's style
+   */
+  this.setCellStyle = function (row, column, style)
+    {
+      if (!this.cellStyles)
+        {
+          this.cellStyles = {};
+        }
+
+      if (!this.cellStyles[row])
+        {
+          this.cellStyles[row] = {};
+        }
+
+      this.cellStyles[row][column] = style;
+
+      this.rebuild ();
+    };
+
+  /**
+   * Get specified cell's style
+   */
+  this.getCellStyle = function (row, column, style)
+    {
+      return this.cellStyles && this.cellStyles[row] ?
+          this.cellStyles[row][column] : null;
+    };
+
+  /**
+   * Clear all cell-specified stlyes
+   */
+  this.clearCellStyles = function ()
+    {
+      this.cellStyles = null;
+      this.rebuild ();
+    };
+
   /****
    * Constructor
    */
@@ -100,6 +175,9 @@ function UIGrid (opts)
 
   /* Default cell padding */
   this.padding = defVal (opts['padding'], 0);
+
+  /* Cell-specified styles */
+  this.cellStyles = null;
 }
 
 UIGrid.prototype = new UIContainer;
