@@ -13,6 +13,10 @@ DIV.UIText {
   padding: 0 4px;
 }
 
+DIV.UIText:hover {
+  background: #ebebeb url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
+}
+
 DIV.UIText DIV.UITextInputHolder {
 }
 

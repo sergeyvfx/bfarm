@@ -32,7 +32,7 @@ DIV.UIEntry DIV.UIEntryInputHolder INPUT {
 }
 
 DIV.UIEntry:hover {
-	background: #c0c0c0 url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
+	background: #ebebeb url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIEntryWImage {
