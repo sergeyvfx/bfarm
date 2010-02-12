@@ -7,7 +7,8 @@
  *
  * All generated classes should implements this interface
  */
-function IObject ()
+
+function _IObject ()
 {
   /**
    * Object's destrucctor
@@ -15,12 +16,11 @@ function IObject ()
   this.destroy = function ()
     {
     };
+}
 
+function IObject (opts)
+{
   /**
    * Contructor is going here
    */
 }
-
-
-//IObject.prototype = new IObject;
-IObject.prototype.constructor = IObject;

@@ -2,9 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIObject ()
+function _UIObject ()
 {
-  IObject.call (this);
+  _IObject.call (this);
 
   /**
    * Get object's UI context
@@ -15,5 +15,10 @@ function UIObject ()
     };
 }
 
-//UIObject.prototype = new UIObject;
+function UIObject ()
+{
+  IObject.call (this);
+}
+
+UIObject.prototype = new _UIObject;
 UIObject.prototype.constructor = UIObject;

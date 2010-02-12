@@ -7,9 +7,9 @@
  *
  * Makes registering/fiering/etc events e2u
  */
-function IEventProxy ()
+function _IEventProxy ()
 {
-  IObject.call (this);
+  _IObject.call (this);
 
   /**
    * Add new event handler (event is string only)
@@ -109,10 +109,15 @@ function IEventProxy ()
 
       IObject.prototype.destroy.call (this);
     };
+}
 
-  /* Hasn of {event}=>{list of handlers} */
+function IEventProxy (opts)
+{
+  IObject.call (this);
+
+  /* Hash of {event}=>{list of handlers} */
   this.handlers = {};
 }
 
-IEventProxy.prototype = new IObject;
+IEventProxy.prototype = new _IEventProxy;
 IEventProxy.prototype.constructor = IEventProxy;

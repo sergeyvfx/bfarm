@@ -5,9 +5,9 @@
 /**
  * Common mouse click/move action provider
  */
-function UIDragProvider ()
+function _UIDragProvider ()
 {
-  IObject.call (this);
+  _IObject.call (this);
 
   /**
    * Register object for dragging
@@ -127,6 +127,11 @@ function UIDragProvider ()
   this.handleDelta = function (delta)
     {
     };
+}
+
+function UIDragProvider ()
+{
+  IObject.call (this);
 
   /* Name of key of opts which holds area for begin dragging */
   this.optAreaName = '';
@@ -163,5 +168,5 @@ function UIDragProvider ()
     } (this));
 }
 
-UIDragProvider.prototype = new IObject;
+UIDragProvider.prototype = new _UIDragProvider;
 UIDragProvider.prototype.constructor = UIDragProvider;

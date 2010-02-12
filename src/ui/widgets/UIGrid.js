@@ -2,9 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIGrid (opts)
+function _UIGrid ()
 {
-  opts = opts || {};
+  _UIContainer.call (this);
 
   /**
    * Clear all custom styles from cell
@@ -162,10 +162,15 @@ function UIGrid (opts)
       this.cellStyles = null;
       this.rebuild ();
     };
+}
 
-  /****
-   * Constructor
-   */
+/****
+ * Constructor
+ */
+function UIGrid (opts)
+{
+  opts = opts || {};
+  UIContainer.call (this, opts);
 
   /* Number of rows */
   this.rows = opts['rows'] || 1;
@@ -180,5 +185,5 @@ function UIGrid (opts)
   this.cellStyles = null;
 }
 
-UIGrid.prototype = new UIContainer;
+UIGrid.prototype = new _UIGrid;
 UIGrid.prototype.constructor = UIGrid;

@@ -2,11 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIWidget (opts)
+function _UIWidget ()
 {
-  opts = opts || {};
-
-  UIObject.call (this);
+  _UIObject.call (this);
 
   /****
    * Properties getters/setters
@@ -198,12 +196,15 @@ function UIWidget (opts)
           $(this.dom)[event] (stopEvent);
         }
     };
+}
 
-  /***
-   * Constructor
-   */
-
-  /** Properties **/
+/***
+ * Constructor
+ */
+function UIWidget (opts)
+{
+  opts = opts || {};
+  UIObject.call (this);
 
   /* List of attached events */
   this.events = [];
@@ -226,5 +227,5 @@ function UIWidget (opts)
   this.margin = defVal (opts['margin'], null);
 }
 
-//UIWidget.prototype = new UIWidget;
+UIWidget.prototype = new _UIWidget;
 UIWidget.prototype.constructor = UIWidget;

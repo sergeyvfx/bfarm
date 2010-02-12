@@ -2,7 +2,7 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function IUIMovable ()
+function _IUIMovable ()
 {
   /**
    * Move object by given coordinates deltas
@@ -44,12 +44,16 @@ function IUIMovable ()
   this.validateMoveDelta = null;
 }
 
-IUIMovable.prototype = new IUIMovable;
+function IUIMovable ()
+{
+}
+
+IUIMovable.prototype = new _IUIMovable;
 IUIMovable.prototype.constructor = IUIMovable;
 
-function UIMoveManager ()
+function _UIMoveManager ()
 {
-  UIDragProvider.call (this);
+  _UIDragProvider.call (this);
 
   this.handleDelta = function (delta)
     {
@@ -61,6 +65,11 @@ function UIMoveManager ()
 
       this.activeObject.moveBy (delta);
     };
+}
+
+function UIMoveManager ()
+{
+  UIDragProvider.call (this);
 
   /* Name of key of opts which holds area for begin dragging */
   this.optAreaName = 'moveArea';
@@ -75,7 +84,7 @@ function UIMoveManager ()
   this.endDragMethod = 'onEndMove';
 }
 
-UIMoveManager.prototype = new UIDragProvider;
+UIMoveManager.prototype = new _UIMoveManager;
 UIMoveManager.prototype.constructor = UIMoveManager;
 
 var uiMoveManager = new UIMoveManager;

@@ -2,9 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIContainer (opts)
+function _UIContainer ()
 {
-  opts = opts || {};
+  _UIWidget.call (this);
 
   /**
    * Build main DOM tree and return holders for widgets
@@ -104,13 +104,19 @@ function UIContainer (opts)
 
         }
     };
+}
 
-  /***
-   * Constructor
-   */
+/***
+ * Constructor
+ */
+function UIContainer (opts)
+{
+  opts = opts || {};
+
+  UIWidget.call (this, opts);
 
   this.container = [];
 }
 
-UIContainer.prototype = new UIWidget;
+UIContainer.prototype = new _UIContainer;
 UIContainer.prototype.constructor = UIContainer;

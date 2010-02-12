@@ -2,9 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIText (opts)
+function _UIText (opts)
 {
-  opts = opts || {};
+  _UIWidget.call (this);
 
   /**
    * Build editable entry
@@ -251,10 +251,17 @@ function UIText (opts)
    * Event stubs
    */
   this.onChanged = function (newText) {};
+}
 
-  /***
-   * Constructor
-   */
+/***
+ * Constructor
+ */
+function UIText (opts)
+{
+  opts = opts || {};
+
+  UIWidget.call (this, opts);
+
   this.stopEvents = this.stopEvents.concat (['click']);
 
   /* Settings for autoexpanding */
@@ -276,5 +283,5 @@ function UIText (opts)
   this.prevText = null;
 }
 
-UIText.prototype = new UIWidget;
+UIText.prototype = new _UIText;
 UIText.prototype.constructor = UIText;

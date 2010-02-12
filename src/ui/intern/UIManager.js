@@ -2,8 +2,10 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIManager ()
+function _UIManager ()
 {
+  _IEventProxy.call (this);
+
   /**
    * Get list of handlers, which will be called for handle specified event
    */
@@ -158,6 +160,11 @@ function UIManager ()
         stopEvent (userData['domEvent']);
       }
   };
+}
+
+function UIManager ()
+{
+  IEventProxy.call (this);
 
   this.defaultEvents = ['click', 'mousedown', 'mouseup', 'mouseover',
                         'mouseout', 'mousemove', 'keypress', 'keydown', 'keyup'];
@@ -166,7 +173,7 @@ function UIManager ()
   this.registerContext();
 }
 
-UIManager.prototype = new IEventProxy;
+UIManager.prototype = new _UIManager;
 UIManager.prototype.constructor = UIManager;
 
 var uiManager = new UIManager ();

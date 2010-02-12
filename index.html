@@ -11,13 +11,16 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/entry.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/text.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/grid.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/spinbutton.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
 <!--    <script type="text/javascript" src="src/jquery/rightClick.js"></script>
     <script type="text/javascript" src="src/jquery/corner.js"></script>-->
 
-    <script type="text/javascript" src="src/builtin.js"></script>
+    <script type="text/javascript" src="src/core/Events.js"></script>
+    <script type="text/javascript" src="src/core/DOMCore.js"></script>
+    <script type="text/javascript" src="src/core/builtin.js"></script>
 
     <script type="text/javascript" src="src/core/Core.js"></script>
     <script type="text/javascript" src="src/core/proto/UIObject.js"></script>
@@ -39,6 +42,7 @@
     <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIText.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIGrid.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UISpinButton.js"></script>
   </head>
 
   <body>
@@ -84,12 +88,13 @@
 
       var cnt = $('.UIPopup')[0];
 
-      var grid = new UIGrid ({'rows': 3,
+      var grid = new UIGrid ({'rows': 4,
                               'cols': 2,
                               'padding': 2});
 
       grid.setCellStyle (1, 0, {'colspan': 2});
       grid.setCellStyle (2, 0, {'colspan': 2});
+      grid.setCellStyle (3, 0, {'colspan': 2});
 
       var imgs = ['camera', 'config' ]
       var buttons = [];
@@ -113,6 +118,12 @@
                               'autoexpand' : true,
                               'sensitive'  : true});
       grid.add (text);
+
+      var spin = new UISpinButton ({'parent'     : cnt,
+                                    'image'      : 'pics/buttons/camera.gif',
+                                    'min': -50,
+                                    'max': 50});
+      grid.add (spin);
 
       cnt.appendChild (grid.build ());
 

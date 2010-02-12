@@ -36,6 +36,11 @@ if (!window.Element)
     result.each (function (i) { _(this); } );
     return result;
   }
+
+  for (var k in _$)
+    {
+      $[k] = _$[k];
+    }
 }
 
 if (!Array.indexOf)
@@ -62,3 +67,10 @@ Element.prototype.offset = function ()
   return $(this).offset ();
 };
 
+/**
+ * Trim spaces from string
+ */
+String.prototype.trim = function()
+{
+  return this.replace(/^\s+|\s+$/g, '');
+}

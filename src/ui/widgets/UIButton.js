@@ -2,9 +2,10 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIButton (opts)
+function _UIButton ()
 {
-  opts = opts || {};
+  _UIWidget.call (this);
+  
 
   /**
    * Build DOM tree for button
@@ -125,7 +126,7 @@ function UIButton (opts)
    */
   this.setSensitive = function (sensitive)
     {
-      UIButton.prototype.setSensitive.call (this, sensitive);
+      UIWidget.prototype.setSensitive.call (this, sensitive);
       this.handleSensitive ();
     };
 
@@ -150,6 +151,11 @@ function UIButton (opts)
           $(dom).addClass ('UIButtonInsesitive');
         }
     };
+}
+
+function UIButton (opts)
+{
+  UIWidget.call (this, opts);
 
   /* Title which will be displayed */
   this.title = opts['title'];
@@ -167,5 +173,5 @@ function UIButton (opts)
   this.imageElement = null; /* DOM element for image */
 }
 
-UIButton.prototype = new UIWidget;
+UIButton.prototype = new _UIButton;
 UIButton.prototype.constructor = UIButton;

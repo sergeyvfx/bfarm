@@ -2,7 +2,7 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function IUIPopup ()
+function _IUIPopup ()
 {
   /**
    * Show popup object at specified point
@@ -21,12 +21,16 @@ function IUIPopup ()
     };
 }
 
-IUIPopup.prototype = new IUIPopup;
+function IUIPopup ()
+{
+}
+
+IUIPopup.prototype = new _IUIPopup;
 IUIPopup.prototype.constructor = IUIPopup;
 
-function UIPopupManager ()
+function _UIPopupManager ()
 {
-  IObject.call (this);
+  _IObject.call (this);
 
   /**
    * Show new popup object
@@ -155,6 +159,11 @@ function UIPopupManager ()
     {
       return this.stack.length ? this.stack[this.stack.length - 1] : null;
     };
+}
+
+function UIPopupManager ()
+{
+  IObject.call (this);
 
   /* Stack of popupped objects */
   this.stack = [];
@@ -181,7 +190,7 @@ function UIPopupManager ()
     } (this));
 }
 
-UIPopupManager.prototype = new IObject;
+UIPopupManager.prototype = new _UIPopupManager;
 UIPopupManager.prototype.constructor = UIPopupManager;
 
 var uiPopupManager = new UIPopupManager;

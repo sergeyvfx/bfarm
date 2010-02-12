@@ -2,9 +2,9 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-function UIEntry (opts)
+function _UIEntry (opts)
 {
-  opts = opts || {};
+  _UIWidget.call (this);
 
   /**
    * Build editable entry
@@ -150,38 +150,65 @@ function UIEntry (opts)
     };
 
   /**
+   * Check changes made by user
+   */
+  this.checkChanges = function ()
+    {
+      var text = this.validateChanging (this.inputElement.value);
+
+      if (text == null)
+        {
+          text = this.prevText;
+        }
+
+      this.inputElement.value = text;
+
+      if (text != this.prevText)
+        {
+          this.text = this.prevText = text;
+          this.doOnChanged (text);
+        }
+    };
+
+  /**
    * Event handlers
    */
   this.keyUpHandler = function (event)
     {
-      if (!this.validateChanging ())
-        {
-          this.inputElement.value = this.prevText;
-        }
-      else
-        {
-          var newText = this.inputElement.value;
-          this.text = this.prevText = newText;
-          this.onChanged (newText);
-        }
+      this.checkChanges ();
     };
 
   /**
    * Validation function
    */
-  this.validateChanging = function ()
+  this.validateChanging = function (text)
     {
-      return true;
+      return text;
     }
+
+  /**
+   * CORE-side handler of value changed event
+   */
+  this.doOnChanged = function (newText)
+    {
+      this.onChanged (newText);
+    };
 
   /***
    * Event stubs
    */
   this.onChanged = function (newText) {};
 
-  /***
-   * Constructor
-   */
+}
+
+/***
+ * Constructor
+ */
+function UIEntry (opts)
+{
+  opts = opts || {};
+  UIWidget.call (this, opts);
+
   this.stopEvents = this.stopEvents.concat (['click']);
 
   /* DOM elements which are holding text */
@@ -196,5 +223,5 @@ function UIEntry (opts)
   this.prevText = null;
 }
 
-UIEntry.prototype = new UIWidget;
+UIEntry.prototype = new _UIEntry;
 UIEntry.prototype.constructor = UIEntry;
