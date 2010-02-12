@@ -92,9 +92,14 @@ function _UISpinButton ()
    */
   this.validateChanging = function (text)
     {
-      text = text.trim ();
+      text = text.trim ().replace (/\.+$/, '.');
 
-      if (text == '' || text == '-' || text.charAt (text.length - 1 == '.'))
+      if (text == '.')
+        {
+          return '0.';
+        }
+
+      if (text == '' || text == '-' || text.match (/^\-?[0-9]+\.$/))
         {
           return text;
         }
