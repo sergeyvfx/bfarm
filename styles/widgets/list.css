@@ -16,6 +16,10 @@ DIV.UIList:hover {
   background: #ebebeb;
 }
 
+DIV.UIList:hover DIV.UIListListItem {
+  border: 1px #ebebeb solid;
+}
+
 DIV.UIListItemHolder {
   text-align: left;
 }
