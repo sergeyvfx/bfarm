@@ -1,0 +1,46 @@
+DIV.UIList {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #e7e7e7;
+  color: #333;
+  margin: 0px;
+  padding: 4px;
+}
+
+DIV.UIList:hover {
+  background: #ebebeb;
+}
+
+DIV.UIListItemHolder {
+  text-align: left;
+}
+
+DIV.UIListListItem {
+  padding: 2px 4px;
+  border: 1px #e7e7e7 solid;
+  cursor: pointer;
+}
+
+DIV.UIListActiveListItem,
+DIV.UIListListItem:hover {
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+}
+
+DIV.UIListActiveListItem {
+  background: #5680c2 url(../../pics/ui/listitem_s_bg.gif) 0 0 repeat-x !important;
+  border: 1px #2d5da6 solid !important;
+  color: #fff;
+}
+
+DIV.UIListListItem:hover {
+  background: #768eb2 url(../../pics/ui/listitem_h_bg.gif) 0 0 repeat-x;
+  border: 1px #4f6c98 solid;
+}

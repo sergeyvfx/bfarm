@@ -72,3 +72,14 @@ function getSpacingStr (spacing)
 
   return '';
 }
+
+/**
+ * Round number to specified number of decimal digits
+ */
+function roundNumber (num, dec)
+{
+  var result = Math.round (Math.round (num * Math.pow (10, dec + 1)) /
+      Math.pow (10, 1) ) / Math.pow (10, dec);
+
+  return result;
+}

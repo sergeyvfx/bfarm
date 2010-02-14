@@ -62,6 +62,9 @@ function _UISpinButton ()
       return result;
     };
 
+  /**
+   * Build DOM for widget
+   */
   this.build = function ()
     {
       this.text = this.valueToText (this.value);
@@ -151,10 +154,11 @@ function _UISpinButton ()
           return;
         }
 
+      var oldValue = this.value;
       this.value = newValue;
       this.updateText ();
 
-      this.doOnChanged (null);
+      this.doOnChanged (null, oldValue);
 
       var handler = function (self, direction) {
           return function () {
@@ -192,8 +196,9 @@ function _UISpinButton ()
   /**
    * CORE-side handler of value changed event
    */
-  this.doOnChanged = function (newText)
+  this.doOnChanged = function (newText, oldValue)
     {
+      var oldValue = isUnknown (oldValue) ? null : oldValue;
       if (newText == null)
         {
           newText = '' + this.value;
@@ -208,8 +213,12 @@ function _UISpinButton ()
             }
         }
 
-      document.body.childNodes[1].innerHTML = '' + this.value;
       this.onChanged (newText);
+
+      if (this.value != oldValue)
+        {
+          this.onValueChanged (this.value);
+        }
     };
 
   /****
@@ -282,6 +291,12 @@ function _UISpinButton ()
       this.max = max;
       this.validateValue ();
     };
+
+  /****
+   * Stubs
+   */
+
+  this.onValueChanged = function (newValue) {};
 }
 
 function UISpinButton (opts)

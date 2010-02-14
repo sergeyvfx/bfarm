@@ -12,9 +12,11 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/text.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/grid.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/spinbutton.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/list.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
+    <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
 <!--    <script type="text/javascript" src="src/jquery/rightClick.js"></script>
     <script type="text/javascript" src="src/jquery/corner.js"></script>-->
 
@@ -29,6 +31,7 @@
     <script type="text/javascript" src="src/core/proto/UIPopup.js"></script>
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
+    <script type="text/javascript" src="src/core/IContainer.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIObject.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIManager.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIDragProvider.js"></script>
@@ -37,12 +40,14 @@
     <script type="text/javascript" src="src/ui/intern/UIPopup.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIWidget.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIContainer.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIAbstractList.js"></script>
 
     <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIText.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIGrid.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UISpinButton.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UIList.js"></script>
   </head>
 
   <body>
@@ -88,41 +93,45 @@
 
       var cnt = $('.UIPopup')[0];
 
-      var grid = new UIGrid ({'rows': 4,
+      var grid = new UIGrid ({'rows': 5,
                               'cols': 2,
                               'padding': 2});
 
       grid.setCellStyle (1, 0, {'colspan': 2});
       grid.setCellStyle (2, 0, {'colspan': 2});
       grid.setCellStyle (3, 0, {'colspan': 2});
+      grid.setCellStyle (4, 0, {'colspan': 2});
 
       var imgs = ['camera', 'config' ]
       var buttons = [];
       for (var i =0; i < 2; ++i)
         {
           var img = imgs[i] ? ('pics/buttons/' + imgs[i] + '.gif') : null;
-          buttons[i] = new UIButton ({'parent': cnt,
-                                      'title': 'Нажми меня ' + (i + 1),
+          buttons[i] = new UIButton ({'title': 'Нажми меня ' + (i + 1),
                                       'image': img
                                       });
           grid.add (buttons[i]);
         }
 
-      var entry = new UIEntry ({'parent': cnt,
-                                'text'  : 'Hi!',
+      var entry = new UIEntry ({'text'  : 'Hi!',
                                 'image' : 'pics/buttons/search.gif'});
       grid.add (entry);
 
-      var text = new UIText ({'parent'     : cnt,
-                              'text'       : 'Hi!',
+      var text = new UIText ({'text'       : 'Hi!',
                               'autoexpand' : true,
                               'sensitive'  : true});
       grid.add (text);
 
-      var spin = new UISpinButton ({'parent'     : cnt,
-                                    'image'      : 'pics/buttons/camera.gif',
-                                    'min': -50,
-                                    'max': 50});
+      var list = new UIList ();
+      for (var i = 0; i < 5; ++i)
+        {
+          list.add ('Item ' + (i + 1));
+        }
+      grid.add (list);
+
+      var spin = new UISpinButton ({'image'      : 'pics/buttons/camera.gif',
+                                    'min': 0,
+                                    'max': 4});
       grid.add (spin);
 
       cnt.appendChild (grid.build ());
@@ -136,6 +145,16 @@
             button.setSensitive (!button.getSensitive ());
           }
         } (buttons[0]);
+
+      list.onItemSelected = function (spin) {return function (itemIndex){
+            spin.setValue (itemIndex);
+          }
+        } (spin);
+
+      spin.onValueChanged = function (list) {return function (newValue){
+            list.setActive (Math.floor (newValue));
+          }
+        } (list);
 
       uiManager.addHandler ('click', function (userData) {
            var e = userData['domEvent'];

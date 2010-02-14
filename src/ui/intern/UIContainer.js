@@ -4,6 +4,7 @@
 
 function _UIContainer ()
 {
+  _IContainer.call (this);
   _UIWidget.call (this);
 
   /**
@@ -17,7 +18,15 @@ function _UIContainer ()
    */
   this.getHolders = function ()
     {
-    
+      return null;
+    };
+
+  /**
+   * Build DOM for specified child
+   */
+  this.buildChild = function (widgetIndex)
+    {
+      return this.container[widgetIndex].build ();
     };
 
   /**
@@ -45,9 +54,14 @@ function _UIContainer ()
         {
           var m = defVal (holders[i].widgetsCount, 1);
 
+          if (m == -1)
+            {
+              m = widgetCount;
+            }
+
           for (var j = 0; j < m && widgetIndex < widgetCount; ++j)
             {
-              var dom = this.container[widgetIndex].build ();
+              var dom = this.buildChild(widgetIndex);
               ++widgetIndex;
 
               if (!dom)
@@ -63,21 +77,13 @@ function _UIContainer ()
     };
 
   /**
-   * Get list of all widgets
-   */
-  this.getContainer = function ()
-    {
-      return this.container;
-    }
-
-  /**
    * Add child widget
    */
   this.add = function (widget, rebuild)
     {
       rebuild = defVal (rebuild, true);
 
-      this.container.push (widget);
+      IContainer.prototype.add.call(this, widget);
 
       if (rebuild)
         {
@@ -91,17 +97,11 @@ function _UIContainer ()
   this.remove = function (widget, rebuild)
     {
       rebuild = defVal (rebuild, true);
+      IContainer.prototype.remove.call(this, widget);
 
-      var index = this.container.indexOf (wodget);
-      if (index >= 0)
+      if (rebuild)
         {
-          this.container.splice (index, 1)
-
-          if (rebuild)
-            {
-              this.rebuild ();
-            }
-
+          this.rebuild ();
         }
     };
 }
@@ -113,9 +113,8 @@ function UIContainer (opts)
 {
   opts = opts || {};
 
+  IContainer.call (this);
   UIWidget.call (this, opts);
-
-  this.container = [];
 }
 
 UIContainer.prototype = new _UIContainer;

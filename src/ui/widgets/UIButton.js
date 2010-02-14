@@ -50,9 +50,9 @@ function _UIButton ()
 
       this.attachEvent (result, 'click', 'onClickHandler');
 
-      this.handleSensitive ();
-
       this.handleSensitive (result);
+
+      $(result).disableTextSelect ();
 
       return result;
     };

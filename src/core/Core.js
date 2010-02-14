@@ -74,3 +74,10 @@ String.prototype.trim = function()
 {
   return this.replace(/^\s+|\s+$/g, '');
 }
+
+/**
+ * Round number to specified number of decimal digits
+ */
+Number.prototype.toFixed = function (dec) {
+  return roundNumber (this, dec);
+}

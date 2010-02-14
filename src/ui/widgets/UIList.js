@@ -1,0 +1,68 @@
+/**
+ * Copyright (C) 2010 Sergey I. Sharybin
+ */
+
+function _UIList ()
+{
+  _UIAbstractList.call (this);
+
+  /**
+   * Build DOM for specified child
+   */
+  this.buildChild = function (itemIndex)
+    {
+      var child = this.container[itemIndex];
+      var result = createElement ('DIV');
+
+      if (child.build)
+        {
+          result.appendChild (child.build ());
+        }
+      else
+        {
+          result.innerHTML = '' + child;
+        }
+
+      this.processItemDOM (itemIndex, result);
+
+      return result;
+    };
+
+  this.getHolders = function ()
+    {
+      var result = createElement ('DIV');
+      var holder = createElement ('DIV');
+
+      result.className = 'UIList';
+      holder.className = 'UIListItemHolder';
+
+      result.appendChild (holder);
+
+      /* Holder for unlimited count of widgets */
+      holder.widgetsCount = -1;
+
+      $(result).disableTextSelect ();
+
+      return {'dom': result, 'holders': [holder]}
+    };
+}
+
+/****
+ * Constructor
+ */
+function UIList (opts)
+{
+  opts = opts || {};
+  UIAbstractList.call (this, opts);
+
+  /* Class name for list item DOM element */
+  this.itemClassName = 'UIListListItem';
+
+  /* Class name for active list item DOM element */
+  this.itemActClassName = 'UIListActiveListItem';
+
+  this.stopEvents = this.stopEvents.concat (['click']);
+}
+
+UIList.prototype = new _UIList;
+UIList.prototype.constructor = UIList;
