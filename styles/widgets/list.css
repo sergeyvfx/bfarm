@@ -44,7 +44,7 @@ DIV.UIListActiveListItem {
   color: #fff;
 }
 
-DIV.UIListListItem:hover {
+DIV.UIList DIV.UIListListItem:hover {
   background: #768eb2 url(../../pics/ui/listitem_h_bg.gif) 0 0 repeat-x;
   border: 1px #4f6c98 solid;
 }
