@@ -28,6 +28,7 @@ DIV.UIText DIV.UITextInputHolder TEXTAREA {
   color: #333;
   background:  transparent;
   display: block;
+  overflow: auto;
 }
 
 DIV.UIText DIV.UITextInputHolder TEXTAREA.UITextExpandable {

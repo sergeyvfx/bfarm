@@ -42,6 +42,11 @@ function _UIText (opts)
 
       this.prevText = this.text;
 
+      if (this.autoexpand)
+        {
+          this.validateHeight ();
+        }
+
       return result;
     };
 
@@ -78,7 +83,6 @@ function _UIText (opts)
         {
           return this.buildEntry ();
         }
-
     };
 
   /***
@@ -189,12 +193,16 @@ function _UIText (opts)
       var s = $(e);
 
       var minHeight = isUnknown (this.minHeight) ?
-          parseInt (s.css ('minHeight')) : this.minHeight;
+          parseInt (s.css ('minHeight')) || 0 : this.minHeight;
       var maxHeight = isUnknown (this.maxHeight) ?
-          parseInt (s.css ('maxHeight')) : this.maxHeight;
+          parseInt (s.css ('maxHeight')) || 0 : this.maxHeight;
+
+      /*
+       * TODO: Maybe we should remove setting up overflow style from here
+       */
 
       height = Math.max (height, minHeight);
-      if (height >= maxHeight)
+      if (height >= maxHeight && height != 0)
         {
           height = maxHeight;
           this.inputElement.style.overflow = 'auto';
@@ -204,7 +212,10 @@ function _UIText (opts)
           this.inputElement.style.overflow = 'hidden';
         }
 
-      this.inputElement.style.height = height + 'px';
+      if (height != 0)
+        {
+          this.inputElement.style.height = height + 'px';
+        }
     };
 
   /**
@@ -273,10 +284,7 @@ function UIText (opts)
   this.inputElement = null
   this.textElement = null;
 
-  if (opts['rows'])
-    {
-      this.rows = opts['rows'] > 0 ? opts['rows'] : 3;
-    }
+  this.rows = (!isUnknown (opts['rows']) && opts['rows'] > 0) ? opts['rows'] : 3;
 
   /* Text, displayed in entry */
   this.text = isUnknown (opts['text']) ? '' : opts['text'];
