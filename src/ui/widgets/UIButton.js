@@ -50,8 +50,6 @@ function _UIButton ()
 
       this.attachEvent (result, 'click', 'onClickHandler');
 
-      this.handleSensitive (result);
-
       $(result).disableTextSelect ();
 
       return result;
@@ -120,37 +118,6 @@ function _UIButton ()
       this.title = title;
       this.titleElement.innerHTML = title;
     };
-
-  /**
-   * Setter of sensitive attribute
-   */
-  this.setSensitive = function (sensitive)
-    {
-      UIWidget.prototype.setSensitive.call (this, sensitive);
-      this.handleSensitive ();
-    };
-
-  /**
-   * Handle sensitive attribute
-   */
-  this.handleSensitive  = function (dom)
-    {
-      dom = dom || this.dom;
-
-      if (!dom)
-        {
-          return;
-        }
-
-      if (this.sensitive)
-        {
-          $(dom).removeClass ('UIButtonInsesitive');
-        }
-      else
-        {
-          $(dom).addClass ('UIButtonInsesitive');
-        }
-    };
 }
 
 function UIButton (opts)
@@ -171,6 +138,8 @@ function UIButton (opts)
 
   this.titleElement = null; /* DOM element for title */
   this.imageElement = null; /* DOM element for image */
+
+  this.insensitiveClassName = 'UIButtonInsensitive';
 }
 
 UIButton.prototype = new _UIButton;

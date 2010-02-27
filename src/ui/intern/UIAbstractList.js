@@ -20,9 +20,14 @@ function _UIAbstractList ()
           this.itemsDom[itemIndex] = dom;
 
           $(dom).click (function (self, widgetIndex) {return function () {
-                self.onItemClicked (widgetIndex);
+                self.doItemClicked (widgetIndex);
               }
             } (this, itemIndex))
+        }
+
+      if (!dom)
+        {
+          return;
         }
 
       dom.className = this.itemClassName;
@@ -47,9 +52,10 @@ function _UIAbstractList ()
   /**
    * Handler of item's click
    */
-  this.onItemClicked = function (itemIndex)
+  this.doItemClicked = function (itemIndex)
     {
       this.doItemSelect (itemIndex);
+      this.onItemClicked (itemIndex);
     };
 
   /**
@@ -76,25 +82,42 @@ function _UIAbstractList ()
    */
 
   /**
-   * Get active element's index
+   * Get active element
    */
   this.getActive = function ()
+    {
+      return this.container[this.active];
+    };
+
+  /**
+   * Get active element's index
+   */
+  this.getActiveIndex = function ()
     {
       return this.active;
     };
 
   /**
-   * Set active
+   * Set active item index
    */
   this.setActive = function (active)
     {
-      this.doItemSelect (active);
+      this.doItemSelect (this.container.indexOf (active));
+    }
+
+  /**
+   * Set active item
+   */
+  this.setActiveIndex = function (index)
+    {
+      this.doItemSelect (index);
     }
 
   /**
    * Stubs
    */
   this.onItemSelected = function (itemIndex) {};
+  this.onItemClicked = function (itemIndex) {};
 
   /**
    * Destroy widget

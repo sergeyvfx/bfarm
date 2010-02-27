@@ -17,6 +17,12 @@ Element.prototype.popupAt = function (point)
   this.style.left = point.x + 'px';
   this.style.top = point.y + 'px';
   this.style.display = 'block';
+
+  if (!this.hasParent ())
+    {
+      document.body.appendChild (this);
+      this.autoAdded = true;
+    }
 }
 
 /**
@@ -25,4 +31,9 @@ Element.prototype.popupAt = function (point)
 Element.prototype.hidePopup = function ()
 {
   this.style.display = 'none';
+
+  if (this.autoAdded)
+    {
+      this.parentNode.removeChild (this);
+    }
 }

@@ -35,6 +35,14 @@ function _IContainer ()
     };
 
   /**
+   * Remove all items
+   */
+  this.clear = function ()
+    {
+      this.container = [];
+    }
+
+  /**
    * Get item by index
    */
   this.get = function (index)

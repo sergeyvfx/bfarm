@@ -83,3 +83,45 @@ function roundNumber (num, dec)
 
   return result;
 }
+
+/**
+ * Construct arguments hash from argument's names and arguments' values
+ */
+function mkargs(names, values, additional)
+{
+  var result = {}
+
+  for (var i = 0, n = Math.min (names.length, values.length); i < n; ++i)
+    {
+      result[names[i]] = values[i];
+    }
+
+  if (additional)
+    {
+      for (var x in additional)
+        {
+          result[x] = additional[x];
+        }
+    }
+
+  return result;
+}
+
+/**
+ * Wrap function context substitution
+ */
+function wrap (proc, args)
+{
+  return function (proc, args) { return function () {
+        proc (args);
+      };
+    } (proc, args);
+}
+
+/**
+ * Call function outside from current stream
+ */
+function callOut (proc, args)
+{
+  window.setTimeout (wrap (proc, args), 5);
+}

@@ -33,18 +33,51 @@ function _UIPopupManager ()
   _IObject.call (this);
 
   /**
+   * Call object's handler
+   */
+  this.callHandler = function (item, handler)
+    {
+      if (item && item['opts'] && item['opts'][handler])
+        {
+          item['opts'][handler] ();
+        }
+    };
+
+  /**
+   * Call object's handler (outside current thread)
+   */
+  this.callOutHandler = function (item, handler)
+    {
+      window.setTimeout (function (self, item, handler) { return function () {
+            self.callHandler (item, handler);
+          }
+        } (this, item, handler), 5)
+    };
+
+  /**
    * Show new popup object
    */
   this.popup = function (object, point, opts)
     {
-      var context = object.getUIContext ();
-      object.popupAt (point);
+      if (point['pos'])
+        {
+          point['x'] = point['pos']['x'];
+          point['y'] = point['pos']['y'];
+        }
 
-      this.stack.push ({'object': object,
-                        'opts': opts,
-                        'context': context});
+      callOut (function (args) {
+          var context = args['object'].getUIContext ();
+          object.popupAt (args['point']);
 
-      uiManager.registerContext (context);
+          var item = {'object' : args['object'],
+                      'opts'   : args['opts'],
+                      'context': context};
+          args['this'].stack.push (item);
+  
+          uiManager.registerContext (context);
+
+          args['this'].callOutHandler (item, 'onShow');
+        }, mkargs (['object', 'point', 'opts'], arguments, {'this': this}));
     }
 
   /**
@@ -88,6 +121,8 @@ function _UIPopupManager ()
 
       obj.hidePopup ();
 
+      this.callHandler (item, 'onHide');
+
       var index = this.stack.indexOf (item);
       this.stack.splice (index, 1);
     };
@@ -107,9 +142,13 @@ function _UIPopupManager ()
   /**
    * Hide all popups from specified stack item
    */
-  this.hideFromStackItem = function (item)
+  this.hideFromStackItem = function (item, hideLayer)
     {
-      var index = item ? this.stack.indexOf (item) + 1 : 0;
+      var delta = 1;
+      if (hideLayer)
+        delta = 0;
+
+      var index = item ? this.stack.indexOf (item) + delta : 0;
 
       for (var i = this.stack.length - 1; i >= index; --i)
         {
@@ -124,6 +163,23 @@ function _UIPopupManager ()
     {
       this.hideFromStackItem (null);
     };
+
+  /**
+   * Hide all objects from specified
+   */
+  this.hide = function (object)
+    {
+      for (var i = 0, n = this.stack.length; i < n; ++i)
+        {
+          var item = this.stack[i];
+
+          if (item['object'] == object)
+            {
+              this.hideFromStackItem (item, true);
+              break;
+            }
+        }
+    }
 
   /**
    * Hide all popups from specified context

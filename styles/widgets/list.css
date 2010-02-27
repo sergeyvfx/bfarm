@@ -16,8 +16,11 @@ DIV.UIList:hover {
   background: #ebebeb;
 }
 
-DIV.UIList:hover DIV.UIListListItem {
-  border: 1px #ebebeb solid;
+DIV.UIListTransparent,
+DIV.UIListTransparent:hover {
+  background: transparent;
+  padding: 0;
+  border: 0;
 }
 
 DIV.UIListItemHolder {
@@ -26,7 +29,7 @@ DIV.UIListItemHolder {
 
 DIV.UIListListItem {
   padding: 2px 4px;
-  border: 1px #e7e7e7 solid;
+  border: 1px transparent solid;
   cursor: pointer;
 }
 

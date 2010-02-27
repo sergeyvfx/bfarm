@@ -55,3 +55,23 @@ function voidLink(content, opts)
 
   return  result;
 }
+
+/**
+ * Check node is in tree
+ */
+function nodeInTree(node, tree)
+{
+  var cur = node;
+
+  while (cur)
+    {
+      if (cur == tree)
+        {
+          return true;
+        }
+
+      cur = cur.parentNode;
+    }
+
+  return false;
+}

@@ -5,8 +5,9 @@
 /**
  *  Get event's target element
  */
-function eventTarget (evt)
+function eventTarget (event)
 {
+  var evt = event || window.event;
   var targ = evt.target || evt.srcElement;
 
   if (targ.nodeType == 3)
@@ -15,6 +16,16 @@ function eventTarget (evt)
     }
 
   return targ;
+}
+
+/**
+ *  Get event's relatedTarget element
+ */
+function relatedTarget (event)
+{
+  var evt = event || window.event;
+
+  return (event.relatedTarget) ? event.relatedTarget : event.toElement;
 }
 
 /**

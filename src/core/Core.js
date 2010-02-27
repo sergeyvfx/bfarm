@@ -68,6 +68,30 @@ Element.prototype.offset = function ()
 };
 
 /**
+ * Get DOM element's outer width
+ */
+Element.prototype.outerWidth = function ()
+{
+  return $(this).outerWidth ();
+};
+
+/**
+ * Get DOM element's outer height
+ */
+Element.prototype.outerHeight = function ()
+{
+  return $(this).outerHeight ();
+};
+
+/**
+ * Check DOM element've got parent node
+ */
+Element.prototype.hasParent = function ()
+{
+  return $(this).parent () [0];
+};
+
+/**
  * Trim spaces from string
  */
 String.prototype.trim = function()

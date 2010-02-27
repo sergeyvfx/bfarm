@@ -45,6 +45,18 @@ function _UIList ()
 
       return {'dom': result, 'holders': [holder]}
     };
+
+  this.doBuild = function ()
+    {
+      var result = UIAbstractList.prototype.doBuild.call (this);
+
+      if (this.transparent)
+        {
+          $(result).addClass ('UIListTransparent');
+        }
+
+      return result;
+    }
 }
 
 /****
@@ -62,6 +74,8 @@ function UIList (opts)
   this.itemActClassName = 'UIListActiveListItem';
 
   this.stopEvents = this.stopEvents.concat (['click']);
+
+  this.transparent = opts['transparent'];
 }
 
 UIList.prototype = new _UIList;

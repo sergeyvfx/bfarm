@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/grid.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/spinbutton.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/list.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/combobox.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
@@ -48,6 +49,7 @@
     <script type="text/javascript" src="src/ui/widgets/UIGrid.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UISpinButton.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIList.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UIComboBox.js"></script>
   </head>
 
   <body>
@@ -93,7 +95,7 @@
 
       var cnt = $('.UIPopup')[0];
 
-      var grid = new UIGrid ({'rows': 5,
+      var grid = new UIGrid ({'rows': 6,
                               'cols': 2,
                               'padding': 2});
 
@@ -101,6 +103,7 @@
       grid.setCellStyle (2, 0, {'colspan': 2});
       grid.setCellStyle (3, 0, {'colspan': 2});
       grid.setCellStyle (4, 0, {'colspan': 2});
+      grid.setCellStyle (5, 0, {'colspan': 2});
 
       var imgs = ['camera', 'config' ]
       var buttons = [];
@@ -121,6 +124,13 @@
                               'autoexpand' : true,
                               'sensitive'  : true});
       grid.add (text);
+
+      var combobox = new UIComboBox ({'items': ['item 0', 'item 1', 'item 2']});
+      combobox.add ('Test');
+      combobox.remove ('item 1');
+      combobox.setActiveIndex (1);
+      grid.add (combobox);
+
 
       var list = new UIList ();
       for (var i = 0; i < 5; ++i)
@@ -152,7 +162,7 @@
         } (spin);
 
       spin.onValueChanged = function (list) {return function (newValue){
-            list.setActive (Math.floor (newValue));
+            list.setActiveIndex (Math.floor (newValue));
           }
         } (list);
 

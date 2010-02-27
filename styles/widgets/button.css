@@ -37,12 +37,12 @@ DIV.UIButton A IMG {
   border: 0;
 }
 
-DIV.UIButtonInsesitive {
-	border-color: #666;
+DIV.UIButtonInsensitive {
+  border-color: #666;
   background: #aaa url(../../pics/ui/button_d_bg.gif) 0 0 repeat-x;
 }
 
-DIV.UIButtonInsesitive:hover {
+DIV.UIButtonInsensitive:hover {
   background: #b6b6b6 url(../../pics/ui/button_d_s_bg.gif) 0 0 repeat-x;
 }
 

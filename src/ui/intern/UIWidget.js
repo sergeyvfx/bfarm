@@ -60,7 +60,11 @@ function _UIWidget ()
     {
       this.sensitive = sensitive;
       this.onSensitiveChanged ();
-      this.rebuild ();
+
+      if (!this.handleSensitive ())
+        {
+          this.rebuild ();
+        }
     };
 
   /**
@@ -112,6 +116,8 @@ function _UIWidget ()
         }
 
       this.attachStoppers ();
+      this.handleSensitive ();
+
       return this.dom;
     };
 
@@ -196,6 +202,35 @@ function _UIWidget ()
           $(this.dom)[event] (stopEvent);
         }
     };
+
+  /**
+   * Handle sensitive attribute
+   */
+  this.handleSensitive  = function (dom)
+    {
+      if (this.insensitiveClassName != null)
+        {
+          dom = dom || this.dom;
+    
+          if (!dom)
+            {
+              return;
+            }
+    
+          if (this.sensitive)
+            {
+              $(dom).removeClass (this.insensitiveClassName);
+            }
+          else
+            {
+              $(dom).addClass (this.insensitiveClassName);
+            }
+
+          return true;
+        }
+
+      return false;
+    };
 }
 
 /***
@@ -223,6 +258,9 @@ function UIWidget (opts)
 
   /* List of events, which soudn't been bubbled */
   this.stopEvents = [];
+
+  /* Class name for insensitive widget */
+  this.insensitiveClassName = null;
 
   this.margin = defVal (opts['margin'], null);
 }
