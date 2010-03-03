@@ -88,6 +88,37 @@ function _UIWidget ()
         }
     };
 
+    this.getMargin = function ()
+    {
+      return this.margin;
+    };
+
+  /**
+   * Set widget height
+   */
+  this.setHeight = function (heigth)
+    {
+      this.height = height;
+
+      if (this.dom)
+        {
+          this.rebuild ();
+        }
+    };
+
+  /**
+   * Set widget width
+   */
+  this.setWidth = function (width)
+    {
+      this.width = eidth;
+
+      if (this.dom)
+        {
+          this.rebuild ();
+        }
+    };
+
   /****
    * DOM functions
    */
@@ -112,6 +143,16 @@ function _UIWidget ()
           if (marginStr)
             {
               this.dom.style.margin = marginStr;
+            }
+
+          if (this.width != null)
+            {
+              this.dom.style.width = this.width + 'px';
+            }
+
+          if (this.height != null)
+            {
+              this.dom.style.height = this.height + 'px';
             }
         }
 
@@ -262,7 +303,12 @@ function UIWidget (opts)
   /* Class name for insensitive widget */
   this.insensitiveClassName = null;
 
+  /* Margin from widget */
   this.margin = defVal (opts['margin'], null);
+
+  /* Widget's dimensions */
+  this.height = defVal (opts['height'], null);
+  this.width  = defVal (opts['width'], null);
 }
 
 UIWidget.prototype = new _UIWidget;

@@ -137,7 +137,7 @@ function _UIAbstractList ()
 function UIAbstractList (opts)
 {
   opts = opts || {};
-  UIContainer.call (this);
+  UIContainer.call (this, opts);
 
   /* Class name for list item DOM element */
   this.itemClassName = '';

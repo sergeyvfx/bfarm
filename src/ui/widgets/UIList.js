@@ -31,12 +31,15 @@ function _UIList ()
   this.getHolders = function ()
     {
       var result = createElement ('DIV');
+      var scroller = createElement ('DIV');
       var holder = createElement ('DIV');
 
       result.className = 'UIList';
+      scroller.className = 'UIListScroller';
       holder.className = 'UIListItemHolder';
 
-      result.appendChild (holder);
+      scroller.appendChild (holder);
+      result.appendChild (scroller);
 
       /* Holder for unlimited count of widgets */
       holder.widgetsCount = -1;
@@ -53,6 +56,11 @@ function _UIList ()
       if (this.transparent)
         {
           $(result).addClass ('UIListTransparent');
+        }
+
+      if (this.height != null || this.width != null)
+        {
+          $(result).addClass ('UIListFixedSize');
         }
 
       return result;

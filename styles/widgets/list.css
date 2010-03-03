@@ -10,6 +10,12 @@ DIV.UIList {
   color: #333;
   margin: 0px;
   padding: 4px;
+
+}
+
+DIV.UIListFixedSize {
+  position: relative;
+  padding: 0px;
 }
 
 DIV.UIList:hover {
@@ -50,4 +56,14 @@ DIV.UIListActiveListItem {
 DIV.UIList DIV.UIListListItem:hover {
   background: #768eb2 url(../../pics/ui/listitem_h_bg.gif) 0 0 repeat-x;
   border: 1px #4f6c98 solid;
+}
+
+DIV.UIListFixedSize DIV.UIListScroller {
+  overflow: auto;
+  position: absolute;
+  padding-right: 4px;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
 }
