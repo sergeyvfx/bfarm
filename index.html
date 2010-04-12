@@ -16,6 +16,7 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/combobox.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/viewport.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/window.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -43,6 +44,8 @@
     <script type="text/javascript" src="src/ui/intern/UIWidget.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIContainer.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIAbstractList.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIZIndex.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIWindowManager.js"></script>
 
     <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
@@ -55,6 +58,7 @@
     <script type="text/javascript" src="src/ui/elem/UIViewport.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportPanel.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportItem.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIWindow.js"></script>
   </head>
 
   <body>
@@ -102,7 +106,18 @@
       var vp = viewport.build ();
       document.body.insertBefore (vp, $('.UIPopup')[0]);
       viewport.addPanel (VP_PANEL_BOTTOM);
-      viewport.addItem ('./pics/ico/blender.png', 'Blender', function () {alert ('Click on Blender');});
+      viewport.addItem ('./pics/ico/blender.png', 'Blender', function () {
+          var wnd = new UIWindow ({'caption': 'Test window',
+                                   'top': 16,
+                                   'left': 16});
+          wnd.show ();
+
+          var btn = new UIButton ({'title': 'Нажми меня',
+                                   'image': 'pics/buttons/camera.gif'
+                                  });
+
+          wnd.getClientArea().appendChild (btn.build ());
+        });
       viewport.addItem ('./pics/ico/gnome-cd.png', 'Media player', function () {alert ('Click on player');});
 
       var cnt = $('.UIPopup')[0];

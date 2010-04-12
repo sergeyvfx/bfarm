@@ -182,6 +182,7 @@ function _UIWidget ()
   this.onParentChanged = function () {};
   this.onVisibleChanged = function () {};
   this.onSensitiveChanged = function () {};
+  this.onFocus = function () {};
 
   /**
    * Set focus to widget
@@ -197,6 +198,8 @@ function _UIWidget ()
           {
           }
       }
+
+    this.onFocus ();
   };
 
   /***

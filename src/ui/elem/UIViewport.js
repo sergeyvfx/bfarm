@@ -145,18 +145,38 @@ function _UIViewport ()
 
       return item;
     };
+
+  /**
+   * Get viewport's zindex object
+   *
+   * @return viewport's zindex object
+   */
+  this.getZIndex = function ()
+    {
+      return this.zIndex;
+    };
 }
 
 function UIViewport (opts)
 {
   UIWidget.call (this, opts);
 
+  /* Register main viewport */
+  if (uiMainViewport == null)
+    {
+      uiMainViewport = this;
+    }
+
   this.viewport = null;
   this.itemsHolder = null;
 
   this.panels = [];
   this.items = [];
+
+  this.zIndex = new UIZIndex ();
 }
 
 UIViewport.prototype = new _UIViewport;
 UIViewport.prototype.constructor = UIViewport;
+
+var uiMainViewport = null;

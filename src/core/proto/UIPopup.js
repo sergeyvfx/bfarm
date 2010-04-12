@@ -37,3 +37,8 @@ Element.prototype.hidePopup = function ()
       this.parentNode.removeChild (this);
     }
 }
+
+Element.prototype.setPupZIndex = function (zIndex)
+{
+  this.style.zIndex = zIndex;
+}

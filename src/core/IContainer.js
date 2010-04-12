@@ -30,7 +30,7 @@ function _IContainer ()
       var index = this.container.indexOf (element);
       if (index >= 0)
         {
-          this.container.splice (index, 1)
+          this.container.splice (index, 1);
         }
     };
 

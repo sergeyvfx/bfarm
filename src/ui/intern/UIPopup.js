@@ -19,6 +19,13 @@ function _IUIPopup ()
   this.hidePopup = function ()
     {
     };
+
+  /**
+   * Set z-index position
+   */
+  this.setPupZIndex = function (zIndex)
+    {
+    };
 }
 
 function IUIPopup ()
@@ -68,6 +75,11 @@ function _UIPopupManager ()
       callOut (function (args) {
           var context = args['object'].getUIContext ();
           object.popupAt (args['point']);
+
+          // XXX: need registration of zIndex in viewport and object's
+          //      viewport should be used instead of main
+          var zIndex = uiMainViewport.getZIndex ().getLastIndex () + 1;
+          object.setPupZIndex (zIndex);
 
           var item = {'object' : args['object'],
                       'opts'   : args['opts'],
