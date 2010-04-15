@@ -107,19 +107,21 @@
       document.body.insertBefore (vp, $('.UIPopup')[0]);
       viewport.addPanel (VP_PANEL_BOTTOM);
       viewport.addItem ('./pics/ico/blender.png', 'Blender', function () {
-          var wnd = new UIWindow ({'caption': 'Test window',
-                                   'top': 16,
-                                   'left': 16});
-          var btn = new UIButton ({'title': 'Нажми меня',
-                                   'image': 'pics/buttons/camera.gif',
-                                   'click': function (wnd) { return function () {
-                                             wnd.hide ();
-                                          }
-                                        } (wnd)
-                                   });
-
-          wnd.add (btn);
-          wnd.show ();
+          if (isUnknown (window.__testWnd)) {
+            var wnd = new UIWindow ({'caption': 'Test window',
+                                     'top': 16,
+                                     'left': 16});
+            var btn = new UIButton ({'title': 'Спрятать окно',
+                                     'click': function (wnd) { return function () {
+                                               wnd.hide ();
+                                            }
+                                          } (wnd)
+                                     });
+  
+            wnd.add (btn);
+            window.__testWnd = wnd;
+          }
+          window.__testWnd.show ();
         });
       viewport.addItem ('./pics/ico/gnome-cd.png', 'Media player', function () {alert ('Click on player');});
 

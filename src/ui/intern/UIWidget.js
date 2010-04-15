@@ -135,7 +135,10 @@ function _UIWidget ()
           return null;
         }
 
-      this.dom = this.doBuild ();
+      if (!this.dom)
+        {
+          this.dom = this.doBuild ();
+        }
 
       if (this.dom)
         {
@@ -168,6 +171,8 @@ function _UIWidget ()
   this.rebuild = function ()
     {
       var oldDOM = this.dom;
+
+      this.dom = null;
       var newDOM = this.build ();
 
       if (oldDOM && oldDOM.parentNode)
