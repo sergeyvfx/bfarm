@@ -84,6 +84,7 @@ function _UIContainer ()
       rebuild = defVal (rebuild, true);
 
       IContainer.prototype.add.call(this, widget);
+      widget.parent = this;
 
       if (rebuild)
         {

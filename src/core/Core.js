@@ -91,6 +91,11 @@ Element.prototype.hasParent = function ()
   return $(this).parent () [0];
 };
 
+Element.prototype.removeAllNodes = function ()
+{
+  removeAllNodes (this);
+};
+
 /**
  * Trim spaces from string
  */

@@ -11,16 +11,28 @@ function createElement (element)
 }
 
 /**
+ * Remove all nodes from node
+ */
+function removeAllNodes (node)
+{
+  while (node.childNodes.length)
+    {
+      var node = node.childNodes[0];
+      node.removeChild (node);
+    }
+}
+
+/**
  * Move all nodes from source to destination
  */
 function moveAllNodes (src, dst)
 {
   while (src.childNodes.length)
-  {
-    var node = src.childNodes[0];
-    src.removeChild (node);
-    dst.appendChild (node);
-  }
+    {
+      var node = src.childNodes[0];
+      src.removeChild (node);
+      dst.appendChild (node);
+    }
 }
 
 /**

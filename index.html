@@ -110,13 +110,16 @@
           var wnd = new UIWindow ({'caption': 'Test window',
                                    'top': 16,
                                    'left': 16});
-          wnd.show ();
-
           var btn = new UIButton ({'title': 'Нажми меня',
-                                   'image': 'pics/buttons/camera.gif'
-                                  });
+                                   'image': 'pics/buttons/camera.gif',
+                                   'click': function (wnd) { return function () {
+                                             wnd.hide ();
+                                          }
+                                        } (wnd)
+                                   });
 
-          wnd.getClientArea().appendChild (btn.build ());
+          wnd.add (btn);
+          wnd.show ();
         });
       viewport.addItem ('./pics/ico/gnome-cd.png', 'Media player', function () {alert ('Click on player');});
 

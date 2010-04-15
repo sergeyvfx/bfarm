@@ -31,7 +31,7 @@ function _UIWindowManager ()
     };
 
   /**
-   * Foxus specified window
+   * Focus specified window
    *
    * @param window - window to be focused
    */
@@ -68,6 +68,17 @@ function _UIWindowManager ()
 
       window.dom.style.zIndex = index;
     };
+
+  /**
+   * Hide specified window
+   *
+   * @param window - window to be hidden
+   */
+  this.hideWindow = function (window)
+    {
+      window.viewport.getViewport ().removeChild (window.dom);
+      window.viewport = null;
+    }
 }
 
 function UIWindowManager ()

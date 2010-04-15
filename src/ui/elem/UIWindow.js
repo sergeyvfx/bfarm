@@ -7,6 +7,20 @@ function _UIWindow ()
   _UIContainer.call (this);
 
   /**
+   * Build all widgets
+   */
+  this.buildWidgets = function ()
+    {
+      this.clientArea.removeAllNodes ();
+
+      for (var i = 0, n = this.container.length; i < n; ++i)
+        {
+          var dom = this.container[i].build ();
+          this.clientArea.appendChild (dom);
+        }
+    };
+
+  /**
    * Build DOM tree
    */
   this.doBuild = function ()
@@ -63,7 +77,10 @@ function _UIWindow ()
 
       uiManager.registerContext (result);
       $(result).click (function (self) { return function () { self.setFocus (); } } (this));
-  
+
+      /* Build widgets */
+      this.buildWidgets ();
+
       return result;
     };
 
@@ -82,16 +99,27 @@ function _UIWindow ()
   this.raise = function ()
     {
       uiWindowManager.raiseWindow (this);
+      this.onRaise ();
     };
 
   /**
    * Show window
    *
-   * @param vewPort - viewport where window will be shown
+   * @param viewPort - viewport where window will be shown
    */
   this.show = function (viewPort)
     {
       uiWindowManager.showWindow (this, viewPort);
+      this.onShow ();
+    };
+
+  /**
+   * Hide window
+   */
+  this.hide = function ()
+    {
+      uiWindowManager.hideWindow (this);
+      this.onHide ();
     };
 
   /* Getters/setters */
@@ -103,6 +131,11 @@ function _UIWindow ()
     {
       return this.clientArea;
     };
+
+  /* Event stubs */
+  this.onShow = function () {};
+  this.onRaise = function () {};
+  this.onHide = function () {};
 }
 
 /****
