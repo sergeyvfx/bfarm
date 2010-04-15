@@ -7,7 +7,7 @@
  */
 function _UIWindowManager ()
 {
-  _IObject.call (this);
+  _IContainer.call (this);
 
   /**
    * Show specified window
@@ -79,12 +79,50 @@ function _UIWindowManager ()
       window.viewport.getViewport ().removeChild (window.dom);
       window.viewport = null;
     }
+
+  /**
+   * Close specified window
+   *
+   * @param window - window to be closed
+   */
+  this.closeWindow = function (window)
+    {
+      this.hideWindow (window);
+      this.removeWindow (window);
+    }
+
+  /* setters/getters */
+
+  /**
+   * Get all management windows
+   */
+  this.getWindows = function ()
+    {
+      return this.getContainer ();
+    };
+
+  /**
+   * Add new management window
+   */
+  this.addWindow = function (window)
+    {
+      this.add (window);
+    };
+
+  /**
+   * Remove management window
+   */
+  this.removeWindow = function (window)
+    {
+      this.remove (window);
+    };
 }
 
 function UIWindowManager ()
 {
   IObject.call (this);
 
+  this.windows = [];
   this.raiseOnFocus = true;
 }
 

@@ -122,6 +122,15 @@ function _UIWindow ()
       this.onHide ();
     };
 
+  /**
+   * Close window
+   */
+  this.close = function ()
+    {
+      uiWindowManager.closeWindow (this);
+      this.onClose ();
+    };
+
   /* Getters/setters */
 
   /**
@@ -136,6 +145,7 @@ function _UIWindow ()
   this.onShow = function () {};
   this.onRaise = function () {};
   this.onHide = function () {};
+  this.onClose = function () {};
 }
 
 /****
