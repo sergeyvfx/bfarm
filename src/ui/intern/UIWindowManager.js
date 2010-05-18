@@ -27,6 +27,8 @@ function _UIWindowManager ()
 
       window.viewport = viewport;
 
+      window.onShow ();
+
       this.raiseWindow (window);
     };
 
@@ -51,6 +53,12 @@ function _UIWindowManager ()
   this.raiseWindow = function (window)
     {
       var viewport = window.viewport;
+
+      if (!viewport)
+        {
+          return;
+        }
+
       var zIndex = viewport.getZIndex ();
       var oldIndex = window.dom.style.zIndex;
 
@@ -67,6 +75,8 @@ function _UIWindowManager ()
         }
 
       window.dom.style.zIndex = index;
+
+      window.onRaise ();
     };
 
   /**
@@ -76,8 +86,10 @@ function _UIWindowManager ()
    */
   this.hideWindow = function (window)
     {
-      window.viewport.getViewport ().removeChild (window.dom);
+      removeNode (window.dom);
       window.viewport = null;
+
+      window.onHide ();
     }
 
   /**
@@ -87,8 +99,18 @@ function _UIWindowManager ()
    */
   this.closeWindow = function (window)
     {
+      window.abortClose = false;
+      window.onClose ();
+
+      if (window.abortClose)
+        {
+          return;
+        }
+
       this.hideWindow (window);
       this.removeWindow (window);
+
+      window.onClosed ();
     }
 
   /* setters/getters */
@@ -121,6 +143,7 @@ function _UIWindowManager ()
 function UIWindowManager ()
 {
   IObject.call (this);
+  IContainer.call (this);
 
   this.windows = [];
   this.raiseOnFocus = true;

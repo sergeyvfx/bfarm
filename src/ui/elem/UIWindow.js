@@ -21,6 +21,69 @@ function _UIWindow ()
     };
 
   /**
+   * Create new button in title bar
+   *
+   * @param title - button's title
+   * @param pos - position (left or right)
+   * @param handler - click handler
+   */
+  this.buildTitleButton = function (image, title, pos, handler)
+    {
+      var button = createElement ('DIV');
+      pos = '' + defVal (pos, 'left');
+      image = '' + defVal (image, '');
+
+      if (pos.toLowerCase() == 'left')
+        {
+          pos = 'Left';
+        }
+      else
+        {
+          pos = 'Right';
+        }
+
+      button.className = 'UIWindowTitleButton UIWindowTitleButton' + pos;
+
+      if (image == '')
+        {
+          button.appendChild (document.createTextNode (title));
+        }
+
+      if (handler)
+        {
+          /* Need this to prevent dnd stuff starting working on button's click */
+          $(button).mousedown (function (event) {stopEvent (event); });
+
+          $(button).click (handler);
+        }
+
+      if (image)
+        {
+          /*
+           * TODO: Fix this to add support of full url
+           */
+          var src = 'pics/ui/elem/' + image + '.gif';
+
+          var img = createElement ('IMG');
+          img.src = src;
+          img.title = title;
+
+          button.appendChild (img);
+        }
+
+      this.titleButtons.appendChild (button);
+    };
+
+  /**
+   * Build default buttons in title bar
+   */
+  this.buildDefaultButtons = function ()
+    {
+      this.buildTitleButton ('window-close', 'close', 'right',
+          wrapMeth (this, 'onCloseClick'));
+    }
+
+  /**
    * Build DOM tree
    */
   this.doBuild = function ()
@@ -44,7 +107,12 @@ function _UIWindow ()
       title.className = 'UIWindowTitle';
       title.appendChild (document.createTextNode (this.caption));
       result.appendChild (title);
-  
+
+      /* Title buttons */
+      var buttons = createElement ('DIV');
+      buttons.className = 'UIWindowTitleButtons';
+      title.appendChild (buttons);
+
       if (this.resizable)
         {
           var sizer = createElement ('DIV');
@@ -74,6 +142,9 @@ function _UIWindow ()
       this.title      = title;
       this.sizer      = sizer;
       this.clientArea = clientArea;
+      this.titleButtons = buttons;
+
+      this.buildDefaultButtons ();
 
       uiManager.registerContext (result);
       $(result).click (function (self) { return function () { self.setFocus (); } } (this));
@@ -90,7 +161,6 @@ function _UIWindow ()
   this.setFocus = function ()
     {
       uiWindowManager.focusWindow (this);
-      this.onFocus ();
     };
 
   /**
@@ -110,7 +180,6 @@ function _UIWindow ()
   this.show = function (viewPort)
     {
       uiWindowManager.showWindow (this, viewPort);
-      this.onShow ();
     };
 
   /**
@@ -119,7 +188,6 @@ function _UIWindow ()
   this.hide = function ()
     {
       uiWindowManager.hideWindow (this);
-      this.onHide ();
     };
 
   /**
@@ -128,7 +196,6 @@ function _UIWindow ()
   this.close = function ()
     {
       uiWindowManager.closeWindow (this);
-      this.onClose ();
     };
 
   /* Getters/setters */
@@ -141,11 +208,22 @@ function _UIWindow ()
       return this.clientArea;
     };
 
+    /* Handlers */
+
+  /**
+   * Handler of close title button
+   */
+  this.onCloseClick = function ()
+    {
+      this.close (this);
+    }
+
   /* Event stubs */
-  this.onShow = function () {};
-  this.onRaise = function () {};
-  this.onHide = function () {};
-  this.onClose = function () {};
+  this.onShow   = function () {};
+  this.onRaise  = function () {};
+  this.onHide   = function () {};
+  this.onClose  = function () {};
+  this.onClosed = function () {};
 }
 
 /****
@@ -187,6 +265,9 @@ function UIWindow (opts)
         }
     };
   } (this));
+
+  /* Internal use */
+  this.abortClose = false;
 }
 
 UIWindow.prototype = new _UIWindow;

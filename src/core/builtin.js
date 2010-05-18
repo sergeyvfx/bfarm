@@ -119,6 +119,17 @@ function wrap (proc, args)
 }
 
 /**
+ * Wrap method context substitution
+ */
+function wrapMeth (obj, proc, args)
+{
+  return function (obj, proc, args) { return function () {
+        obj[proc] (args);
+      };
+    } (obj, proc, args);
+}
+
+/**
  * Call function outside from current stream
  */
 function callOut (proc, args)

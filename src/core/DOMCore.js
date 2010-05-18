@@ -87,3 +87,18 @@ function nodeInTree(node, tree)
 
   return false;
 }
+
+/**
+ * Remove node from DOM tree
+ *
+ * @param node - node to be removed
+ */
+function removeNode(node)
+{
+  if (!node || !node.parentNode)
+    {
+      return;
+    }
+
+  node.parentNode.removeChild (node);
+}

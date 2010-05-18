@@ -50,3 +50,49 @@ DIV.UIWindowClient {
   top: 24px;
   overflow: hidden;
 }
+
+DIV.UIWindowTitleButtons {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  padding: 0 4px;
+  font-size: 7px;
+}
+
+DIV.UIWindowTitleButton {
+  margin-top: 1px;
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  text-align: center;
+  padding-top: 1px;
+  cursor: pointer;
+  color: #333;
+
+  overflow: hidden;
+  height: 13px;
+  min-width: 18px;
+}
+
+DIV.UIWindowTitleButton:hover {
+  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIWindowTitleButtonLeft {
+  float: left;
+}
+
+DIV.UIWindowTitleButtonRight {
+  float: right;
+}
+
+DIV.UIWindowTitleButton IMG {
+  vertical-align: middle;
+}
