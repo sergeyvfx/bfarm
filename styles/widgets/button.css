@@ -31,6 +31,7 @@ DIV.UIButton A {
   color: #333;
   display: block;
   width: 100%;
+  margin-top: 1px;
 }
 
 DIV.UIButton A IMG {
