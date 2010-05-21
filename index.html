@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/viewport.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/window.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/groupbox.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -46,6 +47,7 @@
     <script type="text/javascript" src="src/ui/intern/UIAbstractList.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIZIndex.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIWindowManager.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIAbstractGroup.js"></script>
 
     <script type="text/javascript" src="src/ui/widgets/UIButton.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIEntry.js"></script>
@@ -59,6 +61,7 @@
     <script type="text/javascript" src="src/ui/elem/UIViewportPanel.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportItem.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIWindow.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIGroupBox.js"></script>
   </head>
 
   <body>
@@ -108,7 +111,7 @@
       viewport.addPanel (VP_PANEL_BOTTOM);
       viewport.addItem ('./pics/ico/blender.png', 'Blender', function () {
           if (isUnknown (window.__testWnd)) {
-            var wnd = new UIWindow ({'caption': 'Test window',
+            var wnd = new UIWindow ({'caption': 'Тестовое окно',
                                      'top': 16,
                                      'left': 16});
             var btn = new UIButton ({'title': 'Спрятать окно',
@@ -117,8 +120,27 @@
                                             }
                                           } (wnd)
                                      });
-  
-            wnd.add (btn);
+
+            var groupBox = new UIGroupBox ({'title': 'Тестовая группа'});
+
+            var grid = new UIGrid ({'rows': 3, 'cols': 1, 'padding': 2});
+
+            grid.add (btn);
+
+            var img = 'pics/buttons/camera.gif';
+            var btn = new UIButton ({'title': 'Поменять заголовок',
+                                     'image': img});
+
+            btn.onClick = function (groupBox) {return function () {
+                    groupBox.setTitle ('New title');
+                  };
+                } (groupBox);
+
+            grid.add (btn);
+
+            groupBox.add (grid);
+            wnd.add (groupBox);
+
             window.__testWnd = wnd;
           }
           window.__testWnd.show ();

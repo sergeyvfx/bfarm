@@ -1,0 +1,35 @@
+DIV.UIGroupBox {
+  margin: 4px 0;
+  position: relative;
+}
+
+DIV.UIGroupBoxContainer {
+  padding: 4px;
+  border: 1px solid #666666;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+}
+
+DIV.UIGroupBoxHeader {
+  position: absolute;
+  left: 16px;
+  top: -6pt;
+  background-color: #C2C2C2;
+  padding: 0 4px;
+  color: #333;
+  font-weight: bold;
+  cursor: default;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+DIV.UIGroupBoxTitled {
+  margin: 6px 0 4px 0;
+}
+
+DIV.UIGroupBoxContainerTitled {
+  padding-top: 6px;
+}

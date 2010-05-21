@@ -108,6 +108,9 @@ function _UIWindow ()
       title.appendChild (document.createTextNode (this.caption));
       result.appendChild (title);
 
+      $(title).disableTextSelect ();
+      $(titleBg).disableTextSelect ();
+
       /* Title buttons */
       var buttons = createElement ('DIV');
       buttons.className = 'UIWindowTitleButtons';

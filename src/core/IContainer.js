@@ -49,6 +49,14 @@ function _IContainer ()
     {
       return this.container[index];
     }
+
+  /**
+   * Get container length
+   */
+  this.length = function ()
+    {
+      return this.container.length;
+    }
 }
 
 /***
