@@ -61,7 +61,7 @@ function _UIContainer ()
 
           for (var j = 0; j < m && widgetIndex < widgetCount; ++j)
             {
-              var dom = this.buildChild(widgetIndex);
+              var dom = this.buildChild (widgetIndex);
               ++widgetIndex;
 
               if (!dom)
@@ -83,7 +83,7 @@ function _UIContainer ()
     {
       rebuild = defVal (rebuild, true);
 
-      IContainer.prototype.add.call(this, widget);
+      IContainer.prototype.add.call (this, widget);
       widget.parent = this;
 
       if (rebuild)

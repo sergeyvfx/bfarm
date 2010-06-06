@@ -11,6 +11,13 @@ function createElement (element)
 }
 
 /**
+ * Create text node
+ */
+function createTextNode (text)
+{
+  return document.createTextNode (text);
+}
+/**
  * Remove all nodes from node
  */
 function removeAllNodes (node)
@@ -101,4 +108,16 @@ function removeNode(node)
     }
 
   node.parentNode.removeChild (node);
+}
+
+/**
+ * Append float terminator
+ *
+ * @param where - where float should be terminated
+ */
+function floatTerm (where)
+{
+  var floatTerm = createElement ('DIV');
+  floatTerm.className = 'floatTerm';
+  where.appendChild (floatTerm);
 }

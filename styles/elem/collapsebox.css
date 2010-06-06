@@ -1,0 +1,57 @@
+DIV.UICollapseGroup {
+  border: 1px solid #666;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+}
+
+DIV.UICollapseBoxHeader {
+  background-color: #aaa;
+  padding: 0 4px;
+
+  -moz-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+  -khtml-border-radius: 6px 6px 0 0;
+}
+
+DIV.UICollapseGroupCollapsedHeader {
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+}
+
+DIV.UICollapseGroupContainer {
+  border-top: 1px solid #666;
+  padding: 4px;
+}
+
+TABLE.UICollapseBoxHeaderRowBlockHolder {
+  width: 100%;
+}
+
+TD.UICollapseBoxHeaderHolder {
+  text-align: left;
+  vertical-align: middle;
+  padding: 0 0 0 6px;
+}
+
+TD.UICollapseBoxHeaderFirstHolder {
+  padding-left: 0;
+}
+
+TD.UICollapseBoxCollapseButtonHolder {
+  width: 16px;
+}
+
+IMG.UICollapseBoxCollapseButton {
+  cursor: pointer;
+  vertical-align: top;
+}
+
+DIV.UICollapseBoxTitle {
+  font-weight: bold;
+}

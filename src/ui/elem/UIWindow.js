@@ -46,7 +46,7 @@ function _UIWindow ()
 
       if (image == '')
         {
-          button.appendChild (document.createTextNode (title));
+          button.appendChild (createTextNode (title));
         }
 
       if (handler)
@@ -89,23 +89,23 @@ function _UIWindow ()
   this.doBuild = function ()
     {
       var result = createElement ('DIV');
-  
+
       result.className = 'UIWindow';
-  
+
       /* Title */
-  
+
       /* Background and shadow */
       var titleBg = createElement ('DIV');
       var span = createElement ('SPAN');
       titleBg.className = 'UIWindowTitleBg';
-      span.appendChild (document.createTextNode (this.caption));
+      span.appendChild (createTextNode (this.caption));
       titleBg.appendChild (span);
       result.appendChild (titleBg);
-  
+
       /* Title */
       var title = createElement ('DIV');
       title.className = 'UIWindowTitle';
-      title.appendChild (document.createTextNode (this.caption));
+      title.appendChild (createTextNode (this.caption));
       result.appendChild (title);
 
       $(title).disableTextSelect ();

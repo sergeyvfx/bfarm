@@ -20,7 +20,7 @@ function _UIGroupBox ()
 
       var header = createElement ('DIV');
 
-      header.appendChild (document.createTextNode (this.title));
+      header.appendChild (createTextNode (this.title));
       header.className = 'UIGroupBoxHeader';
 
       $(header).disableTextSelect ();
@@ -69,7 +69,7 @@ function _UIGroupBox ()
       else
         {
           this.headerDom.innerHTML = '';
-          this.headerDom.appendChild (document.createTextNode (this.title));
+          this.headerDom.appendChild (createTextNode (this.title));
         }
     };
 }

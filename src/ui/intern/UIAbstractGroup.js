@@ -56,7 +56,7 @@ function _UIAbstractGroup ()
       container.className = this.contanerClassName;
       dom.appendChild (container);
 
-      hodlers = this.buildHoldersNodes ();
+      hodlers = this.buildHoldersNodes (container);
       if (!hodlers)
         {
           holders = [container];

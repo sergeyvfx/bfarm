@@ -29,7 +29,7 @@ function _UIViewportItem ()
       /* Caption */
       var cpt = createElement ('DIV');
       cpt.className = 'UIViewportItemCaption';
-      cpt.appendChild (document.createTextNode (this.caption));
+      cpt.appendChild (createTextNode (this.caption));
       this.caption_d = cpt;
       item.appendChild (cpt);
 
