@@ -1,4 +1,4 @@
-DIV.UICollapseGroup {
+DIV.UICollapseBox {
   border: 1px solid #666;
 
   -moz-border-radius: 6px;
@@ -9,7 +9,7 @@ DIV.UICollapseGroup {
 
 DIV.UICollapseBoxHeader {
   background-color: #aaa;
-  padding: 0 4px;
+  padding: 0 2px;
 
   -moz-border-radius: 6px 6px 0 0;
   border-radius: 6px 6px 0 0;
@@ -17,14 +17,14 @@ DIV.UICollapseBoxHeader {
   -khtml-border-radius: 6px 6px 0 0;
 }
 
-DIV.UICollapseGroupCollapsedHeader {
+DIV.UICollapseBoxCollapsedHeader {
   -moz-border-radius: 6px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 }
 
-DIV.UICollapseGroupContainer {
+DIV.UICollapseBoxContainer {
   border-top: 1px solid #666;
   padding: 4px;
 }

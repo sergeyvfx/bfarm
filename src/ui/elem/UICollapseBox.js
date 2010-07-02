@@ -15,11 +15,11 @@ function _UICollapseBox ()
   this.createHeaderItemHolder = function (where)
     {
       var holder = createElement ('TD');
-      holder.className = 'UICollapseBoxHeaderHolder';
+      holder.className = this.headerItemHolderClassName;
 
       if (where.childNodes.length == 0)
         {
-          holder.className += ' UICollapseBoxHeaderFirstHolder';
+          holder.className += ' ' + this.headerFIrstItemHolderClassName;
         }
 
       where.appendChild (holder);
@@ -35,11 +35,11 @@ function _UICollapseBox ()
   this.beginHeaderRow = function (where, block)
     {
       var table = createElement ('TABLE');
-      table.className = 'UICollapseBoxHeaderRowHolder';
+      table.className = this.headerRowHolderClassName;
 
       if (block)
         {
-          table.className += ' UICollapseBoxHeaderRowBlockHolder';
+          table.className += ' ' + this.headerBlockRowHolderClassName;
         }
 
       $(table).append('<tbody><tr></tr></tbody>');
@@ -97,15 +97,15 @@ function _UICollapseBox ()
   this.buildHeader = function ()
     {
       var header = createElement ('DIV');
-      header.className = 'UICollapseBoxHeader';
+      header.className = this.headerClassName;
 
       var holder = this.beginHeaderRow (header);
 
       /* Collapse button */
       var btnHolder = this.createHeaderItemHolder (holder);
       var button = createElement ('IMG');
-      btnHolder.className = 'UICollapseBoxCollapseButtonHolder';
-      button.className = 'UICollapseBoxCollapseButton';
+      btnHolder.className = this.collapseButtonHolderClassName;
+      button.className = this.collapseButtonClassName;
       btnHolder.appendChild (button);
 
       /* Box title */
@@ -113,7 +113,7 @@ function _UICollapseBox ()
         {
           var titleHolder = this.createHeaderItemHolder (holder);
           var title = createElement ('DIV');
-          title.className = 'UICollapseBoxTitle';
+          title.className = this.titleHolderClassName;
           title.appendChild (createTextNode (this.title));
           titleHolder.appendChild (title);
         }
@@ -200,13 +200,43 @@ function UICollapseBox (opts)
   this.headerItems = defVal (opts['headerItems'], []);
 
   /* Class name for outer DOM node */
-  this.outerClassName = 'UICollapseGroup';
+  this.outerClassName = 'UICollapseBox';
+
+  if (isUnknown (this.classNamePrefix))
+    {
+      /* prefix for all class names */
+      this.classNamePrefix = this.outerClassName;
+    }
 
   /* Class name for widget container node */
-  this.contanerClassName = 'UICollapseGroupContainer';
+  this.contanerClassName = this.classNamePrefix + 'Container';
 
   /* Class name for collapsed header */
-  this.collapsedHeaderClass = 'UICollapseGroupCollapsedHeader';
+  this.collapsedHeaderClass = this.classNamePrefix + 'CollapsedHeader';
+
+  /* Class name for header */
+  this.headerClassName = this.classNamePrefix + 'Header';
+
+  /* Class name for collapse button holder */
+  this.collapseButtonHolderClassName = this.classNamePrefix + 'CollapseButtonHolder';
+
+  /* Class name for collapse button */
+  this.collapseButtonClassName = this.classNamePrefix + 'CollapseButton';
+
+  /* Class name for title holder */
+  this.titleHolderClassName = this.classNamePrefix + 'Title';
+
+  /* Class name for header row holder */
+  this.headerRowHolderClassName = this.classNamePrefix + 'HeaderRowHolder';
+
+  /* Class name for block row holder */
+  this.headerBlockRowHolderClassName = this.classNamePrefix + 'HeaderRowBlockHolder';
+
+  /* Class name for header item holder */
+  this.headerItemHolderClassName = this.classNamePrefix + 'HeaderHolder';
+
+  /* Class name for first header item holder */
+  this.headerFIrstItemHolderClassName = this.classNamePrefix + 'HeaderFirstHolder';
 
   /* Box's title */
   this.title = defVal (opts['title'], '');

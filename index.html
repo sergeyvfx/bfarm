@@ -19,6 +19,7 @@
     <link rel="stylesheet" type="text/css" href="styles/elem/window.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/groupbox.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/collapsebox.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/panelbox.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -65,6 +66,7 @@
     <script type="text/javascript" src="src/ui/elem/UIWindow.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIGroupBox.js"></script>
     <script type="text/javascript" src="src/ui/elem/UICollapseBox.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIPanelBox.js"></script>
   </head>
 
   <body>
@@ -127,14 +129,16 @@
             var hBtn = new UIButton ({'title': 'Кнопка',
                                       'image' : 'pics/buttons/search.gif'});
             hBtn.width = '100px';
-            var hBtnBlock = new UIButton ({'title': 'Блочная кнопка',
+            var hBtnBlock = new UIButton ({'title': 'Ещё кнопка',
                                            'image' : 'pics/buttons/camera.gif'});
             hBtnBlock.block = true;
             var items = [hBtn, hBtnBlock];
-            var groupBox = new UICollapseBox ({'title'    : 'Тестовая группа',
-                                              'collapsed': false,
-                                              'animated' : true,
-                                              'headerItems': items});
+            var groupBox = new UIPanelBox ({'title'    : 'Тестовая группа',
+                                            'collapsed': false,
+                                            'animated' : true});
+            var groupBox2 = new UIPanelBox ({'title'    : 'Группа 2',
+                                             'collapsed': true,
+                                             'animated' : true});
 
             var grid = new UIGrid ({'rows': 2, 'cols': 1, 'padding': 2});
 
@@ -151,15 +155,20 @@
 
             grid.add (btn);
 
-            groupBox.add (grid);
+            var grid2 = new UIGrid ({'rows': 3, 'cols': 1, 'padding': 2});
+            grid2.add (hBtn);
+            grid2.add (hBtnBlock);
 
             var spin = new UISpinButton ({'image' : 'pics/buttons/camera.gif',
-                                          'min'   : 0,
-                                          'max'   : 16});
+              'min'   : 0,
+              'max'   : 16});
+            groupBox.add (grid);
+            groupBox2.add (grid2);
+            grid2.add (spin);
 
             var outGrid = new UIGrid ({'rows': 2, 'cols': 1, 'padding': 2});
             outGrid.add (groupBox);
-            outGrid.add (spin);
+            outGrid.add (groupBox2);
             wnd.add (outGrid);
 
             window.__testWnd = wnd;
