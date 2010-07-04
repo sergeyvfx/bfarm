@@ -136,3 +136,22 @@ function callOut (proc, args)
 {
   window.setTimeout (wrap (proc, args), 5);
 }
+
+/**
+ * Check could object be interpreted as truth
+ */
+function isTruth(obj)
+{
+  if (isUnknown (obj))
+    {
+      return false;
+    }
+
+  if (obj.toLowerCase)
+    {
+      var l = obj.toLowerCase ();
+      return l != '' && l != '0' && l != 'false';
+    }
+
+  return (obj) ? true : false;
+}

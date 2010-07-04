@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="styles/elem/groupbox.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/collapsebox.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/panelbox.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/scrolledarea.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/panel.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -38,6 +40,7 @@
     <script type="text/javascript" src="src/core/IObject.js"></script>
     <script type="text/javascript" src="src/core/IEventProxy.js"></script>
     <script type="text/javascript" src="src/core/IContainer.js"></script>
+    <script type="text/javascript" src="src/ui/intern/UIUtil.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIObject.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIManager.js"></script>
     <script type="text/javascript" src="src/ui/intern/UIDragProvider.js"></script>
@@ -67,6 +70,8 @@
     <script type="text/javascript" src="src/ui/elem/UIGroupBox.js"></script>
     <script type="text/javascript" src="src/ui/elem/UICollapseBox.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIPanelBox.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIScrolledArea.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIPanel.js"></script>
   </head>
 
   <body>
@@ -155,7 +160,10 @@
 
             grid.add (btn);
 
+            var combobox = new UIComboBox ({'items': ['item 0', 'item 1', 'item 2']});
+
             var grid2 = new UIGrid ({'rows': 3, 'cols': 1, 'padding': 2});
+            grid2.add (combobox);
             grid2.add (hBtn);
             grid2.add (hBtnBlock);
 
@@ -166,10 +174,15 @@
             groupBox2.add (grid2);
             grid2.add (spin);
 
-            var outGrid = new UIGrid ({'rows': 2, 'cols': 1, 'padding': 2});
-            outGrid.add (groupBox);
-            outGrid.add (groupBox2);
-            wnd.add (outGrid);
+            var header = new UIGrid ({'rows': 1, 'cols': 2, 'padding': 2});
+            header.add (new UIButton ({'title': 'Pinned button'}));
+            header.add (new UISpinButton ());
+            header.height = 18;
+
+            var panel = new UIPanel ({'header' : header});
+            panel.add (groupBox);
+            panel.add (groupBox2);
+            wnd.add (panel);
 
             window.__testWnd = wnd;
           }

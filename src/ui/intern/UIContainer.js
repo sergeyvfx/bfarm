@@ -14,7 +14,7 @@ function _UIContainer ()
    *
    * Holder is a DOM element, to which widgets will be appended
    * This DOM element could contain a widgetsCount property if it wants
-   * to hold more than one widget 
+   * to hold more than one widget
    */
   this.getHolders = function ()
     {
@@ -81,7 +81,7 @@ function _UIContainer ()
    */
   this.add = function (widget, rebuild)
     {
-      rebuild = defVal (rebuild, true);
+      rebuild = defVal (rebuild, this.dom != null);
 
       IContainer.prototype.add.call (this, widget);
       widget.parent = this;

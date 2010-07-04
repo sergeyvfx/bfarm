@@ -122,10 +122,12 @@ function _UIButton ()
 
 function UIButton (opts)
 {
+  opts = opts || {};
+
   UIWidget.call (this, opts);
 
   /* Title which will be displayed */
-  this.title = opts['title'];
+  this.title = defVal (opts['title'], '');
 
   /* User's defined click handler */
   if (opts['click'])

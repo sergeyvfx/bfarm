@@ -6,6 +6,25 @@ function _UIPanelBox ()
 {
   _UICollapseBox.call (this);
 
+  /**
+   * Tweak some node's classNames after build
+   */
+  this.tweakStyles = function ()
+    {
+      UICollapseBox.prototype.tweakStyles.call (this);
+
+      /* nice integration to UI panel  */
+      var p = this.getParent ();
+      if (p instanceof UIPanel)
+        {
+          /* XXX: hacky checking */
+          if (!p.hasHeader () && p.get (0) == this)
+            {
+              $(this.headerDom).addClass ('UIPanelBoxFirstHeader');
+              $(this.headerDom.parentNode).addClass ('UIPanelBoxFirst ');
+            }
+        }
+    };
 }
 
 function UIPanelBox (opts)

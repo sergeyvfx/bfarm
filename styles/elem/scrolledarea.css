@@ -1,0 +1,13 @@
+DIV.UIScrolledArea {
+  position: relative;
+}
+
+DIV.UIScrolledAreaBordered {
+  border: 1px solid #666;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+}
+

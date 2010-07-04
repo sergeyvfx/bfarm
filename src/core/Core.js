@@ -91,9 +91,27 @@ Element.prototype.hasParent = function ()
   return $(this).parent () [0];
 };
 
+/**
+ * Remove all child nodes
+ */
 Element.prototype.removeAllNodes = function ()
 {
   removeAllNodes (this);
+};
+
+/**
+ * Push new node as first child
+ */
+Element.prototype.pushFront = function (node)
+{
+  if (this.childNodes.length)
+    {
+      $(node).insertBefore ($(this.childNodes[0]));
+    }
+  else
+    {
+      this.appendChild (node);
+    }
 };
 
 /**

@@ -10,6 +10,14 @@ DIV.UIPanelBoxHeader {
   border-width: 1px 0 0 0;
 }
 
+DIV.UIPanelBoxFirst {
+  border-width: 0 !important;
+}
+
+DIV.UIPanelBoxFirstHeader {
+  border-width: 0 !important;
+}
+
 DIV.UIPanelBoxContainer {
   padding: 4px;
 }
