@@ -24,18 +24,19 @@ function _UISpinButton ()
           };
         } (this, position == 'Left' ? -1 : 1, button));
 
-      var handler = function (self, button) {return function (event) {
-            var target = relatedTarget (event);
-            if (!nodeInTree (target, button))
-              {
-                self.stopAffecting ();
-                $(button).removeClass ('UISpinButtonAbjusting');
-              }
-          };
-        } (this, button);
+      var handler = function (self, button) { return function (type) {return function (event) {
+                var target = relatedTarget (event);
+                if (!nodeInTree (target, button) || type == 'up')
+                  {
+                    self.stopAffecting ();
+                    $(button).removeClass ('UISpinButtonAbjusting');
+                  }
+              };
+            }
+          } (this, button);
 
-      $(button).mouseup (handler);
-      $(button).mouseout (handler);
+      $(button).mouseup (handler ('up'));
+      $(button).mouseout (handler ('out'));
 
       return button;
     }
