@@ -5,7 +5,7 @@
 function _UIButton ()
 {
   _UIWidget.call (this);
-  
+
 
   /**
    * Build DOM tree for button
@@ -51,6 +51,9 @@ function _UIButton ()
       this.attachEvent (result, 'click', 'onClickHandler');
 
       $(result).disableTextSelect ();
+      $(result).mousedown (wrapMeth (this, 'doOnPress'));
+      $(result).mouseup   (wrapMeth (this, 'doOnRelease'));
+      $(result).mouseout  (wrapMeth (this, 'doOnMouseOut'));
 
       return result;
     };
@@ -71,7 +74,9 @@ function _UIButton ()
   /**
    * Events'stubs
    */
-  this.onClick = function (event) {}
+  this.onClick   = function (event) {}
+  this.onPress   = function () {}
+  this.onRelease = function () {}
 
   /**
    * Getters/setters
@@ -117,6 +122,33 @@ function _UIButton ()
     {
       this.title = title;
       this.titleElement.innerHTML = title;
+    };
+
+  /**
+   * Handle button was pressed down event
+   */
+  this.doOnPress = function ()
+    {
+      $(this.dom).addClass ('UIButtonPressed');
+      this.onPress ();
+    };
+
+  /**
+   * Handle button was released event
+   */
+  this.doOnRelease = function ()
+    {
+      $(this.dom).removeClass ('UIButtonPressed');
+
+      this.onRelease ();
+    };
+
+  /**
+   * Handle button was released event
+   */
+  this.doOnMouseOut = function ()
+    {
+      $(this.dom).removeClass ('UIButtonPressed');
     };
 }
 

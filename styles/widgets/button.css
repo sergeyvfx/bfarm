@@ -20,6 +20,14 @@ DIV.UIButton:hover {
   background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
 }
 
+DIV.UIButtonPressed {
+  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+}
+
+DIV.UIButtonPressed * {
+  color: #fff !important;
+}
+
 DIV.UIButton IMG {
   vertical-align: middle;
   margin-right: 6px;

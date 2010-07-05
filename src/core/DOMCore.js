@@ -51,12 +51,13 @@ function voidLink(content, opts)
 
   result.href = 'JavaScript:Void(0)';
 
-  $(result).click (function () {
-      if (!this.canFocus)
-        {
-          this.blur ();
-        }
-    });
+  var blurCallback = function ()
+    {
+      window.setTimeout (function (link) { return function () { link.blur (); }; } (this), 1)
+    };
+
+  $(result).mousedown (blurCallback);
+  $(result).click (blurCallback);
 
   if (typeof content == 'string')
     {
