@@ -60,3 +60,7 @@ DIV.UISpinButtonBtnRight DIV.UISpinButtonBtnArr {
   height: 10px;
   margin: 4px 0 0 6px;
 }
+
+DIV.UISpinButtonAbjusting {
+  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+}

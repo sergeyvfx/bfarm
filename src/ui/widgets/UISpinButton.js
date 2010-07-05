@@ -18,15 +18,21 @@ function _UISpinButton ()
       arr.className = 'UISpinButtonBtnArr';
       button.appendChild (arr);
 
-      $(button).mousedown (function (self, direction) {return function (event) {
+      $(button).mousedown (function (self, direction, button) {return function (event) {
             self.onBtnMouseDown (event, direction);
+            $(button).addClass ('UISpinButtonAbjusting');
           };
-        } (this, position == 'Left' ? -1 : 1));
+        } (this, position == 'Left' ? -1 : 1, button));
 
-      var handler = function (self) {return function () {
-            self.stopAffecting ();
+      var handler = function (self, button) {return function (event) {
+            var target = relatedTarget (event);
+            if (!nodeInTree (target, button))
+              {
+                self.stopAffecting ();
+                $(button).removeClass ('UISpinButtonAbjusting');
+              }
           };
-        } (this);
+        } (this, button);
 
       $(button).mouseup (handler);
       $(button).mouseout (handler);
@@ -50,7 +56,7 @@ function _UISpinButton ()
             }
 
           var entryHolder = createElement ('DIV');
-          entryHolder.className = 'UISpinEntryHolder'; 
+          entryHolder.className = 'UISpinEntryHolder';
           moveAllNodes (result, entryHolder);
 
           result.appendChild (this.createButton ('Left'));
