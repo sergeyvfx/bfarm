@@ -16,8 +16,14 @@ function _UIPanel ()
       if (this.hasHeader ())
         {
           var tmpHeader = $('<div></div>') . addClass ('UIPanelHeader');
-          var margin = parseInt ($(tmpHeader).css ('marginTop')) +
-                       parseInt ($(tmpHeader).css ('marginBottom')) + 2;
+
+          /* Only FF works correct if node is out of document's DOM */
+          document.body.appendChild (tmpHeader[0]);
+
+          var margin = parseInt (tmpHeader.css ('marginTop') || '0') +
+                       parseInt (tmpHeader.css ('marginBottom') || '0') + 2;
+
+          removeNode (tmpHeader[0]);
 
           res.top += uiUtil.getItemHeight (this.header) + margin;
         }

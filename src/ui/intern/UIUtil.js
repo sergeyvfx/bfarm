@@ -85,7 +85,22 @@ function _UIUtil ()
         }
 
       return null;
-    }
+    };
+
+  /**
+   * Convert user-specified size to style value
+   */
+  this.sizeToStyle = function (size)
+    {
+      var size = '' + size;
+
+      if (size.match (/^[0-9]+$/))
+        {
+          return size + 'px';
+        }
+
+      return size;
+    };
 }
 
 function UIUtil ()

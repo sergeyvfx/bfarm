@@ -30,11 +30,11 @@ function _UIViewportPanel ()
 
       if (this.position % 2)
         {
-          viewport.style['margin' + alphaName] = $(result).css('height');
+          viewport.style['margin' + alphaName] = $(result).css('height') || '0px';
         }
       else
         {
-          viewport.style['margin' + alphaName] = $(result).css('width');
+          viewport.style['margin' + alphaName] = $(result).css('width') || '0px';
         }
 
       return result;

@@ -150,12 +150,12 @@ function _UIWidget ()
 
           if (this.width != null)
             {
-              this.dom.style.width = this.width + 'px';
+              this.dom.style.width = uiUtil.sizeToStyle (this.width);
             }
 
           if (this.height != null)
             {
-              this.dom.style.height = this.height + 'px';
+              this.dom.style.height = uiUtil.sizeToStyle (this.height);
             }
         }
 
@@ -260,12 +260,12 @@ function _UIWidget ()
       if (this.insensitiveClassName != null)
         {
           dom = dom || this.dom;
-    
+
           if (!dom)
             {
               return;
             }
-    
+
           if (this.sensitive)
             {
               $(dom).removeClass (this.insensitiveClassName);
@@ -279,6 +279,21 @@ function _UIWidget ()
         }
 
       return false;
+    };
+
+  /**
+   * Destroy DOM subtree
+   */
+  this.destroyDOM = function ()
+    {
+      if (this.dom)
+        {
+          /* ensure widget's DOM isn't in document's DOM */
+          removeNode (this.dom);
+
+          delete this.dom;
+          this.dom = null;
+        }
     };
 }
 

@@ -51,7 +51,7 @@ function _UIComboBox ()
     };
 
   /**
-   * Build DOM for combo box 
+   * Build DOM for combo box
    */
   this.doBuild = function ()
     {
@@ -127,6 +127,7 @@ function _UIComboBox ()
   this.hideDropDown = function () {
     callOut (function (self) {return function () {
           uiPopupManager.hide (self.popupList);
+          self.list.destroyDOM ();
         };
       } (this)
     );
@@ -283,7 +284,7 @@ function _UIComboBox ()
   /**
    * Do all checking when mouse was leaved combobox or drop down list
    */
-  this.checkMouseOut = function (event) 
+  this.checkMouseOut = function (event)
     {
       if (!this.hideListOnMouseout || !this.popupList)
         {
@@ -343,12 +344,26 @@ function _UIComboBox ()
     };
 
   /**
+   * Update list's dom (if needed)
+   */
+  this.rebuildList = function ()
+    {
+      if (!this.list.dom)
+        {
+          /* nothing to do */
+          return;
+        }
+
+      this.list.rebuild ();
+    };
+
+  /**
    * Add new item to list
    */
   this.add = function (item)
     {
       this.list.add (item);
-      this.list.rebuild ();
+      this.rebuildList ();
     };
 
   /**
@@ -357,7 +372,7 @@ function _UIComboBox ()
   this.remove = function (item)
     {
       this.list.remove (item);
-      this.list.rebuild ();
+      this.rebuildList ();
     };
 }
 
