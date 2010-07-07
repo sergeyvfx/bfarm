@@ -367,7 +367,7 @@ function _UIComboBox ()
     };
 
   /**
-   * Add new item to list
+   * Remove item from list
    */
   this.remove = function (item)
     {
