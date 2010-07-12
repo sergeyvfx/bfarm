@@ -23,28 +23,11 @@ function _UIScrolledArea ()
    */
   this.buildScroller = function ()
     {
-      var jqHolder;
       var paddings = this.getScrollHolderPaddings ();
       var position = isUnknown (this.getParent ().height) ? '' : 'absolute';
 
-      var dom = ($('<div></div>')
-          .css ('display', 'table')
-          .append($('<div></div>')
-                    .css ('display', 'table-cell')
-                    .css ('height', '100%')
-                    .append ((jqHolder = $('<div></div>'))
-                             .css ('overflow', 'auto')
-                             .css ('position', position)
-                             .css ('top', paddings.top + 'px')
-                             .css ('bottom', paddings.bottom + 'px')
-                             .css ('left', paddings.left + 'px')
-                             .css ('right', paddings.right + 'px')
-                            )
-                 )) [0];
-
-      dom['holder'] = jqHolder[0];
-
-      return dom;
+      return buildScrollHolder ({'paddings': paddings,
+                                 'position': position});
     };
 
   /**
