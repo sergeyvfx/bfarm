@@ -48,7 +48,7 @@ function _UIScrolledArea ()
 
       if (this.withBorder)
         {
-          $(dom).addClass ('UIScrolledAreaBordered');
+          dom.addClass ('UIScrolledAreaBordered');
         }
 
       return {'dom': dom, 'holders': [scroller.holder]};

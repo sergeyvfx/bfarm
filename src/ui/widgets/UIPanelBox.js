@@ -20,8 +20,8 @@ function _UIPanelBox ()
           /* XXX: hacky checking */
           if (!p.hasHeader () && p.get (0) == this)
             {
-              $(this.headerDom).addClass ('UIPanelBoxFirstHeader');
-              $(this.headerDom.parentNode).addClass ('UIPanelBoxFirst ');
+              this.headerDom.addClass ('UIPanelBoxFirstHeader');
+              this.headerDom.parentNode.addClass ('UIPanelBoxFirst ');
             }
         }
     };

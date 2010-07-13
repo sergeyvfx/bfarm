@@ -61,8 +61,8 @@ function _UIAbstractCollapse ()
         {
           if (this.collapsedContainerClass)
             {
-              $(this.containerDom).removeClass (this.expandedContainerClass);
-              $(this.containerDom).addClass (this.collapsedContainerClass);
+              this.containerDom.removeClass (this.expandedContainerClass);
+              this.containerDom.addClass (this.collapsedContainerClass);
             }
           else
             {
@@ -71,19 +71,19 @@ function _UIAbstractCollapse ()
 
           if (this.headerDom)
             {
-              $(this.headerDom).removeClass (this.expandedHeaderClass);
-              $(this.headerDom).addClass (this.collapsedHeaderClass);
+              this.headerDom.removeClass (this.expandedHeaderClass);
+              this.headerDom.addClass (this.collapsedHeaderClass);
             }
         }
       else
         {
-          $(this.containerDom).removeClass (this.collapsedContainerClass);
-          $(this.containerDom).addClass (this.expandedContainerClass);
+          this.containerDom.removeClass (this.collapsedContainerClass);
+          this.containerDom.addClass (this.expandedContainerClass);
 
           if (this.headerDom)
             {
-              $(this.headerDom).removeClass (this.collapsedHeaderClass);
-              $(this.headerDom).addClass (this.expandedHeaderClass);
+              this.headerDom.removeClass (this.collapsedHeaderClass);
+              this.headerDom.addClass (this.expandedHeaderClass);
             }
         }
     };

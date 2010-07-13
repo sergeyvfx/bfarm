@@ -20,7 +20,7 @@ function _UISpinButton ()
 
       $(button).mousedown (function (self, direction, button) {return function (event) {
             self.onBtnMouseDown (event, direction);
-            $(button).addClass ('UISpinButtonAbjusting');
+            button.addClass ('UISpinButtonAbjusting');
           };
         } (this, position == 'Left' ? -1 : 1, button));
 
@@ -29,7 +29,7 @@ function _UISpinButton ()
                 if (!nodeInTree (target, button) || type == 'up')
                   {
                     self.stopAffecting ();
-                    $(button).removeClass ('UISpinButtonAbjusting');
+                    button.removeClass ('UISpinButtonAbjusting');
                   }
               };
             }
@@ -50,10 +50,10 @@ function _UISpinButton ()
 
       if (result)
         {
-          $(result).addClass ('UISpinButton');
+          result.addClass ('UISpinButton');
           if (this.image)
             {
-              $(result).addClass ('UISpinButtonWImage');
+              result.addClass ('UISpinButtonWImage');
             }
 
           var entryHolder = createElement ('DIV');

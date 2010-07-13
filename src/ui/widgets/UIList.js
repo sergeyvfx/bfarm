@@ -55,12 +55,12 @@ function _UIList ()
 
       if (this.transparent)
         {
-          $(result).addClass ('UIListTransparent');
+          result.addClass ('UIListTransparent');
         }
 
       if (this.height != null || this.width != null)
         {
-          $(result).addClass ('UIListFixedSize');
+          result.addClass ('UIListFixedSize');
         }
 
       return result;

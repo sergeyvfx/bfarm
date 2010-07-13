@@ -35,8 +35,8 @@ function _UIGroupBox ()
     {
       if (this.title)
         {
-          $(this.outerDom).addClass ('UIGroupBoxTitled');
-          $(this.containerDom).addClass ('UIGroupBoxContainerTitled');
+          this.outerDom.addClass ('UIGroupBoxTitled');
+          this.containerDom.addClass ('UIGroupBoxContainerTitled');
         }
     };
 

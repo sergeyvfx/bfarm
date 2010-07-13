@@ -180,6 +180,22 @@ Element.prototype.pushFront = function (node)
 };
 
 /**
+ * Add class to node
+ */
+Element.prototype.addClass = function (class)
+{
+  return $(this).addClass (class);
+};
+
+/**
+ * Remove class from node
+ */
+Element.prototype.removeClass = function (class)
+{
+  return $(this).removeClass (class);
+};
+
+/**
  * Trim spaces from string
  */
 String.prototype.trim = function()

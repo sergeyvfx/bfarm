@@ -320,11 +320,11 @@ function _UIWidget ()
 
           if (this.sensitive)
             {
-              $(dom).removeClass (this.insensitiveClassName);
+              dom.removeClass (this.insensitiveClassName);
             }
           else
             {
-              $(dom).addClass (this.insensitiveClassName);
+              dom.addClass (this.insensitiveClassName);
             }
 
           return true;

@@ -240,7 +240,7 @@ function _UIComboBox ()
    */
   this.onPupShow = function ()
     {
-      $(this.dom).addClass ('UIComboboxDropdown');
+      this.dom.addClass ('UIComboboxDropdown');
       this.validateShadowSize ();
     };
 
@@ -249,7 +249,7 @@ function _UIComboBox ()
    */
   this.onPupHide = function ()
     {
-      $(this.dom).removeClass ('UIComboboxDropdown');
+      this.dom.removeClass ('UIComboboxDropdown');
       this.popupList = null;
     };
 

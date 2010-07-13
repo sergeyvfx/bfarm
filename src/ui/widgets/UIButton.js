@@ -131,7 +131,7 @@ function _UIButton ()
     {
       if (this.sensitive)
         {
-          $(this.dom).addClass ('UIButtonPressed');
+          this.dom.addClass ('UIButtonPressed');
           this.onPress ();
         }
     };
@@ -143,7 +143,7 @@ function _UIButton ()
     {
       if (this.sensitive)
         {
-          $(this.dom).removeClass ('UIButtonPressed');
+          this.dom.removeClass ('UIButtonPressed');
           this.onRelease ();
         }
     };
@@ -153,7 +153,7 @@ function _UIButton ()
    */
   this.doOnMouseOut = function ()
     {
-      $(this.dom).removeClass ('UIButtonPressed');
+      this.dom.removeClass ('UIButtonPressed');
     };
 }
 

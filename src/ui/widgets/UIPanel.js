@@ -47,7 +47,7 @@ function _UIPanel ()
               header = $('<div></div>').append (header);
             }
 
-          $(header).addClass (this.headerClassName);
+          header.addClass (this.headerClassName);
         }
 
       return header;

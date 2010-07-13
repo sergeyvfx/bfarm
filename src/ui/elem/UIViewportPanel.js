@@ -24,7 +24,7 @@ function _UIViewportPanel ()
       var alphaName = VP_PANEL_ALPHAS[this.position - 1];
 
       result.className = 'UIViewportPanel';
-      $(result).addClass ('UIViewport' + alphaName + 'Panel');
+      result.addClass ('UIViewport' + alphaName + 'Panel');
 
       var viewport = this.getParent().getViewport();
 

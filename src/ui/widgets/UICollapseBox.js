@@ -136,8 +136,8 @@ function _UICollapseBox ()
     {
       if (!this.collapsed && this.headerDom)
         {
-          $(this.headerDom).removeClass (this.collapsedHeaderClass);
-          $(this.headerDom).addClass (this.expandedHeaderClass);
+          this.headerDom.removeClass (this.collapsedHeaderClass);
+          this.headerDom.addClass (this.expandedHeaderClass);
         }
     };
 
