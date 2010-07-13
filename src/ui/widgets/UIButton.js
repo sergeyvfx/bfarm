@@ -129,8 +129,11 @@ function _UIButton ()
    */
   this.doOnPress = function ()
     {
-      $(this.dom).addClass ('UIButtonPressed');
-      this.onPress ();
+      if (this.sensitive)
+        {
+          $(this.dom).addClass ('UIButtonPressed');
+          this.onPress ();
+        }
     };
 
   /**
@@ -138,9 +141,11 @@ function _UIButton ()
    */
   this.doOnRelease = function ()
     {
-      $(this.dom).removeClass ('UIButtonPressed');
-
-      this.onRelease ();
+      if (this.sensitive)
+        {
+          $(this.dom).removeClass ('UIButtonPressed');
+          this.onRelease ();
+        }
     };
 
   /**
