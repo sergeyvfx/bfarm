@@ -23,6 +23,11 @@ function _UIPanel ()
           var margin = parseInt (tmpHeader.css ('marginTop') || '0') +
                        parseInt (tmpHeader.css ('marginBottom') || '0') + 2;
 
+          if (!this.withBorder)
+            {
+              margin += 4;
+            }
+
           removeNode (tmpHeader[0]);
 
           res.top += uiUtil.getItemHeight (this.header) + margin;
