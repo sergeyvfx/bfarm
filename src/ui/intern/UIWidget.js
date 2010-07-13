@@ -353,8 +353,6 @@ function _UIWidget ()
    */
   this.postEmbedTweaks = function ()
     {
-      var parent = this.getParent ();
-
       if (!this.isEmbedded ())
         {
           return;

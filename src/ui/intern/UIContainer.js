@@ -111,6 +111,7 @@ function _UIContainer ()
    */
   this.postEmbedTweaks = function ()
     {
+      this.isEmbedded ()
       if (!this.isEmbedded ())
         {
           return;

@@ -2,63 +2,6 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
-/******
- * Default functions overriding
- */
-
-function setEmbedHandlers (node)
-  {
-    var handle = ['appendChild', 'insertAfter', 'insertBefore'];
-
-    for (var i = 0, n = handle.length; i < n; ++i)
-      {
-        var h = handle[i];
-
-        if (!node[h])
-          {
-            continue;
-          }
-
-        node['__' + h] = node[h];
-
-        node[h] = function (h) { return function (a, b) {
-              var result = this['__' + h] (a, b);
-
-              if (a.uiWidget)
-                {
-                  var f = a.uiWidget.postEmbedTweaks;
-
-                  if (typeof f == 'function')
-                    {
-                      f.call (a.uiWidget);
-                    }
-                }
-
-              return result;
-            };
-          } (h);
-      }
-
-    return node;
-  }
-
-if (!window.HTMLDocument)
-  {
-    var oldDocCreateElement = document.createElement;
-    document.createElement = function (elem)
-      {
-        return setEmbedHandlers (oldDocCreateElement (elem));
-      }
-  }
-else
-  {
-    var oldHTMLDocCreateElement = HTMLDocument.prototype.createElement;
-    HTMLDocument.prototype.createElement = function (elem)
-      {
-        return setEmbedHandlers (oldHTMLDocCreateElement.call (this, elem));
-      }
-  }
-
 /**
  * Create new DOM element
  */
@@ -189,12 +132,13 @@ function isNodeEmbedded (node)
 {
   var oldID = node.id;
 
+
   if (isUnknown (document.embedCounter))
     {
       document.embedCounter = 0;
     }
 
-  node.id = '__chechEmbed' + (document.embedCounter++);
+  node.id = '__checkEmbed' + (document.embedCounter++);
 
   var result = document.getElementById (node.id);
 

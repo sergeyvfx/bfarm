@@ -5,6 +5,8 @@
 function buildScrollHolder (opts)
 {
   opts = opts || {};
+  var ieVersion = $.browser.msie ? parseFloat ($.browser.version) : null;
+  var couldDispTable = (ieVersion == null || ieVersion >= 8);
 
   var jqHolder = null;
   var position = defVal (opts['position'], '');
@@ -14,9 +16,9 @@ function buildScrollHolder (opts)
                                             'right'  : 0});
 
   var dom = ($('<div></div>')
-      .css ('display', 'table')
+      .css ('display', couldDispTable ? 'table' : '')
       .append($('<div></div>')
-                .css ('display', 'table-cell')
+                .css ('display', couldDispTable ? 'table-cell' : '')
                 .css ('height', '100%')
                 .append ((jqHolder = $('<div></div>'))
                          .css ('overflow', 'auto')

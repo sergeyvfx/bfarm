@@ -12,8 +12,16 @@ if (!window.Element)
 
   function _ (element)
     {
+      if (!element)
+        {
+          return null;
+        }
+
       for (var key in Element.prototype)
-        element[key] = Element.prototype[key];
+        {
+          element[key] = Element.prototype[key];
+        }
+
       return element;
     }
 
@@ -58,6 +66,63 @@ if (!Array.indexOf)
       return -1;
     }
 }
+
+/******
+ * Default functions overriding
+ */
+
+function setEmbedHandlers (node)
+  {
+    var handle = ['appendChild', 'insertAfter', 'insertBefore'];
+
+    for (var i = 0, n = handle.length; i < n; ++i)
+      {
+        var h = handle[i];
+
+        if (!node[h])
+          {
+            continue;
+          }
+
+        node['__' + h] = node[h];
+
+        node[h] = function (h) { return function (a, b) {
+              var result = this['__' + h] (a, b);
+
+              if (a.uiWidget)
+                {
+                  var f = a.uiWidget.postEmbedTweaks;
+
+                  if (typeof f == 'function')
+                    {
+                      f.call (a.uiWidget);
+                    }
+                }
+
+              return result;
+            };
+          } (h);
+      }
+
+    return node;
+  }
+
+if (!window.HTMLDocument)
+  {
+    var oldDocCreateElement = document.createElement;
+    document.createElement = function (elem)
+      {
+        return setEmbedHandlers (oldDocCreateElement (elem));
+      }
+  }
+else
+  {
+    var oldHTMLDocCreateElement = HTMLDocument.prototype.createElement;
+    HTMLDocument.prototype.createElement = function (elem)
+      {
+        return setEmbedHandlers (oldHTMLDocCreateElement.call (this, elem));
+      }
+  }
 
 /**
  * Get DOM element's absolute position
