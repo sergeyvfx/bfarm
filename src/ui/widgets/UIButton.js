@@ -24,15 +24,8 @@ function _UIButton ()
       innerHTML += '<span>' + this.title + '</span>';
 
       var text;
-      if (this.sensitive)
-        {
-          text = voidLink (innerHTML);
-        }
-      else
-        {
-          text = createElement ('SPAN');
-          text.innerHTML = innerHTML;
-        }
+      text = createElement ('SPAN');
+      text.innerHTML = innerHTML;
 
       if (this.image)
         {
