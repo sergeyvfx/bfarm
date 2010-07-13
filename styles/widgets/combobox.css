@@ -5,7 +5,7 @@ DIV.UIComboBox {
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
-  
+
   height: 18px;
 }
 
@@ -74,6 +74,7 @@ DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxButton {
 DIV.UIComboBoxText {
   padding-top: 2px;
   height: 16px;
+  text-align: center;
 }
 
 DIV.UIComboBoxPupList {
@@ -103,7 +104,7 @@ DIV.UIComboBoxPupListBLayer {
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -khtml-border-radius: 4px;
-  
+
   filter: alpha(opacity=90);
   -moz-opacity: 0.9;
   -khtml-opacity: 0.9;

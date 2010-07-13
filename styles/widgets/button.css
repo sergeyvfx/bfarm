@@ -1,19 +1,19 @@
 DIV.UIButton {
-	border: 1px #666 solid;
+  border: 1px #666 solid;
 
-	-moz-border-radius: 6px;
-	border-radius: 6px;
-	-webkit-border-radius: 6px;
-	-khtml-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
 
-	background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
-	text-align: center;
-	padding-top: 1px;
-	cursor: pointer;
-	color: #333;
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  text-align: center;
+  padding-top: 1px;
+  cursor: pointer;
+  color: #333;
 
-	overflow: hidden;
-	height: 18px;
+  overflow: hidden;
+  height: 18px;
 }
 
 DIV.UIButton:hover {
@@ -56,5 +56,5 @@ DIV.UIButtonInsensitive:hover {
 }
 
 DIV.UIButtonInsesitive A {
-	color: #666;
+  color: #666;
 }
