@@ -12,6 +12,7 @@ function _UIScrolledArea ()
   this.getScrollHolderPaddings = function ()
     {
       var padding = this.withBorder ? 4 : 0;
+
       return {'top':    padding,
               'right':  padding,
               'bottom': padding,
@@ -24,7 +25,7 @@ function _UIScrolledArea ()
   this.buildScroller = function ()
     {
       var paddings = this.getScrollHolderPaddings ();
-      var position = isUnknown (this.getParent ().height) ? '' : 'absolute';
+      var position = this.isHeightSet () ? 'absolute' : '';
 
       return buildScrollHolder ({'paddings': paddings,
                                  'position': position});
@@ -39,7 +40,6 @@ function _UIScrolledArea ()
 
       dom = createElement ('DIV');
       dom.className = this.outerClassName;
-      dom.style.height = '150px';
 
       scroller = this.buildScroller ();
       scroller.holder.widgetsCount = this.length ();

@@ -119,6 +119,52 @@ function _UIWidget ()
         }
     };
 
+  /**
+   * Get fill flag
+   */
+  this.getFill = function ()
+    {
+      return this.fill;
+    };
+
+  /**
+   * set fill flag
+   */
+  this.setFill = function (fill)
+    {
+      this.fill = fill;
+    };
+
+  /****
+   * Some DOM helpers
+   */
+
+  this.isEmbedded = function ()
+    {
+      if (!this.dom)
+        {
+          return false;
+        }
+
+      return isNodeEmbedded (this.dom);
+    };
+
+  /**
+   * Is width specified (direct or indirect)
+   */
+  this.isWidthSet = function ()
+    {
+      return this.width != null || this.fill;
+    };
+
+  /**
+   * Is height specified (direct or indirect)
+   */
+  this.isHeightSet = function ()
+    {
+      return this.height != null || this.fill;
+    };
+
   /****
    * DOM functions
    */
@@ -143,19 +189,25 @@ function _UIWidget ()
       if (this.dom)
         {
           var marginStr = getSpacingStr (this.margin);
+
+          this.dom.uiWidget = this;
+
           if (marginStr)
             {
               this.dom.style.margin = marginStr;
             }
 
-          if (this.width != null)
+          if (!this.fill)
             {
-              this.dom.style.width = uiUtil.sizeToStyle (this.width);
-            }
+              if (this.width != null)
+                {
+                  this.dom.style.width = uiUtil.sizeToStyle (this.width);
+                }
 
-          if (this.height != null)
-            {
-              this.dom.style.height = uiUtil.sizeToStyle (this.height);
+              if (this.height != null)
+                {
+                  this.dom.style.height = uiUtil.sizeToStyle (this.height);
+                }
             }
         }
 
@@ -295,6 +347,37 @@ function _UIWidget ()
           this.dom = null;
         }
     };
+
+  /**
+   * Make some tweaks after embedding widget to container
+   */
+  this.postEmbedTweaks = function ()
+    {
+      var parent = this.getParent ();
+
+      if (!this.isEmbedded ())
+        {
+          return;
+        }
+
+      if (this.fill)
+        {
+          var p = $(this.dom.parentNode);
+          var s = $(this.dom);
+
+          if (!inside (p.css ('position'), ['absolute', 'relative']))
+            {
+              p.css ('position', 'relative');
+            }
+
+          s.css ('position', 'absolute');
+
+          s.css ('top',    p.css ('paddingTop'));
+          s.css ('bottom', p.css ('paddingBottom'));
+          s.css ('left',   p.css ('paddingLeft'));
+          s.css ('right',  p.css ('paddingRight'));
+        }
+    };
 }
 
 /***
@@ -332,6 +415,9 @@ function UIWidget (opts)
   /* Widget's dimensions */
   this.height = defVal (opts['height'], null);
   this.width  = defVal (opts['width'], null);
+
+  /* Should widget fill whole parent's client area? */
+  this.fill   = defVal (opts['fill'], false);
 }
 
 UIWidget.prototype = new _UIWidget;

@@ -105,6 +105,29 @@ function _UIContainer ()
           this.rebuild ();
         }
     };
+
+  /**
+   * Make some tweaks after embedding widget to container
+   */
+  this.postEmbedTweaks = function ()
+    {
+      if (!this.isEmbedded ())
+        {
+          return;
+        }
+
+      UIWidget.prototype.postEmbedTweaks.call (this);
+
+      for (var i = 0, n = this.length (); i < n; ++i)
+       {
+         var c = this.get (i);
+
+         if (typeof c.postEmbedTweaks == 'function')
+           {
+             c.postEmbedTweaks ();
+           }
+       }
+    };
 }
 
 /***

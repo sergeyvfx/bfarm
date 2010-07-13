@@ -155,3 +155,19 @@ function isTruth(obj)
 
   return (obj) ? true : false;
 }
+
+/**
+ * Check if object in list
+ */
+function inside(obj, list)
+{
+  for (var i = 0; i < list.length; ++i)
+    {
+      if (list[i] == obj)
+        {
+          return true;
+        }
+    }
+
+  return false;
+}
