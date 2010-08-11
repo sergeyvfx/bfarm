@@ -101,6 +101,26 @@ function _UIUtil ()
 
       return size;
     };
+
+  this.getContentStyle = function (i, n, firstClass, middleClass, lastClass, lonelyClass)
+    {
+      if (n == 1)
+        {
+          return lonelyClass;
+        }
+      else if (i == 0)
+        {
+          return firstClass;
+        }
+      else if (i == n - 1)
+        {
+          return lastClass;
+        }
+      else
+        {
+          return middleClass;
+        }
+    };
 }
 
 function UIUtil ()

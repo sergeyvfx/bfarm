@@ -133,6 +133,7 @@ function _UIWidget ()
   this.setFill = function (fill)
     {
       this.fill = fill;
+      this.rebuild ();
     };
 
   /****

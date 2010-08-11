@@ -17,6 +17,7 @@ function buildScrollHolder (opts)
 
   var dom = ($('<div></div>')
       .css ('display', couldDispTable ? 'table' : '')
+      .css ('width',   '100%')
       .append($('<div></div>')
                 .css ('display', couldDispTable ? 'table-cell' : '')
                 .css ('height', '100%')

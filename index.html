@@ -22,6 +22,7 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/panelbox.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/scrolledarea.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/panel.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/notebook.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -70,6 +71,7 @@
     <script type="text/javascript" src="src/ui/widgets/UIPanelBox.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIScrolledArea.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIPanel.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UINotebook.js"></script>
 
     <script type="text/javascript" src="src/ui/elem/UIViewport.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportPanel.js"></script>
@@ -185,7 +187,18 @@
             var panel = new UIPanel ({'header' : header, 'fill': true, 'withBorder': false});
             panel.add (groupBox);
             panel.add (groupBox2);
-            wnd.add (panel);
+
+            //wnd.add (panel);
+
+            var nb = new UINotebook ({'fill': true,
+                                      'tabs': new Array(
+                                                         {'title': 'Test 1', 'content': panel},
+                                                         {'title': 'Test 2', 'content': 'Вкладка 2'},
+                                                         {'title': 'Test 3', 'content': 'Вкладка 3'}
+                                                       ),
+                                      'activeTab': 0
+                                     });
+            wnd.add (nb);
 
             window.__testWnd = wnd;
           }

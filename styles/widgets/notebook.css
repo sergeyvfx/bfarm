@@ -1,0 +1,95 @@
+DIV.UINotebook {
+  position: relative;
+}
+
+DIV.UINotebookHeader {
+  height: 16px;
+  margin: 0 8px;
+}
+
+DIV.UINotebookBody {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #ddd;
+  position: relative;
+  padding: 6px;
+}
+
+DIV.UINotebookFilled {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+DIV.UINotebookHeaderTab {
+  position: relative;
+  border: 1px #666 solid;
+  border-bottom: 0;
+  height: 16px;
+  background: #ddd url(../../pics/ui/notebook_tab.gif);
+
+  float: left;
+
+  padding: 0 6px;
+  cursor: pointer;
+}
+
+DIV.UINotebookHeaderTab:hover {
+  background: #cfcfcf url(../../pics/ui/notebook_tab_s.gif);
+}
+
+DIV.UINotebookHeaderActiveTab:hover {
+  background: #ddd;
+}
+
+DIV.UINotebookHeaderActiveTab {
+  height: 16px;
+  z-index: 10;
+  background: #ddd;
+}
+
+DIV.UINotebookHeaderLonelyTab {
+  -moz-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+  -khtml-border-radius: 6px 6px 0 0;
+}
+
+DIV.UINotebookHeaderFirstTab {
+  -moz-border-radius: 6px 0 0 0;
+  border-radius: 6px 0 0 0;
+  -webkit-border-radius: 6px 0 0 0;
+  -khtml-border-radius: 6px 0 0 0;
+
+  border-right: 0;
+}
+
+DIV.UINotebookHeaderMiddleTab {
+  border-right: 0;
+}
+
+DIV.UINotebookHeaderLastTab {
+  -moz-border-radius: 0 6px 0 0;
+  border-radius: 0 6px 0 0;
+  -webkit-border-radius: 0 6px 0 0;
+  -khtml-border-radius: 0 6px 0 0;
+}
+
+DIV.UINotebookTab {
+  overflow: hidden;
+}
+
+DIV.UINotebookFilledTab {
+  position: absolute;
+  left: 6px;
+  top: 6px;
+  right: 6px;
+  bottom: 6px;
+}

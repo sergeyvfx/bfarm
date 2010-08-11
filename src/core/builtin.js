@@ -171,3 +171,17 @@ function inside(obj, list)
 
   return false;
 }
+
+function clamp(x, min, max)
+{
+  if (x < min)
+    {
+      x = min;
+    }
+  else if (x > max)
+    {
+      x = max;
+    }
+
+  return x;
+}

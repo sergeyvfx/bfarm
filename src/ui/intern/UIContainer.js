@@ -123,6 +123,16 @@ function _UIContainer ()
        {
          var c = this.get (i);
 
+         if (this.widgetField)
+           {
+             c = c[this.widgetField];
+
+             if (!c)
+               {
+                 continue;
+               }
+           }
+
          if (typeof c.postEmbedTweaks == 'function')
            {
              c.postEmbedTweaks ();
@@ -140,6 +150,8 @@ function UIContainer (opts)
 
   IContainer.call (this);
   UIWidget.call (this, opts);
+
+  this.widgetField = null;
 }
 
 UIContainer.prototype = new _UIContainer;
