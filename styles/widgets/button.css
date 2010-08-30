@@ -28,7 +28,7 @@ DIV.UIButtonPressed * {
   color: #fff !important;
 }
 
-DIV.UIButton IMG {
+DIV.UIButton IMG.UIButtonImage {
   vertical-align: middle;
   margin-right: 6px;
   position: relative;
@@ -42,7 +42,7 @@ DIV.UIButton A {
   margin-top: 1px;
 }
 
-DIV.UIButton A IMG {
+DIV.UIButton A IMG.UIButtonImage {
   border: 0;
 }
 

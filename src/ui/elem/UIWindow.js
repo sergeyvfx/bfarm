@@ -123,6 +123,12 @@ function _UIWindow ()
           result.appendChild (sizer);
 
           UI_MakeResizable (result, {'resizeArea': sizer});
+
+          result.resizeBy = function (self, origHandler) {return function (delta) {
+                origHandler.call (result, delta);
+                self.onResize (delta);
+              }
+            } (this, result.resizeBy);
         }
 
       /* Client area */
@@ -227,6 +233,7 @@ function _UIWindow ()
   this.onHide   = function () {};
   this.onClose  = function () {};
   this.onClosed = function () {};
+  this.onResize = function (delta) {};
 }
 
 /****

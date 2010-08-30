@@ -51,7 +51,7 @@ if (!window.Element)
     }
 }
 
-if (!Array.indexOf)
+if (!Array.prototype.indexOf)
 {
   Array.prototype.indexOf = function(obj)
     {
