@@ -132,7 +132,6 @@ function isNodeEmbedded (node)
 {
   var oldID = node.id;
 
-
   if (isUnknown (document.embedCounter))
     {
       document.embedCounter = 0;

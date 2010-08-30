@@ -13,7 +13,7 @@ var
 
 function _UIViewportPanel ()
 {
-  _UIWidget.call (this);
+  _UIContainer.call (this);
 
   /**
    * Build DOM tree
@@ -26,6 +26,7 @@ function _UIViewportPanel ()
       result.className = 'UIViewportPanel';
       result.addClass ('UIViewport' + alphaName + 'Panel');
 
+      /* Hack viewport margins */
       var viewport = this.getParent().getViewport();
 
       if (this.position % 2)
@@ -43,7 +44,7 @@ function _UIViewportPanel ()
 
 function UIViewportPanel (opts)
 {
-  UIWidget.call (this, opts);
+  UIContainer.call (this, opts);
 
   this.position = opts['position'];
 }

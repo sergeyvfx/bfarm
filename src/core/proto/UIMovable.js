@@ -13,8 +13,14 @@
  */
 Element.prototype.moveBy = function (delta)
 {
-  if (this.style.position != 'absolute' ||
-      !('' + this.style.left).match (/px$/) ||
+  var absolute = this.style.position == 'absolute';
+
+  if (!absolute)
+    {
+      absolute = $(this).css ('position') == 'absolute';
+    }
+
+  if (!absolute || !('' + this.style.left).match (/px$/) ||
       !('' + this.style.top).match (/px$/))
     {
       var pos = this.offset ();

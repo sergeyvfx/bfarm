@@ -107,22 +107,28 @@ function setEmbedHandlers (node)
     return node;
   }
 
-if (!window.HTMLDocument)
-  {
-    var oldDocCreateElement = document.createElement;
-    document.createElement = function (elem)
-      {
-        return setEmbedHandlers (oldDocCreateElement (elem));
-      }
-  }
-else
-  {
-    var oldHTMLDocCreateElement = HTMLDocument.prototype.createElement;
-    HTMLDocument.prototype.createElement = function (elem)
-      {
-        return setEmbedHandlers (oldHTMLDocCreateElement.call (this, elem));
-      }
-  }
+{
+  if (!window.HTMLDocument)
+    {
+      var oldDocCreateElement = document.createElement;
+      document.createElement = function (elem)
+        {
+          return setEmbedHandlers (oldDocCreateElement (elem));
+        }
+    }
+  else
+    {
+      var oldHTMLDocCreateElement = HTMLDocument.prototype.createElement;
+      HTMLDocument.prototype.createElement = function (elem)
+        {
+          return setEmbedHandlers (oldHTMLDocCreateElement.call (this, elem));
+        }
+    }
+
+  $(document).ready (function () {
+      setEmbedHandlers (document.body);
+    });
+}
 
 /**
  * Get DOM element's absolute position

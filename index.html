@@ -127,6 +127,7 @@
       var viewport = new UIViewport();
       var vp = viewport.build ();
       document.body.insertBefore (vp, $('.UIPopup')[0]);
+      //viewport.addPanel (VP_PANEL_TOP);
       viewport.addPanel (VP_PANEL_BOTTOM);
       viewport.addItem ('./pics/ico/webtester.png', 'WebTester', function () {
           if (isUnknown (window.__testWnd)) {

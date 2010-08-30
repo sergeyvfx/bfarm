@@ -26,7 +26,6 @@ DIV.UIViewportTopPanel {
   top: 0;
   height: 26px;
   background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
-  border-bottom: 1px #939393 solid;
 }
 
 DIV.UIViewportBottomPanel {

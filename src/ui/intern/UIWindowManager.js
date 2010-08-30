@@ -23,8 +23,15 @@ function _UIWindowManager ()
         }
 
       var wnd = window.build ();
-      viewport.getViewport ().appendChild (wnd);
+      var wndHolder = document.body;
 
+      if (viewport)
+        {
+          wndHolder = viewport.getViewport ();
+        }
+
+      //alert (wndHolder.appendChild);
+      wndHolder.appendChild (wnd);
       window.viewport = viewport;
 
       window.onShow ();
