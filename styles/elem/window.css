@@ -21,7 +21,7 @@ DIV.UIWindowTitleBg {
 }
 
 DIV.UIWindowTitleBg {
-  background: #888888 url('../../pics/ui/elem/window-title.gif') 0 0 repeat-x;
+  background: #888888 url(../../pics/ui/elem/window-title.gif) 0 0 repeat-x;
   border-bottom: 1px #666 solid;
 }
 
@@ -34,7 +34,7 @@ DIV.UIWindowTitleBg SPAN {
 
 DIV.UIWindowSizer {
   position: absolute;
-  background: url('../../pics/ui/sizer.gif') 0 0 no-repeat;
+  background: url(../../pics/ui/sizer.gif) 0 0 no-repeat;
   right: 0;
   bottom: 0;
   width: 10px;

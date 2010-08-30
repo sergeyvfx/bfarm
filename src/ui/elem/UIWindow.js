@@ -15,7 +15,7 @@ function _UIWindow ()
 
       for (var i = 0, n = this.container.length; i < n; ++i)
         {
-          var dom = this.container[i].build ();
+          var dom = uiUtil.getItemDOM (this.container[i]);
           this.clientArea.appendChild (dom);
         }
     };
