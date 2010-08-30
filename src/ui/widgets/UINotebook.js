@@ -20,7 +20,7 @@ function _UINotebook ()
           var h = createElement ('DIV');
           h.className = 'UINotebookHeaderTab';
 
-          h.appendChild (createTextNode (tab['title']));
+          h.appendChild (createTextNode (tab['title'] || 'Вкладка'));
           $(h).addClass (uiUtil.getContentStyle (i, n,
                                                  'UINotebookHeaderFirstTab',
                                                  'UINotebookHeaderMiddleTab',
@@ -48,18 +48,8 @@ function _UINotebook ()
 
       if (tab['content'])
         {
-          if (tab['content'].build)
-            {
-              where.appendChild (tab['content'].build ());
-            }
-          else if (tab['content'] instanceof Element)
-            {
-              where.appendChild (tab['content']);
-            }
-          else
-            {
-              where.appendChild (createTextNode (tab['content']));
-            }
+          var dom = uiUtil.getItemDOM (tab['content']);
+          where.appendChild (dom);
         }
     };
 

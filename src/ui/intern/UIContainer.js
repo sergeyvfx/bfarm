@@ -125,7 +125,7 @@ function _UIContainer ()
 
          if (this.widgetField)
            {
-             c = c[this.widgetField];
+             c = uiCreator.create (c[this.widgetField]);
 
              if (!c)
                {

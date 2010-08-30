@@ -182,17 +182,17 @@ Element.prototype.pushFront = function (node)
 /**
  * Add class to node
  */
-Element.prototype.addClass = function (class)
+Element.prototype.addClass = function (className)
 {
-  return $(this).addClass (class);
+  return $(this).addClass (className);
 };
 
 /**
  * Remove class from node
  */
-Element.prototype.removeClass = function (class)
+Element.prototype.removeClass = function (className)
 {
-  return $(this).removeClass (class);
+  return $(this).removeClass (className);
 };
 
 /**

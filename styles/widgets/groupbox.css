@@ -33,3 +33,9 @@ DIV.UIGroupBoxTitled {
 DIV.UIGroupBoxContainerTitled {
   padding-top: 6px;
 }
+
+/* XXX: not very elegant */
+DIV.UINotebookTab DIV.UIGroupBoxHeader {
+  background: #ddd;
+}
+

@@ -390,6 +390,9 @@ function UIWidget (opts)
   /* List of attached events */
   this.events = [];
 
+  /* Widget's name */
+  this.name = opts['name'] || null;
+
   /* Widget's parent */
   this.parent = opts['parent'] || null;
 

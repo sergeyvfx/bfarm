@@ -59,3 +59,9 @@ DIV.UIEntryROWImage IMG {
   vertical-align: middle;
   margin-right: 4px;
 }
+
+SPAN.UIEntryShadowText {
+  color: #666;
+  position: absolute;
+  top: 2px;
+}

@@ -23,6 +23,7 @@
     <link rel="stylesheet" type="text/css" href="styles/widgets/scrolledarea.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/panel.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/notebook.css">
+    <link rel="stylesheet" type="text/css" href="styles/widgets/label.css">
 
     <script type="text/javascript" src="src/jquery/jquery.js"></script>
     <script type="text/javascript" src="src/jquery/disable.text.select.js"></script>
@@ -72,11 +73,14 @@
     <script type="text/javascript" src="src/ui/widgets/UIScrolledArea.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UIPanel.js"></script>
     <script type="text/javascript" src="src/ui/widgets/UINotebook.js"></script>
+    <script type="text/javascript" src="src/ui/widgets/UILabel.js"></script>
 
     <script type="text/javascript" src="src/ui/elem/UIViewport.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportPanel.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportItem.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIWindow.js"></script>
+
+    <script type="text/javascript" src="src/ui/intern/UICreator.js"></script>
   </head>
 
   <body>
@@ -126,81 +130,7 @@
       viewport.addPanel (VP_PANEL_BOTTOM);
       viewport.addItem ('./pics/ico/blender.png', 'Blender', function () {
           if (isUnknown (window.__testWnd)) {
-            var wnd = new UIWindow ({'caption': 'Тестовое окно',
-                                     'top': 16,
-                                     'left': 16});
-            var btn = new UIButton ({'title': 'Спрятать окно',
-                                     'click': function (wnd) { return function () {
-                                               wnd.hide ();
-                                            }
-                                          } (wnd)
-                                     });
-
-            var hBtn = new UIButton ({'title': 'Кнопка',
-                                      'image' : 'pics/buttons/search.gif'});
-            hBtn.width = '100';
-            var hBtnBlock = new UIButton ({'title': 'Ещё кнопка',
-                                           'image' : 'pics/buttons/camera.gif'});
-            hBtnBlock.block = true;
-            var items = [hBtn, hBtnBlock];
-            var groupBox = new UIPanelBox ({'title'    : 'Тестовая группа',
-                                            'collapsed': false,
-                                            'animated' : true});
-            var groupBox2 = new UIPanelBox ({'title'    : 'Группа 2',
-                                             'collapsed': true,
-                                             'animated' : true});
-
-            var grid = new UIGrid ({'rows': 2, 'cols': 1, 'padding': 2});
-
-            grid.add (btn);
-
-            var img = 'pics/buttons/camera.gif';
-            var btn = new UIButton ({'title': 'Поменять заголовок',
-                                     'image': img});
-
-            btn.onClick = function (groupBox) {return function () {
-                    groupBox.setTitle ('New title');
-                  };
-                } (groupBox);
-
-            grid.add (btn);
-
-            var combobox = new UIComboBox ({'items': ['item 0', 'item 1', 'item 2']});
-
-            var grid2 = new UIGrid ({'rows': 3, 'cols': 1, 'padding': 2});
-            grid2.add (combobox);
-            grid2.add (hBtn);
-            grid2.add (hBtnBlock);
-
-            var spin = new UISpinButton ({'image' : 'pics/buttons/camera.gif',
-              'min'   : 0,
-              'max'   : 16});
-            groupBox.add (grid);
-            groupBox2.add (grid2);
-            grid2.add (spin);
-
-            var header = new UIGrid ({'rows': 1, 'cols': 2, 'padding': 2});
-            header.add (new UIButton ({'title': 'Pinned button'}));
-            header.add (new UISpinButton ());
-            header.height = 18;
-
-            var panel = new UIPanel ({'header' : header, 'fill': true, 'withBorder': false});
-            panel.add (groupBox);
-            panel.add (groupBox2);
-
-            //wnd.add (panel);
-
-            var nb = new UINotebook ({'fill': true,
-                                      'tabs': new Array(
-                                                         {'title': 'Test 1', 'content': panel},
-                                                         {'title': 'Test 2', 'content': 'Вкладка 2'},
-                                                         {'title': 'Test 3', 'content': 'Вкладка 3'}
-                                                       ),
-                                      'activeTab': 0
-                                     });
-            wnd.add (nb);
-
-            window.__testWnd = wnd;
+            window.__testWnd = uiCreator.create ('url://forms/main.js');
           }
           window.__testWnd.show ();
         });

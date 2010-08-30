@@ -41,6 +41,15 @@ function _UIEntry (opts)
 
       input.value = this.text;
 
+      $(input).focus (function (self) {return function () {
+            self.removeShadow ();
+          }
+        } (this));
+      $(input).blur (function (self) {return function () {
+            self.checkShadow ();
+          }
+        } (this));
+
       this.prevText = this.text;
 
       return result;
@@ -76,6 +85,8 @@ function _UIEntry (opts)
    */
   this.doBuild = function ()
     {
+      var result = null;
+
       this.inputElement = null
       this.textElement = null;
       this.focusDOM = null;
@@ -83,13 +94,16 @@ function _UIEntry (opts)
 
       if (!this.sensitive)
         {
-          return this.buildReadonly ();
+          result = this.buildReadonly ();
         }
       else
         {
-          return this.buildEntry ();
+          result = this.buildEntry ();
         }
 
+      this.checkShadow (result);
+
+      return result;
     };
 
   /***
@@ -194,6 +208,40 @@ function _UIEntry (opts)
       this.onChanged (newText);
     };
 
+  this.removeShadow = function (dom)
+    {
+      dom = dom || this.dom;
+      if (this.shadowElement)
+        {
+          removeNode (this.shadowElement);
+          this.shadowElement = null;
+        }
+    }
+
+  this.checkShadow = function (dom)
+    {
+      dom = dom || this.dom;
+
+      if ((this.text && this.text.length) ||
+           this.textElement)
+        {
+          this.removeShadow ();
+        }
+      else if (!this.shadowElement)
+        {
+          this.shadowElement = createElement ('SPAN');
+          this.shadowElement.className = 'UIEntryShadowText';
+          this.shadowElement.appendChild (createTextNode (this.shadowText));
+
+          $(this.shadowElement).click (function (self) {return function () {
+                self.inputElement.focus ();
+              }
+            } (this));
+
+          dom.appendChild (this.shadowElement);
+        }
+    };
+
   /***
    * Event stubs
    */
@@ -221,6 +269,10 @@ function UIEntry (opts)
   /* Text, displayed in entry */
   this.text = isUnknown (opts['text']) ? '' : opts['text'];
   this.prevText = null;
+
+  /* Text, displayed in entry when it's empty */
+  this.shadowText = isUnknown (opts['shadowText']) ? '' : opts['shadowText'];
+  this.shadowElement = null;
 }
 
 UIEntry.prototype = new _UIEntry;

@@ -9,7 +9,7 @@ var
   VP_PANEL_RIGHT  = 0x04;
 
 var
-  VP_PANEL_ALPHAS = ['Top','Left', 'Bottom', 'Right'];
+  VP_PANEL_ALPHAS = ['Top', 'Left', 'Bottom', 'Right'];
 
 function _UIViewportPanel ()
 {

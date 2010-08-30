@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2010 Sergey I. Sharybin
+ */
 
 function _UIUtil ()
 {
@@ -61,7 +64,7 @@ function _UIUtil ()
         {
           return item.dom;
         }
-      else if (item.length)
+      else if (item.length && typeof item != 'string')
         {
           var res = createElement ('DIV');
 
@@ -79,9 +82,14 @@ function _UIUtil ()
 
           return res;
         }
-      else if (item instanceof Element)
+      else if (typeof item == 'object' && item instanceof Element)
         {
           return item;
+        }
+      else if (item instanceof Object || typeof item == 'string')
+        {
+          var widget = uiCreator.create (item);
+          return widget.build ();
         }
 
       return null;

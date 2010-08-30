@@ -5,7 +5,6 @@
 function _UIViewport ()
 {
   _UIWidget.call (this);
-  
 
   /**
    * Build DOM tree for button

@@ -98,14 +98,14 @@ function _UIWindow ()
       var titleBg = createElement ('DIV');
       var span = createElement ('SPAN');
       titleBg.className = 'UIWindowTitleBg';
-      span.appendChild (createTextNode (this.caption));
+      span.appendChild (createTextNode (this.title));
       titleBg.appendChild (span);
       result.appendChild (titleBg);
 
       /* Title */
       var title = createElement ('DIV');
       title.className = 'UIWindowTitle';
-      title.appendChild (createTextNode (this.caption));
+      title.appendChild (createTextNode (this.title));
       result.appendChild (title);
 
       $(title).disableTextSelect ();
@@ -121,28 +121,28 @@ function _UIWindow ()
           var sizer = createElement ('DIV');
           sizer.className = 'UIWindowSizer';
           result.appendChild (sizer);
-  
+
           UI_MakeResizable (result, {'resizeArea': sizer});
         }
-  
+
       /* Client area */
       var clientArea = createElement ('DIV');
       clientArea.className = 'UIWindowClient';
       result.appendChild (clientArea);
-  
+
       /* Set window position */
       result.style.top  = this.top + 'px';
       result.style.left = this.left + 'px';
-  
+
       /* Set window dimensions */
       result.style.width  = this.width + 'px';
       result.style.height = this.height + 'px';
-  
+
       UI_MakeMovable (result, {'moveArea': title});
-  
+
       /* Store DOM elements */
       this.titleBg    = titleBg;
-      this.title      = title;
+      this.titleFg    = title;
       this.sizer      = sizer;
       this.clientArea = clientArea;
       this.titleButtons = buttons;
@@ -237,7 +237,7 @@ function UIWindow (opts)
   opts = opts || {};
   UIContainer.call (this, opts);
 
-  this.caption = opts['caption'] || '';
+  this.title = opts['title'] || '';
 
   /* Window position */
   this.top = opts['top'] || 0;
@@ -256,7 +256,7 @@ function UIWindow (opts)
     }
 
   this.titleBg    = null;  /* Title background */
-  this.title      = null;  /* Title */
+  this.titleFg    = null;  /* Title */
   this.sizer      = null;  /* Resizer element */
   this.clientArea = null;  /* Client area */
 

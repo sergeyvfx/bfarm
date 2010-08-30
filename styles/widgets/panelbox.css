@@ -47,4 +47,5 @@ IMG.UIPanelBoxCollapseButton {
 
 DIV.UIPanelBoxTitle {
   font-weight: bold;
+  cursor: default;
 }
