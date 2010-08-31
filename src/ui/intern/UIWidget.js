@@ -368,7 +368,10 @@ function _UIWidget ()
 
           if (!inside (p.css ('position'), ['absolute', 'relative']))
             {
-              p.css ('position', 'relative');
+              if (p[0] != document.body)
+                {
+                  p.css ('position', 'relative');
+                }
             }
 
           s.css ('position', 'absolute');
