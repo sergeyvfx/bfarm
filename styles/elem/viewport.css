@@ -1,7 +1,7 @@
 DIV.UIViewportHolder {
   border: 1px #666 solid;
-  width: 640px;
-  height: 480px;
+  width: 320px;
+  height: 240px;
   position: relative;
 }
 
@@ -26,6 +26,7 @@ DIV.UIViewportTopPanel {
   top: 0;
   height: 26px;
   background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
+  padding: 0 6px;
 }
 
 DIV.UIViewportBottomPanel {
@@ -35,6 +36,7 @@ DIV.UIViewportBottomPanel {
   height: 26px;
   background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
   border-top: 1px #939393 solid;
+  padding: 0 6px;
 }
 
 UL.UIViewportItemsHolder {
@@ -62,4 +64,10 @@ DIV.UIViewportItem:hover {
   cursor: pointer;
   border: 1px #007 solid;
   background-color: #a8b8ff;
+}
+
+DIV.UIViewportPanelItem {
+  height: 26px;
+  float: left;
+  margin-right: 8px;
 }

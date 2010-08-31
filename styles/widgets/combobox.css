@@ -72,9 +72,9 @@ DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxButton {
 }
 
 DIV.UIComboBoxText {
-  padding-top: 2px;
   height: 16px;
   text-align: center;
+  padding: 2px 4px 0 4px;
 }
 
 DIV.UIComboBoxPupList {

@@ -8,12 +8,13 @@ DIV.UIButton {
 
   background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
   text-align: center;
-  padding-top: 1px;
   cursor: pointer;
   color: #333;
 
   overflow: hidden;
   height: 18px;
+
+  padding: 1px 4px 0 4px;
 }
 
 DIV.UIButton:hover {

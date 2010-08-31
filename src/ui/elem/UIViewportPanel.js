@@ -16,6 +16,32 @@ function _UIViewportPanel ()
   _UIContainer.call (this);
 
   /**
+   * Build items to specified container
+   */
+  this.buildItems = function (where)
+    {
+      var holderHeight = uiUtil.getItemHeight (where);
+
+      for (var i = 0; i < this.length (); ++i)
+        {
+          var item = this.get (i);
+          var dom = uiUtil.getItemDOM (item);
+          var height = uiUtil.getItemHeight (dom);
+
+          if (height && height < holderHeight)
+            {
+              dom.style.marginTop = ((holderHeight - height) / 2 - 1) + 'px';
+            }
+
+          var item = ($('<div class="UIViewportPanelItem">')
+                       .append ($(dom))
+                     ) [0];
+
+          where.appendChild (item);
+        }
+    };
+
+  /**
    * Build DOM tree
    */
   this.doBuild = function ()
@@ -25,6 +51,8 @@ function _UIViewportPanel ()
 
       result.className = 'UIViewportPanel';
       result.addClass ('UIViewport' + alphaName + 'Panel');
+
+      this.buildItems (result);
 
       /* Hack viewport margins */
       var viewport = this.getParent().getViewport();
@@ -44,6 +72,8 @@ function _UIViewportPanel ()
 
 function UIViewportPanel (opts)
 {
+  opts = opts || {};
+
   UIContainer.call (this, opts);
 
   this.position = opts['position'];

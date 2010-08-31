@@ -16,6 +16,8 @@ function _UILabel (opts)
 
       div.appendChild (createTextNode (this.text));
 
+      this.applyStyle (div);
+
       return div;
     };
 
@@ -29,7 +31,7 @@ function _UILabel (opts)
   this.getText = function ()
     {
       return this.text;
-    }
+    };
 
   /**
    * Set text
@@ -43,7 +45,24 @@ function _UILabel (opts)
           this.dom.removeAllNodes ();
           this.dom.appendChild (createTextNode (text));
         }
-    }
+    };
+
+  /**
+   * Apply different styles (bold, etc..)
+   */
+  this.applyStyle = function (where)
+    {
+      where = where || this.dom;
+
+      if (this.bold)
+        {
+          where.style.fontWeight = 'bold';
+        }
+      else
+        {
+          where.style.fontWeight = '';
+        }
+    };
 }
 
 /***
@@ -57,6 +76,9 @@ function UILabel (opts)
 
   /* Text, displayed in label */
   this.text = isUnknown (opts['text']) ? '' : opts['text'];
+
+  /* Should text be bold */
+  this.bold = defVal (opts['bold'], false);
 }
 
 UILabel.prototype = new _UILabel;

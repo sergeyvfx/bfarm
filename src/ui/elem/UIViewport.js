@@ -158,6 +158,8 @@ function _UIViewport ()
 
 function UIViewport (opts)
 {
+  opts = opts || {};
+
   UIWidget.call (this, opts);
 
   /* Register main viewport */

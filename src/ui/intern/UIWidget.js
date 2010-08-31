@@ -191,6 +191,8 @@ function _UIWidget ()
         {
           var marginStr = getSpacingStr (this.margin);
 
+          this.dom.addClass ('UIWidget');
+
           this.dom.uiWidget = this;
 
           if (marginStr)
@@ -375,6 +377,9 @@ function _UIWidget ()
           s.css ('bottom', p.css ('paddingBottom'));
           s.css ('left',   p.css ('paddingLeft'));
           s.css ('right',  p.css ('paddingRight'));
+
+          s.css ('width',  'auto');
+          s.css ('height', 'auto');
         }
     };
 }

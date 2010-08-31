@@ -114,116 +114,125 @@
     </div>
 
     <script type="text/javascript">
-      /*UI_MakeMovable ($('#myDiv')[0], {'moveArea': $('#myDiv2')[0]});
-      UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
+      function main () {
+        /*UI_MakeMovable ($('#myDiv')[0], {'moveArea': $('#myDiv2')[0]});
+        UI_MakeMovable ($('#myDiv3')[0], {'moveArea': $('#myDiv4')[0]});
 
-      UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});*/
-      UI_MakeResizable ($('.UIPopup')[0], {'resizeArea': $('#popupSizer')[0]});
+        UI_MakeResizable ($('#myDiv')[0], {'resizeArea': $('#myDiv5')[0]});*/
+        UI_MakeResizable ($('.UIPopup')[0], {'resizeArea': $('#popupSizer')[0]});
 
-/*      uiManager.registerContext ($('#myDiv')[0]);
-      uiManager.registerContext ($('#myDiv3')[0]);*/
-      uiManager.registerContext ($('.UIPopup')[0]);
+  /*      uiManager.registerContext ($('#myDiv')[0]);
+        uiManager.registerContext ($('#myDiv3')[0]);*/
+        uiManager.registerContext ($('.UIPopup')[0]);
 
-      var viewport = new UIViewport();
-      var vp = viewport.build ();
-      document.body.insertBefore (vp, $('.UIPopup')[0]);
-      //viewport.addPanel (VP_PANEL_TOP);
-      viewport.addPanel (VP_PANEL_BOTTOM);
-      viewport.addItem ('./pics/ico/webtester.png', 'WebTester', function () {
-          if (isUnknown (window.__testWnd)) {
-            window.__testWnd = uiCreator.create ('url://forms/main.js');
-          }
-          window.__testWnd.show ();
-        });
-      viewport.addItem ('./pics/ico/gnome-cd.png', 'Media player', function () {alert ('Click on player');});
-
-      var cnt = $('.UIPopup')[0];
-
-      var grid = new UIGrid ({'rows': 6,
-                              'cols': 2,
-                              'padding': 2});
-
-      grid.setCellStyle (1, 0, {'colspan': 2});
-      grid.setCellStyle (2, 0, {'colspan': 2});
-      grid.setCellStyle (3, 0, {'colspan': 2});
-      grid.setCellStyle (4, 0, {'colspan': 2});
-      grid.setCellStyle (5, 0, {'colspan': 2});
-
-      var imgs = ['camera', 'config' ]
-      var buttons = [];
-      for (var i =0; i < 2; ++i)
-        {
-          var img = imgs[i] ? ('pics/buttons/' + imgs[i] + '.gif') : null;
-          buttons[i] = new UIButton ({'title': 'Нажми меня ' + (i + 1),
-                                      'image': img
-                                      });
-          grid.add (buttons[i]);
-        }
-
-      var entry = new UIEntry ({'text'  : 'Hi!',
-                                'image' : 'pics/buttons/search.gif'});
-      grid.add (entry);
-
-      var text = new UIText ({'text'       : 'Hi!',
-                              'autoexpand' : true,
-                              'sensitive'  : true});
-      grid.add (text);
-
-      var combobox = new UIComboBox ({'items': ['item 0', 'item 1', 'item 2']});
-      combobox.add ('Test');
-      combobox.remove ('item 1');
-      combobox.setActiveIndex (1);
-      grid.add (combobox);
-
-
-      var list = new UIList ({'height': 100});
-      for (var i = 0; i < 13; ++i)
-        {
-          list.add ('Item ' + (i + 1));
-        }
-      grid.add (list);
-
-      var spin = new UISpinButton ({'image'      : 'pics/buttons/camera.gif',
-                                    'min': 0,
-                                    'max': 4});
-      grid.add (spin);
-
-      cnt.appendChild (grid.build ());
-
-      buttons[0].onClick = function (entry) {return function (){
-            entry.setText ('Hi, Ky3bMu4');
-          }
-        } (entry);
-
-      buttons[1].onClick = function (button) {return function (){
-            button.setSensitive (!button.getSensitive ());
-          }
-        } (buttons[0]);
-
-      list.onItemSelected = function (spin) {return function (itemIndex){
-            spin.setValue (itemIndex);
-          }
-        } (spin);
-
-      spin.onValueChanged = function (list) {return function (newValue){
-            list.setActiveIndex (Math.floor (newValue));
-          }
-        } (list);
-
-      uiManager.addHandler ('click', function (userData) {
-           var e = userData['domEvent'];
-           uiPopupManager.popup ($('.UIPopup')[1], {'x': e.pageX,
-                                                    'y': e.pageY});
-        }, {'affectContext': $('.UIPopup')[0]});
-
-      uiManager.addHandler ('click', function (userData) {
-          if (userData['context'] == document)
-            {
-              var e = userData['domEvent'];
-              uiPopupManager.popup ($('.UIPopup')[0], {'x': e.pageX,
-                                                       'y': e.pageY});
+        var viewport = new UIViewport({'fill': true});
+        var vp = viewport.build ();
+        document.body.insertBefore (vp, $('.UIPopup')[0]);
+        var topPanel = viewport.addPanel (VP_PANEL_TOP);
+        var botPanel = viewport.addPanel (VP_PANEL_BOTTOM);
+        viewport.addItem ('./pics/ico/webtester.png', 'WebTester', function () {
+            if (isUnknown (window.__testWnd)) {
+              window.__testWnd = uiCreator.create ('url://forms/main.js');
             }
-        });
+            window.__testWnd.show ();
+          });
+        viewport.addItem ('./pics/ico/gnome-cd.png', 'Media player', function () {alert ('Click on player');});
+
+        var cnt = $('.UIPopup')[0];
+
+        var grid = new UIGrid ({'rows': 6,
+                                'cols': 2,
+                                'padding': 2});
+
+        grid.setCellStyle (1, 0, {'colspan': 2});
+        grid.setCellStyle (2, 0, {'colspan': 2});
+        grid.setCellStyle (3, 0, {'colspan': 2});
+        grid.setCellStyle (4, 0, {'colspan': 2});
+        grid.setCellStyle (5, 0, {'colspan': 2});
+
+        var imgs = ['camera', 'config' ]
+        var buttons = [];
+        for (var i =0; i < 2; ++i)
+          {
+            var img = imgs[i] ? ('pics/buttons/' + imgs[i] + '.gif') : null;
+            buttons[i] = new UIButton ({'title': 'Нажми меня ' + (i + 1),
+                                        'image': img
+                                        });
+            grid.add (buttons[i]);
+          }
+
+        var entry = new UIEntry ({'text'  : 'Hi!',
+                                  'image' : 'pics/buttons/search.gif'});
+        grid.add (entry);
+
+        var text = new UIText ({'text'       : 'Hi!',
+                                'autoexpand' : true,
+                                'sensitive'  : true});
+        grid.add (text);
+
+        var combobox = new UIComboBox ({'items': ['item 0', 'item 1', 'item 2']});
+        combobox.add ('Test');
+        combobox.remove ('item 1');
+        combobox.setActiveIndex (1);
+        grid.add (combobox);
+
+
+        var list = new UIList ({'height': 100});
+        for (var i = 0; i < 13; ++i)
+          {
+            list.add ('Item ' + (i + 1));
+          }
+        grid.add (list);
+
+        var spin = new UISpinButton ({'image'      : 'pics/buttons/camera.gif',
+                                      'min': 0,
+                                      'max': 4});
+        grid.add (spin);
+
+        cnt.appendChild (grid.build ());
+
+        buttons[0].onClick = function (entry) {return function (){
+              entry.setText ('Hi, Ky3bMu4');
+            }
+          } (entry);
+
+        buttons[1].onClick = function (button) {return function (){
+              button.setSensitive (!button.getSensitive ());
+            }
+          } (buttons[0]);
+
+        list.onItemSelected = function (spin) {return function (itemIndex){
+              spin.setValue (itemIndex);
+            }
+          } (spin);
+
+        spin.onValueChanged = function (list) {return function (newValue){
+              list.setActiveIndex (Math.floor (newValue));
+            }
+          } (list);
+
+        uiManager.addHandler ('click', function (userData) {
+             var e = userData['domEvent'];
+             uiPopupManager.popup ($('.UIPopup')[1], {'x': e.pageX,
+                                                      'y': e.pageY});
+          }, {'affectContext': $('.UIPopup')[0]});
+
+        uiManager.addHandler ('click', function (userData) {
+            if (userData['context'] == document)
+              {
+                var e = userData['domEvent'];
+                uiPopupManager.popup ($('.UIPopup')[0], {'x': e.pageX,
+                                                         'y': e.pageY});
+              }
+          });
+
+        topPanel.add (new UIButton ({'title': 'Приложения'}));
+        topPanel.add (new UILabel ({'text': 'admin', 'bold': true}));
+        topPanel.add (new UILabel ({'text': 'Роль:'}));
+        topPanel.add (new UIComboBox ({'items': ['Администратор', 'Пользователь']}));
+      }
+
+      $(document).ready (main);
     </script>
   </body>
 </html>

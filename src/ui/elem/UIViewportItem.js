@@ -51,6 +51,8 @@ function _UIViewportItem ()
 
 function UIViewportItem (opts)
 {
+  opts = opts || {};
+
   UIWidget.call (this, opts);
 
   this.caption = opts['caption'];
