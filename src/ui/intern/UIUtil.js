@@ -34,11 +34,21 @@ function _UIUtil ()
         }
       else if (item instanceof Element)
         {
+          var dummyDiv = null;
+          if (!item.parentNode)
+            {
+              dummyDiv = ($('<div style="_visibility: hidden; position: absolyte; top: 0; left: 0">')
+                           .append (item)
+                         ) [0];
+              document.body.appendChild (dummyDiv);
+            }
+
           var h = $(item).height ();
+          var res = 0;
 
           if (h)
             {
-              return h;
+              res = h;
             }
           else
             {
@@ -46,9 +56,17 @@ function _UIUtil ()
 
               if (h && h.match && h.match (/px$/))
                 {
-                  return parseInt (h);
+                  res = parseInt (h);
                 }
             }
+
+          if (dummyDiv)
+            {
+              removeNode (item);
+              removeNode (dummyDiv);
+            }
+
+          return res;
         }
 
       return 0;
