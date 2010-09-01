@@ -15,6 +15,11 @@ function _UIPanelMenu ()
 
       result.className = 'UIPanelMenuButton';
 
+      if (this.image)
+        {
+          result.innerHTML = '<img src="' + this.image + '" class="UIPanelMenuButtonImage">';
+        }
+
       result.appendChild (createTextNode (this.caption));
 
       $(result).click (wrapMeth (this, 'activate'));
