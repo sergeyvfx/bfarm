@@ -155,6 +155,14 @@ Element.prototype.outerHeight = function ()
 };
 
 /**
+ * Get DOM element's height (could be called)
+ */
+Element.prototype.getHeight = function ()
+{
+  return uiUtil.getItemHeight (this);
+};
+
+/**
  * Check DOM element've got parent node
  */
 Element.prototype.hasParent = function ()

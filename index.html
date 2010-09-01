@@ -17,6 +17,7 @@
     <link rel="stylesheet" type="text/css" href="styles/elem/popup.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/viewport.css">
     <link rel="stylesheet" type="text/css" href="styles/elem/window.css">
+    <link rel="stylesheet" type="text/css" href="styles/elem/panelmenu.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/groupbox.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/collapsebox.css">
     <link rel="stylesheet" type="text/css" href="styles/widgets/panelbox.css">
@@ -79,6 +80,7 @@
     <script type="text/javascript" src="src/ui/elem/UIViewportPanel.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIViewportItem.js"></script>
     <script type="text/javascript" src="src/ui/elem/UIWindow.js"></script>
+    <script type="text/javascript" src="src/ui/elem/UIPanelMenu.js"></script>
 
     <script type="text/javascript" src="src/ui/intern/UICreator.js"></script>
   </head>
@@ -226,10 +228,15 @@
               }
           });
 
-        topPanel.add (new UIButton ({'title': 'Приложения'}));
+        var menu = new UIPanelMenu ({'caption': 'Приложения'});
+        menu.add ('url://forms/general.js');
+        topPanel.add (menu);
+
         topPanel.add (new UILabel ({'text': 'admin', 'bold': true}));
         topPanel.add (new UILabel ({'text': 'Роль:'}));
         topPanel.add (new UIComboBox ({'items': ['Администратор', 'Пользователь']}));
+
+        botPanel.add (new UIPanelMenu ({'caption': 'Приложения'}));
       }
 
       $(document).ready (main);

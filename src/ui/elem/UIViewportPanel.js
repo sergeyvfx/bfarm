@@ -30,7 +30,19 @@ function _UIViewportPanel ()
 
           if (height && height < holderHeight)
             {
-              dom.style.marginTop = ((holderHeight - height) / 2 - 1) + 'px';
+              dom.style.marginTop = '';
+              var margin = $(dom).css('marginTop');
+
+              if (margin.match (/px$/))
+                {
+                  margin = parseInt (margin);
+                }
+              else
+                {
+                  margin = 0;
+                }
+
+              dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
             }
 
           var item = ($('<div class="UIViewportPanelItem">')
@@ -59,12 +71,14 @@ function _UIViewportPanel ()
 
       if (this.position % 2)
         {
-          viewport.style['margin' + alphaName] = $(result).css('height') || '0px';
+          viewport.style['margin' + alphaName] = result.getHeight () + 'px';
         }
       else
         {
           viewport.style['margin' + alphaName] = $(result).css('width') || '0px';
         }
+
+      $(result).disableTextSelect ();
 
       return result;
     }
@@ -75,6 +89,8 @@ function UIViewportPanel (opts)
   opts = opts || {};
 
   UIContainer.call (this, opts);
+
+  this.stopEvents = this.stopEvents.concat (['click']);
 
   this.position = opts['position'];
 }

@@ -86,6 +86,8 @@ function _UIComboBox ()
           };
         } (this));
 
+      $(result).disableTextSelect ();
+
       return result;
     };
 

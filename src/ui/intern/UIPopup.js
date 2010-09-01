@@ -85,7 +85,7 @@ function _UIPopupManager ()
                       'opts'   : args['opts'],
                       'context': context};
           args['this'].stack.push (item);
-  
+
           uiManager.registerContext (context);
 
           args['this'].callOutHandler (item, 'onShow');
