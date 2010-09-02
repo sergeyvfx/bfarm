@@ -211,6 +211,7 @@ function _UIComboBox ()
   this.onListItemSelected = function (itemIndex)
     {
       this.updateText ();
+      this.onItemSelected (this.list.get (itemIndex));
     }
 
   /**
@@ -219,6 +220,7 @@ function _UIComboBox ()
   this.onListItemClicked = function (itemIndex)
     {
       this.hideDropDown ();
+      this.onItemClicked (this.list.get (itemIndex));
     };
 
   /**
@@ -376,6 +378,10 @@ function _UIComboBox ()
       this.list.remove (item);
       this.rebuildList ();
     };
+
+  /* stubs */
+  this.onItemSelected = function (item) {};
+  this.onItemClicked  = function (item) {};
 }
 
 /****
