@@ -15,41 +15,65 @@ function _UIViewportPanel ()
 {
   _UIContainer.call (this);
 
+  this.buildItem = function (where, item)
+    {
+      var holderHeight = uiUtil.getItemHeight (where);
+      var dom = uiUtil.getItemDOM (item);
+      var height = uiUtil.getItemHeight (dom);
+
+      if (height && height < holderHeight)
+        {
+          dom.style.marginTop = '';
+          var margin = $(dom).css('marginTop');
+
+          if (margin.match (/px$/))
+            {
+              margin = parseInt (margin);
+            }
+          else
+            {
+              margin = 0;
+            }
+
+          dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
+        }
+
+      var item = ($('<div class="UIViewportPanelItem">')
+                   .append ($(dom))
+                 ) [0];
+
+      where.appendChild (item);
+      return item;
+    };
+
   /**
    * Build items to specified container
    */
   this.buildItems = function (where)
     {
-      var holderHeight = uiUtil.getItemHeight (where);
-
       for (var i = 0; i < this.length (); ++i)
         {
           var item = this.get (i);
-          var dom = uiUtil.getItemDOM (item);
-          var height = uiUtil.getItemHeight (dom);
 
-          if (height && height < holderHeight)
+          if (item._uivpanel_atEnd)
             {
-              dom.style.marginTop = '';
-              var margin = $(dom).css('marginTop');
-
-              if (margin.match (/px$/))
-                {
-                  margin = parseInt (margin);
-                }
-              else
-                {
-                  margin = 0;
-                }
-
-              dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
+              continue;
             }
 
-          var item = ($('<div class="UIViewportPanelItem">')
-                       .append ($(dom))
-                     ) [0];
+          this.buildItem (where, item);
+        }
 
-          where.appendChild (item);
+      for (var i = this.length () - 1; i >= 0; --i)
+        {
+          var item = this.get (i);
+
+          if (!item._uivpanel_atEnd)
+            {
+              continue;
+            }
+
+          var it = this.buildItem (where, item);
+          $(it).addClass ('UIViewportPanelEndItem');
         }
     };
 
@@ -81,7 +105,13 @@ function _UIViewportPanel ()
       $(result).disableTextSelect ();
 
       return result;
-    }
+    };
+
+  this.add = function (widget, atEnd, rebuild)
+    {
+      widget._uivpanel_atEnd = defVal (atEnd, false);
+      UIContainer.prototype.add.call (this, widget, rebuild);
+    };
 }
 
 function UIViewportPanel (opts)

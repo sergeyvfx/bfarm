@@ -71,3 +71,9 @@ DIV.UIViewportPanelItem {
   float: left;
   margin-right: 8px;
 }
+
+DIV.UIViewportPanelEndItem {
+  float: right;
+  margin-right: 0px;
+  margin-left: 8px;
+}
