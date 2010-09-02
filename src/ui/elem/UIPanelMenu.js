@@ -21,6 +21,10 @@ function _UIPanelMenu ()
         }
 
       result.appendChild (createTextNode (this.caption));
+      if (this.bold)
+        {
+          result.style.fontWeight = 'bold';
+        }
 
       $(result).click (wrapMeth (this, 'activate'));
 
@@ -151,6 +155,7 @@ function UIPanelMenu (opts)
 
   this.caption = opts['caption'];
   this.image   = opts['image'];
+  this.bold    = opts['bold'];
 
   this.menuButton = null;
   this.activated = false;
