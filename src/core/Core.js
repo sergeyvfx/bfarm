@@ -73,7 +73,7 @@ if (!Array.prototype.indexOf)
 
 function setEmbedHandlers (node)
   {
-    var handle = ['appendChild', 'insertAfter', 'insertBefore'];
+    var handle = ['appendChild', 'insertAfter', 'insertBefore', 'replaceChild'];
 
     for (var i = 0, n = handle.length; i < n; ++i)
       {
