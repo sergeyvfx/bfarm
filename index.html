@@ -233,8 +233,7 @@
         topPanel.add (menu);
 
         topPanel.add (new UILabel ({'text': 'admin', 'bold': true}));
-        topPanel.add (new UILabel ({'text': 'Роль:'}));
-        topPanel.add (new UIComboBox ({'items': ['Администратор', 'Пользователь']}));
+        topPanel.add (new UIComboBox ({'title': 'Роль', 'items': ['Администратор', 'Пользователь']}));
 
         botPanel.add (new UIPanelMenu ({'caption': 'Приложения'}));
       }

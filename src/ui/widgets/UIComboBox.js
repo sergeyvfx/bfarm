@@ -12,17 +12,18 @@ function _UIComboBox ()
   this.getTextToDisplay = function ()
     {
       var index = this.list.getActiveIndex ();
+      var prefix = this.title ? this.title + ': ' : '';
 
       if (index >= 0)
         {
           var item = this.list.get (index);
           if (!isUnknown (item))
             {
-              return item.toString ();
+              return prefix + item.toString ();
             }
         }
 
-      return '';
+      return prefix;
     };
 
   /**
@@ -268,6 +269,23 @@ function _UIComboBox ()
    */
 
   /**
+   * Get title
+   */
+  this.getTitle = function ()
+    {
+      return this.title;
+    };
+
+  /**
+   * Set new title
+   */
+  this.setTitle = function (title)
+    {
+      this.title = title;
+      this.updateText ();
+    };
+
+  /**
    * Get hide list on mouse out option
    */
   this.getHideListOnOut = function ()
@@ -409,6 +427,8 @@ function UIComboBox (opts)
           this.list.add (opts['items'][i]);
         }
     }
+
+  this.title = defVal (opts['title'], '');
 
   /* DOM element, which holds text */
   this.textHolder = null;
