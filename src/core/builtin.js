@@ -130,6 +130,21 @@ function wrapMeth (obj, proc, args)
 }
 
 /**
+ * Wrap method context substitution
+ */
+function wrapMethDelayed (obj, proc, args)
+{
+  var callback = function (obj, proc, args) { return function () {
+        obj[proc] (args);
+      };
+    } (obj, proc, args);
+
+  return function (cb) { return function () {
+        callOut (cb);
+      }
+     } (callback)
+}
+/**
  * Call function outside from current stream
  */
 function callOut (proc, args)

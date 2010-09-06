@@ -127,6 +127,11 @@ function _UIWindowManager ()
    */
   this.maximizeWindow = function (window)
     {
+      if (window.isMaximized)
+        {
+          return;
+        }
+
       /* prepare animation */
       var top = parseInt (window.dom.style.top);
       var left = parseInt (window.dom.style.left);
@@ -143,11 +148,44 @@ function _UIWindowManager ()
 
       window.dom.style.width  = 'auto';
       window.dom.style.height = 'auto';
+
+      window.isMaximized = true;
+
+      window.savedDims = {'width'  : width,
+                          'height' : height,
+                          'top'    : top,
+                          'left'   : left};
+
+      /* Animated expand */
       $(window.dom).animate ({'top'    : 0,
                               'left'   : 0,
                               'right'  : 0,
-                              'bottom' : 0}, 100);
-    }
+                              'bottom' : 0}, 100,
+                              wrapMethDelayed (window, 'onMaximized'));
+    };
+
+  /**
+   * Restore size of specified window
+   *
+   * @param window - window to be restored
+   */
+  this.restoreWindow = function (window)
+    {
+      /* Prepare animation */
+      window.dom.style.width  = window.dom.offsetWidth + 'px';
+      window.dom.style.height = window.dom.offsetHeight + 'px';
+
+      window.dom.style.bottom = '';
+      window.dom.style.right  = '';
+
+      window.isMaximized = false;
+
+      $(window.dom).animate ({'top'    : window.savedDims['top'],
+                              'left'   : window.savedDims['left'],
+                              'width'  : window.savedDims['width'],
+                              'height' : window.savedDims['height']}, 100,
+                              wrapMethDelayed (window, 'onRestored'));
+    };
 
   /* setters/getters */
 

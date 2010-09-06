@@ -82,7 +82,7 @@ function _UIWindow ()
       this.buildTitleButton ('window-close', 'close', 'right',
           wrapMeth (this, 'onCloseClick'));
       this.buildTitleButton ('window-maximize', 'maximize', 'right',
-          wrapMeth (this, 'onMaximizeClick'));
+          wrapMeth (this, 'onToggleMaximizeClick'));
     }
 
   /**
@@ -147,6 +147,18 @@ function _UIWindow ()
       result.style.height = this.height + 'px';
 
       UI_MakeMovable (result, {'moveArea': title});
+
+      result.moveBy = function (self, origHandler) {return function (delta) {
+            if (self.isMaximized)
+              {
+                return;
+              }
+
+            origHandler.call (result, delta);
+          }
+        } (this, result.moveBy);
+
+      $(title).dblclick(wrapMeth (this, 'onToggleMaximizeClick'));
 
       /* Store DOM elements */
       this.titleBg    = titleBg;
@@ -217,6 +229,14 @@ function _UIWindow ()
       uiWindowManager.maximizeWindow (this);
     };
 
+  /**
+   * Restore window size
+   */
+  this.restore = function ()
+    {
+      uiWindowManager.restoreWindow (this);
+    };
+
   /* Getters/setters */
 
   /**
@@ -240,9 +260,16 @@ function _UIWindow ()
   /**
    * Handler of maximize title button
    */
-  this.onMaximizeClick = function ()
+  this.onToggleMaximizeClick = function ()
     {
-      this.maximize ();
+      if (this.isMaximized)
+        {
+          this.restore ();
+        }
+      else
+        {
+          this.maximize ();
+        }
     }
 
   /* Event stubs */
@@ -252,6 +279,8 @@ function _UIWindow ()
   this.onClose  = function () {};
   this.onClosed = function () {};
   this.onResize = function (delta) {};
+  this.onMaximized = function () {};
+  this.onRestored  = function () {};
 }
 
 /****
@@ -296,6 +325,8 @@ function UIWindow (opts)
 
   /* Internal use */
   this.abortClose = false;
+
+  this.isMaximized = false;
 }
 
 UIWindow.prototype = new _UIWindow;
