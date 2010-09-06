@@ -91,6 +91,7 @@ DIV.UIWindowTitleButtonLeft {
 
 DIV.UIWindowTitleButtonRight {
   float: right;
+  margin-left: 2px;
 }
 
 DIV.UIWindowTitleButton IMG {

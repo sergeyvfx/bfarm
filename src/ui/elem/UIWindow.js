@@ -81,6 +81,8 @@ function _UIWindow ()
     {
       this.buildTitleButton ('window-close', 'close', 'right',
           wrapMeth (this, 'onCloseClick'));
+      this.buildTitleButton ('window-maximize', 'maximize', 'right',
+          wrapMeth (this, 'onMaximizeClick'));
     }
 
   /**
@@ -207,6 +209,14 @@ function _UIWindow ()
       uiWindowManager.closeWindow (this);
     };
 
+  /**
+   * Maxinize window
+   */
+  this.maximize = function ()
+    {
+      uiWindowManager.maximizeWindow (this);
+    };
+
   /* Getters/setters */
 
   /**
@@ -224,7 +234,15 @@ function _UIWindow ()
    */
   this.onCloseClick = function ()
     {
-      this.close (this);
+      this.close ();
+    }
+
+  /**
+   * Handler of maximize title button
+   */
+  this.onMaximizeClick = function ()
+    {
+      this.maximize ();
     }
 
   /* Event stubs */

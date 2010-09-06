@@ -120,6 +120,35 @@ function _UIWindowManager ()
       window.onClosed ();
     }
 
+  /**
+   * Maximize specified window
+   *
+   * @param window - window to be maximized
+   */
+  this.maximizeWindow = function (window)
+    {
+      /* prepare animation */
+      var top = parseInt (window.dom.style.top);
+      var left = parseInt (window.dom.style.left);
+
+      var width  = window.dom.offsetWidth;
+      var height = window.dom.offsetHeight;
+
+      var parent = window.dom.parentNode;
+      var parentWidth  = parent.clientWidth;
+      var parentHeight = parent.clientHeight;
+
+      window.dom.style.bottom = parentHeight - top - height + 'px';
+      window.dom.style.right  = parentWidth - left - width + 'px';
+
+      window.dom.style.width  = 'auto';
+      window.dom.style.height = 'auto';
+      $(window.dom).animate ({'top'    : 0,
+                              'left'   : 0,
+                              'right'  : 0,
+                              'bottom' : 0}, 100);
+    }
+
   /* setters/getters */
 
   /**
