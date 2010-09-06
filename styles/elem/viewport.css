@@ -72,6 +72,10 @@ DIV.UIViewportPanelItem {
   margin-right: 8px;
 }
 
+DIV.UIViewportPanelBlockItem {
+  float: inherit;
+}
+
 DIV.UIViewportPanelEndItem {
   float: right;
   margin-right: 0px;

@@ -38,9 +38,15 @@ function _UIViewportPanel ()
           dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
         }
 
+      var isBlock = item.block;
       var item = ($('<div class="UIViewportPanelItem">')
                    .append ($(dom))
                  ) [0];
+
+      if (isBlock)
+        {
+          item.addClass ('UIViewportPanelBlockItem');
+        }
 
       where.appendChild (item);
       return item;
