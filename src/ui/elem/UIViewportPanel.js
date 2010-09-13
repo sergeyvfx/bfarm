@@ -97,15 +97,20 @@ function _UIViewportPanel ()
       this.buildItems (result);
 
       /* Hack viewport margins */
-      var viewport = this.getParent().getViewport();
+      var viewport = this.getParent ().getViewport ();
+      var background = this.getParent ().getBackground ();
 
       if (this.position % 2)
         {
-          viewport.style['margin' + alphaName] = result.getHeight () + 'px';
+          var margin = result.getHeight () + 'px';
+          viewport.style['margin' + alphaName] = margin
+          background.style['margin' + alphaName] = margin;
         }
       else
         {
-          viewport.style['margin' + alphaName] = $(result).css('width') || '0px';
+          var margin = $(result).css('width') || '0px';
+          viewport.style['margin' + alphaName] = margin;
+          background.style['margin' + alphaName] = margin;
         }
 
       $(result).disableTextSelect ();

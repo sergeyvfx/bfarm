@@ -11,8 +11,18 @@ DIV.UIViewport {
   bottom: 0;
   left: 0;
   right: 0;
+  overflow: hidden;
+}
+
+DIV.UIViewportBackground {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   background: #eee;
   overflow: hidden;
+  z-index: 0
 }
 
 DIV.UIViewportPanel {

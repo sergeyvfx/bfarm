@@ -15,6 +15,13 @@ function _UIViewport ()
       var result = createElement ('DIV');
       result.className = 'UIViewportHolder';
 
+      /* Background */
+      var background = createElement ('DIV');
+      background.className = 'UIViewportBackground';
+      this.background = background;
+
+      result.appendChild (background);
+
       /* Viewport */
       var viewport = createElement ('DIV');
       viewport.className = 'UIViewport';
@@ -35,6 +42,14 @@ function _UIViewport ()
     };
 
   /* Viewport */
+
+  /**
+   * Get background div
+   */
+  this.getBackground = function ()
+    {
+      return this.background;
+    };
 
   /**
    * Get viewport div
@@ -168,7 +183,8 @@ function UIViewport (opts)
       uiMainViewport = this;
     }
 
-  this.viewport = null;
+  this.viewport    = null;
+  this.background  = null;
   this.itemsHolder = null;
 
   this.panels = [];
