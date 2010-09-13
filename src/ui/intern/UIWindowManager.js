@@ -35,6 +35,7 @@ function _UIWindowManager ()
       window.viewport = viewport;
 
       window.onShow ();
+      this.onWindowShown (window);
 
       this.raiseWindow (window);
     };
@@ -50,6 +51,8 @@ function _UIWindowManager ()
         {
           this.raiseWindow (window);
         }
+
+      this.onWindowFocused (window);
     };
 
   /**
@@ -84,6 +87,7 @@ function _UIWindowManager ()
       window.dom.style.zIndex = index;
 
       window.onRaise ();
+      this.onWindowRaised (window);
     };
 
   /**
@@ -97,6 +101,7 @@ function _UIWindowManager ()
       window.viewport = null;
 
       window.onHide ();
+      this.onWindowHidden (window);
     }
 
   /**
@@ -118,6 +123,7 @@ function _UIWindowManager ()
       this.removeWindow (window);
 
       window.onClosed ();
+      this.onWindowClosed ();
     }
 
   /**
@@ -162,6 +168,8 @@ function _UIWindowManager ()
                               'right'  : 0,
                               'bottom' : 0}, 100,
                               wrapMethDelayed (window, 'onMaximized'));
+
+      this.onWindowMaximized (window);
     };
 
   /**
@@ -185,6 +193,8 @@ function _UIWindowManager ()
                               'width'  : window.savedDims['width'],
                               'height' : window.savedDims['height']}, 100,
                               wrapMethDelayed (window, 'onRestored'));
+
+      this.onWindowRestored (window);
     };
 
   /* setters/getters */
@@ -212,6 +222,15 @@ function _UIWindowManager ()
     {
       this.remove (window);
     };
+
+  /** Event stubs  */
+  this.onWindowRaised    = function (window) {};
+  this.onWindowClosed    = function (window) {};
+  this.onWindowShown     = function (window) {};
+  this.onWindowHidden    = function (window) {};
+  this.onWindowFocused   = function (window) {};
+  this.onWindowMaximized = function (window) {};
+  this.onWindowRestored  = function (window) {};
 }
 
 function UIWindowManager ()
