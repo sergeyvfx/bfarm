@@ -13,6 +13,8 @@ DIV.UIEntry {
   padding: 0 4px;
   height: 18px;
   overflow: hidden;
+
+  position: relative;
 }
 
 DIV.UIEntry DIV.UIEntryInputHolder {
