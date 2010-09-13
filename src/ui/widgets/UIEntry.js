@@ -135,6 +135,8 @@ function _UIEntry (opts)
           this.textElement.innerHTML = this.text;
         }
 
+      this.prevText = this.text;
+
       this.onChanged (text);
     }
 
@@ -175,7 +177,9 @@ function _UIEntry (opts)
           text = this.prevText;
         }
 
-      this.inputElement.value = text;
+      if (this.inputElement.value != text) {
+        this.inputElement.value = text;
+      }
 
       if (text != this.prevText)
         {
