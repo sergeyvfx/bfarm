@@ -27,7 +27,7 @@ function _UIWindow ()
    * @param pos - position (left or right)
    * @param handler - click handler
    */
-  this.buildTitleButton = function (image, title, pos, handler)
+  this.buildTitleButton = function (image, title, pos, className, handler)
     {
       var button = createElement ('DIV');
       pos = '' + defVal (pos, 'left');
@@ -43,6 +43,10 @@ function _UIWindow ()
         }
 
       button.className = 'UIWindowTitleButton UIWindowTitleButton' + pos;
+      if (className)
+        {
+          $(button).addClass (className);
+        }
 
       if (image == '')
         {
@@ -79,9 +83,9 @@ function _UIWindow ()
    */
   this.buildDefaultButtons = function ()
     {
-      this.buildTitleButton ('window-close', 'close', 'right',
+      this.buildTitleButton ('window-close', 'close', 'right', 'UIWindowCloseButton',
           wrapMeth (this, 'onCloseClick'));
-      this.buildTitleButton ('window-maximize', 'maximize', 'right',
+      this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
           wrapMeth (this, 'onToggleMaximizeClick'));
     }
 
