@@ -358,9 +358,9 @@ function UIWindow (opts)
   } (this));
 
   /* Internal use */
-  this.abortClose = false;
-
-  this.isMaximized = false;
+  this.abortClose   = false;
+  this.isMaximized  = false;
+  this.animateSpeed = 100;
 }
 
 UIWindow.prototype = new _UIWindow;

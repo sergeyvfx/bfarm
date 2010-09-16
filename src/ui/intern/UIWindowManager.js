@@ -166,7 +166,7 @@ function _UIWindowManager ()
       $(window.dom).animate ({'top'    : 0,
                               'left'   : 0,
                               'right'  : 0,
-                              'bottom' : 0}, 100,
+                              'bottom' : 0}, window.animateSpeed,
                               wrapMethDelayed (window, 'onMaximized'));
 
       this.onWindowMaximized (window);
@@ -191,7 +191,7 @@ function _UIWindowManager ()
       $(window.dom).animate ({'top'    : window.savedDims['top'],
                               'left'   : window.savedDims['left'],
                               'width'  : window.savedDims['width'],
-                              'height' : window.savedDims['height']}, 100,
+                              'height' : window.savedDims['height']}, window.animateSpeed,
                               wrapMethDelayed (window, 'onRestored'));
 
       this.onWindowRestored (window);
