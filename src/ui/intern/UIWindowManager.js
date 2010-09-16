@@ -52,6 +52,14 @@ function _UIWindowManager ()
           this.raiseWindow (window);
         }
 
+      if (this.lastFocused)
+        {
+          this.lastFocused.dom.removeClass ('UIWindowFocused');
+        }
+
+      window.dom.addClass ('UIWindowFocused');
+      this.lastFocused = window;
+
       this.onWindowFocused (window);
     };
 
@@ -240,6 +248,7 @@ function UIWindowManager ()
 
   this.windows = [];
   this.raiseOnFocus = true;
+  this.lastFocused = null;
 }
 
 UIWindowManager.prototype = new _UIWindowManager;
