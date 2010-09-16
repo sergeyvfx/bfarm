@@ -56,9 +56,14 @@ function _UIWindow ()
       if (handler)
         {
           /* Need this to prevent dnd stuff starting working on button's click */
-          $(button).mousedown (function (event) {stopEvent (event); });
+          var stopCb = function (event) {stopEvent (event); };
+          $(button).mousedown (stopCb);
+          $(button).dblclick  (stopCb);
 
-          $(button).click (handler);
+          $(button).click (function (handler) {return function () {
+                  window.setTimeout (handler, 10);
+                };
+              } (handler));
         }
 
       if (image)
