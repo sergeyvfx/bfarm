@@ -123,7 +123,7 @@ function _UIWindowManager ()
       this.removeWindow (window);
 
       window.onClosed ();
-      this.onWindowClosed ();
+      this.onWindowClosed (window);
     }
 
   /**
