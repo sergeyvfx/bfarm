@@ -270,6 +270,14 @@ function _UIWindow ()
       return this.menu;
     };
 
+  /**
+   * Get window title
+   */
+  this.getTitle = function ()
+    {
+      return this.title;
+    };
+
   /* Handlers */
 
   /**
