@@ -2,9 +2,45 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
+function _UIWidgetPopup ()
+{
+  /**
+   * Show popup object at specified point
+   *
+   * Point is an object with structure {x, y}
+   */
+  this.popupAt = function (point)
+    {
+      if (!this.dom)
+        {
+          this.build ();
+        }
+
+      return this.dom.popupAt (point);
+    };
+
+
+  /**
+   * Hide popup
+   */
+  this.hidePopup = function ()
+    {
+      return this.dom.hidePopup ();
+    };
+
+  /**
+   * Set z-index position
+   */
+  this.setPupZIndex = function (zIndex)
+    {
+      return this.dom.setPupZIndex (zIndex);
+    };
+};
+
 function _UIWidget ()
 {
   _UIObject.call (this);
+  _UIWidgetPopup.call (this);
 
   /****
    * Properties getters/setters

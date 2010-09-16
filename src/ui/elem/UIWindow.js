@@ -83,6 +83,12 @@ function _UIWindow ()
    */
   this.buildDefaultButtons = function ()
     {
+      if (this.menu.length ())
+        {
+          this.buildTitleButton ('window-menu', 'menu', 'left', 'UIWindowMenuButton',
+              wrapMeth (this, 'onMenuClick'));
+        }
+
       this.buildTitleButton ('window-close', 'close', 'right', 'UIWindowCloseButton',
           wrapMeth (this, 'onCloseClick'));
       this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
@@ -251,7 +257,15 @@ function _UIWindow ()
       return this.clientArea;
     };
 
-    /* Handlers */
+  /**
+   * Get window menu
+   */
+  this.getMenu = function ()
+    {
+      return this.menu;
+    };
+
+  /* Handlers */
 
   /**
    * Handler of close title button
@@ -259,7 +273,7 @@ function _UIWindow ()
   this.onCloseClick = function ()
     {
       this.close ();
-    }
+    };
 
   /**
    * Handler of maximize title button
@@ -274,7 +288,21 @@ function _UIWindow ()
         {
           this.maximize ();
         }
-    }
+    };
+
+  /**
+   * Handler of menu button click
+   */
+  this.onMenuClick = function ()
+    {
+      var point = {'x': 0, 'y': 0};
+      var offset = this.dom.offset ();
+
+      point['x'] = offset['left'];
+      point['y'] = offset['top'] + $(this.titleBg).height ();
+
+      uiPopupManager.popup (this.menu, point);
+    };
 
   /* Event stubs */
   this.onShow   = function () {};
@@ -312,6 +340,8 @@ function UIWindow (opts)
     {
       this.resizable = isTruth (opts['resizable']);
     }
+
+  this.menu       = new UIMenu ();  /* Window menu */
 
   this.titleBg    = null;  /* Title background */
   this.titleFg    = null;  /* Title */
