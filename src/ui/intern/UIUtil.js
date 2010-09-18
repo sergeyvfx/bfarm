@@ -34,11 +34,18 @@ function _UIUtil ()
         }
       else if (item instanceof Element)
         {
-          var dummyDiv = null;
-          if (!item.parentNode)
+          var dummyDiv = null, tmpNode = null;
+
+          if (!nodeInTree (item, document.body))
             {
-              dummyDiv = ($('<div style="_visibility: hidden; position: absolyte; top: 0; left: 0">')
-                           .append (item)
+              if (item.parentNode)
+                {
+                  tmpNode = createElement ('DIV');
+                  item.parentNode.replaceChild (tmpNode, item);
+                }
+
+              dummyDiv = ($('<div style="visibility: hidden; position: absolyte; top: 0; left: 0">')
+                           .append ($(item))
                          ) [0];
               document.body.appendChild (dummyDiv);
             }
@@ -63,6 +70,11 @@ function _UIUtil ()
           if (dummyDiv)
             {
               removeNode (item);
+              if (tmpNode)
+                {
+                  tmpNode.parentNode.replaceChild (item, tmpNode);
+                }
+
               removeNode (dummyDiv);
             }
 
