@@ -84,6 +84,15 @@ function _UIViewportPanel ()
     };
 
   /**
+   * Rebuild all items
+   */
+  this.rebuildItems = function ()
+    {
+      this.dom.removeAllNodes ();
+      this.buildItems (this.dom);
+    };
+
+  /**
    * Build DOM tree
    */
   this.doBuild = function ()
@@ -121,7 +130,15 @@ function _UIViewportPanel ()
   this.add = function (widget, atEnd, rebuild)
     {
       widget._uivpanel_atEnd = defVal (atEnd, false);
-      UIContainer.prototype.add.call (this, widget, rebuild);
+
+      var result = UIContainer.prototype.add.call (this, widget, false);
+
+      if (this.dom || rebuild)
+        {
+          this.rebuildItems ();
+        }
+
+      return result;
     };
 }
 

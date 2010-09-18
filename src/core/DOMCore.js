@@ -24,8 +24,8 @@ function removeAllNodes (node)
 {
   while (node.childNodes.length)
     {
-      var node = node.childNodes[0];
-      node.removeChild (node);
+      var n = node.childNodes[0];
+      node.removeChild (n);
     }
 }
 
