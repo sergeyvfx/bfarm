@@ -161,6 +161,35 @@ function _UIViewport ()
     };
 
   /**
+   * Remove specified item from list
+   */
+  this.removeItem = function (item)
+    {
+      var index = this.items.indexOf (item);
+
+      if (index >= 0)
+        {
+          this.items.splice (index, 1);
+
+          if (item.dom)
+            {
+              removeNode (item.dom);
+            }
+        }
+    };
+
+  /**
+   * Remove all items
+   */
+  this.removeAllItems = function ()
+    {
+      while (this.items.length)
+        {
+          this.removeItem (this.items[0]);
+        }
+    };
+
+  /**
    * Get viewport's zindex object
    *
    * @return viewport's zindex object
