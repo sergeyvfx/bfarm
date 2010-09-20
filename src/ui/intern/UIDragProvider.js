@@ -54,15 +54,24 @@ function _UIDragProvider ()
           } (this, object);
 
       /* Handler for preveinting raising of `click` event */
-      var stubHandler = function (event) {
-        stopEvent (event);
-        return false;
-      }
+      var stubHandler = function (object) { return function (handler) { return function (event) {
+              if (!object.dragProvided && handler)
+                {
+                  handler (event);
+                }
+
+              stopEvent (event);
+              return false;
+            }
+          }
+        } (object);
+
+      object.dragProvided = false;
 
       for (var i = 0, n = area.length; i < n; ++i)
         {
           area[i].onmousedown = handler (area[i].onmousedown);
-          area[i].onclick = stubHandler;
+          area[i].onclick = stubHandler (area[i].onclick);
         }
     };
 
@@ -72,6 +81,8 @@ function _UIDragProvider ()
   this.onBeginDrag = function (object, domEvent)
     {
       this.notifierSent = false;
+
+      object.dragProvided = false;
 
       this.activeObject = object;
       this.basePoint = {'x': domEvent.clientX, 'y': domEvent.clientY};
@@ -119,6 +130,8 @@ function _UIDragProvider ()
       this.handleDelta (delta);
 
       this.basePoint = newPos;
+
+      this.activeObject.dragProvided = true;
     };
 
   /**

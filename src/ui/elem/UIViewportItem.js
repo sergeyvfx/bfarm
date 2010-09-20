@@ -34,7 +34,7 @@ function _UIViewportItem ()
       item.appendChild (cpt);
 
       /* Callbacks */
-      result.onclick = function (callback) { return function (event) {
+      item.onclick = function (callback) { return function (event) {
             if (callback)
               {
                 window.setTimeout (callback, 10);
@@ -44,6 +44,13 @@ function _UIViewportItem ()
             return false;
           }
         } (this.exec);
+
+      if (this.movable)
+        {
+          UI_MakeMovable (item);
+        }
+
+      $(result).disableTextSelect ();
 
       return result;
     }
@@ -58,6 +65,7 @@ function UIViewportItem (opts)
   this.caption = opts['caption'];
   this.image   = opts['image'];
   this.exec    = opts['exec'];
+  this.movable = defVal (opts['movable'], false);
 
   this.caption_d = null;
   this.image_d = null;
