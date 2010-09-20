@@ -165,7 +165,7 @@ function _UIViewport ()
    */
   this.removeItem = function (item)
     {
-      var index = this.items.indexOf (item);
+      var index = indexOf (this.items, item);
 
       if (index >= 0)
         {

@@ -27,7 +27,7 @@ function _IContainer ()
    */
   this.remove = function (element)
     {
-      var index = this.container.indexOf (element);
+      var index = indexOf (this.container, element);
       if (index >= 0)
         {
           this.container.splice (index, 1);

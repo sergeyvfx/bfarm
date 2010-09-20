@@ -17,6 +17,20 @@ function _UIWindowManager ()
    */
   this.showWindow = function (window, viewport)
     {
+      if (window.dom && window.dom.parentNode)
+        {
+          /* window had been minimized */
+          window.dom.style.display = '';
+
+          window.onShow ();
+          this.onWindowShown (window);
+
+          this.focusWindow (window);
+          this.raiseWindow (window);
+
+          return;
+        }
+
       if (isUnknown (viewport))
         {
           viewport = uiMainViewport;
@@ -30,7 +44,6 @@ function _UIWindowManager ()
           wndHolder = viewport.getViewport ();
         }
 
-      //alert (wndHolder.appendChild);
       wndHolder.appendChild (wnd);
       window.viewport = viewport;
 
@@ -47,17 +60,22 @@ function _UIWindowManager ()
    */
   this.focusWindow = function (window)
     {
+      var lastFocused = this.getLastFocused ();
       if (this.raiseOnFocus)
         {
           this.raiseWindow (window);
         }
 
-      if (this.lastFocused)
+      if (lastFocused)
         {
-          this.lastFocused.dom.removeClass ('UIWindowFocused');
+          lastFocused.dom.removeClass ('UIWindowFocused');
         }
 
       window.dom.addClass ('UIWindowFocused');
+
+      remove (this.usageStack, window);
+      this.usageStack.push (window);
+
       this.lastFocused = window;
 
       this.onWindowFocused (window);
@@ -205,6 +223,28 @@ function _UIWindowManager ()
       this.onWindowRestored (window);
     };
 
+  /**
+   * Minimize specified window
+   */
+  this.minimizeWindow = function (window)
+    {
+      /* Hide window */
+      window.dom.style.display = 'none';
+
+      window.onMinimized ();
+      this.onWindowMinimized (window);
+
+      /* Find window to raise */
+      remove (this.usageStack, window);
+      this.usageStack.splice (0, 0, window);
+
+      var lastFocused = this.getLastFocused ();
+      if (lastFocused && this.isWindowVisible (lastFocused))
+        {
+          lastFocused.setFocus ();
+        }
+    };
+
   /* setters/getters */
 
   /**
@@ -231,6 +271,31 @@ function _UIWindowManager ()
       this.remove (window);
     };
 
+  /**
+   * Get last focused window
+   */
+  this.getLastFocused = function ()
+    {
+      if (this.usageStack.length)
+        {
+          var window = this.usageStack[this.usageStack.length - 1];
+          if (window.isVisible ())
+            {
+              return window;
+            }
+        }
+
+      return null;
+    };
+
+  /**
+   * Check if window visible
+   */
+  this.isWindowVisible = function (window)
+    {
+      return window.isVisible ();
+    }
+
   /** Event stubs  */
   this.onWindowRaised    = function (window) {};
   this.onWindowClosed    = function (window) {};
@@ -239,6 +304,7 @@ function _UIWindowManager ()
   this.onWindowFocused   = function (window) {};
   this.onWindowMaximized = function (window) {};
   this.onWindowRestored  = function (window) {};
+  this.onWindowMinimized = function (window) {};
 }
 
 function UIWindowManager ()
@@ -246,9 +312,10 @@ function UIWindowManager ()
   IObject.call (this);
   IContainer.call (this);
 
-  this.windows = [];
+  this.windows    = []; /* list of all windows */
+  this.usageStack = []; /* ordered by last focus windows */
+
   this.raiseOnFocus = true;
-  this.lastFocused = null;
 }
 
 UIWindowManager.prototype = new _UIWindowManager;

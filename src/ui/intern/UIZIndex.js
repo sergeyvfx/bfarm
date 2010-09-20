@@ -43,7 +43,7 @@ function _UIZIndex ()
    */
   this.removeIndex = function (index)
     {
-      var i = this.indexes.indexOf (index);
+      var i = indexOf (this.indexes, index);
 
       if (i >= 0)
         {

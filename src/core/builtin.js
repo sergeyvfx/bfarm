@@ -187,6 +187,9 @@ function inside(obj, list)
   return false;
 }
 
+/**
+ * Clamp value
+ */
 function clamp(x, min, max)
 {
   if (x < min)
@@ -199,4 +202,38 @@ function clamp(x, min, max)
     }
 
   return x;
+}
+
+/**
+ * index of object in array
+ */
+function indexOf(arr, obj)
+{
+  if (arr.indexOf)
+    {
+      return arr.indexOf (obj);
+    }
+
+  for (var i = 0; i < this.length; i++)
+    {
+      if (this[i] == obj)
+        {
+          return i;
+        }
+    }
+
+  return -1;
+}
+
+/**
+ * Remove object from array
+ */
+function remove(arr, object)
+{
+  var index = indexOf (arr, object);
+
+  if (index >= 0)
+    {
+      arr.splice (index, 1);
+    }
 }

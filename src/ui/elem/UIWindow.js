@@ -98,6 +98,8 @@ function _UIWindow ()
           wrapMeth (this, 'onCloseClick'));
       this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
           wrapMeth (this, 'onToggleMaximizeClick'));
+      this.buildTitleButton ('window-minimize', 'minimize', 'right', 'UIWindowMinimizeButton',
+          wrapMeth (this, 'onMinimizeClick'));
     };
 
   this.customizeUIMovableHandlers = function (dom)
@@ -288,6 +290,14 @@ function _UIWindow ()
       uiWindowManager.restoreWindow (this);
     };
 
+  /**
+   * Miminize window
+   */
+  this.minimize = function ()
+    {
+      uiWindowManager.minimizeWindow (this);
+    };
+
   /* Getters/setters */
 
   /**
@@ -353,6 +363,37 @@ function _UIWindow ()
       uiPopupManager.popup (this.menu, point);
     };
 
+  /**
+   * Handler of minimize title button
+   */
+  this.onMinimizeClick = function ()
+    {
+      this.minimize ();
+    }
+
+  /**
+   * CHeck if window visible
+   */
+  this.isVisible = function ()
+    {
+      if (!this.dom)
+        {
+          return false;
+        }
+
+      if (!this.dom.parentNode)
+        {
+          return false;
+        }
+
+      if (this.dom.style.display == 'none')
+        {
+          return false;
+        }
+
+      return true;
+    }
+
   /* Event stubs */
   this.onShow   = function () {};
   this.onRaise  = function () {};
@@ -362,6 +403,7 @@ function _UIWindow ()
   this.onResize = function (delta) {};
   this.onMaximized = function () {};
   this.onRestored  = function () {};
+  this.onMinimized = function () {};
 }
 
 /****

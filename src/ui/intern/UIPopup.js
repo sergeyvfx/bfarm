@@ -135,7 +135,7 @@ function _UIPopupManager ()
 
       this.callHandler (item, 'onHide');
 
-      var index = this.stack.indexOf (item);
+      var index = indexOf (this.stack, item);
       this.stack.splice (index, 1);
     };
 
@@ -160,7 +160,7 @@ function _UIPopupManager ()
       if (hideLayer)
         delta = 0;
 
-      var index = item ? this.stack.indexOf (item) + delta : 0;
+      var index = item ? indexOf (this.stack, item) + delta : 0;
 
       for (var i = this.stack.length - 1; i >= index; --i)
         {

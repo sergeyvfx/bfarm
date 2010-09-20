@@ -102,7 +102,7 @@ function _UIAbstractList ()
    */
   this.setActive = function (active)
     {
-      this.doItemSelect (this.container.indexOf (active));
+      this.doItemSelect (indexOf (this.container, active));
     }
 
   /**
