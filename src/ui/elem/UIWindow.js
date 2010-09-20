@@ -98,7 +98,52 @@ function _UIWindow ()
           wrapMeth (this, 'onCloseClick'));
       this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
           wrapMeth (this, 'onToggleMaximizeClick'));
-    }
+    };
+
+  this.customizeUIMovableHandlers = function (dom)
+    {
+      dom.moveBy = function (self, origHandler) {return function (delta) {
+            if (self.isMaximized)
+              {
+                return;
+              }
+
+            origHandler.call (this, delta);
+          }
+        } (this, dom.moveBy);
+
+      dom.validateMoveDelta = function (delta) {
+        var p = this.offsetParent;
+        var x = this.offsetLeft;
+        var y = this.offsetTop;
+        var w = this.offsetWidth;
+        var h = this.offsetHeight;
+
+        /* Horisontal limits */
+        if (x + delta['x'] < 0)
+          {
+            delta['x'] = -x;
+          }
+
+        if (x + delta['x'] + w > p.clientWidth)
+          {
+            delta['x'] = p.clientWidth - x - w;
+          }
+
+        /* vertical limits */
+        if (y + delta['y'] < 0)
+          {
+            delta['y'] = -y;
+          }
+
+        if (y + delta['y'] + h > p.clientHeight)
+          {
+            delta['y'] = p.clientHeight - y - h;
+          }
+
+        return delta;
+      };
+    };
 
   /**
    * Build DOM tree
@@ -162,16 +207,7 @@ function _UIWindow ()
       result.style.height = this.height + 'px';
 
       UI_MakeMovable (result, {'moveArea': title});
-
-      result.moveBy = function (self, origHandler) {return function (delta) {
-            if (self.isMaximized)
-              {
-                return;
-              }
-
-            origHandler.call (result, delta);
-          }
-        } (this, result.moveBy);
+      this.customizeUIMovableHandlers (result);
 
       $(title).dblclick(wrapMeth (this, 'onToggleMaximizeClick'));
 

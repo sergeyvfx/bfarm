@@ -60,10 +60,12 @@ function _UIMoveManager ()
       /* Validate delta, by which user tries to move object */
       if (this.activeObject.validateMoveDelta)
         {
-          delta = this.movingObject.validateMoveDelta (delta);
+          delta = this.activeObject.validateMoveDelta (delta);
         }
 
       this.activeObject.moveBy (delta);
+
+      return delta;
     };
 }
 

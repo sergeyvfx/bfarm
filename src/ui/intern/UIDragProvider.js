@@ -129,7 +129,8 @@ function _UIDragProvider ()
 
       this.handleDelta (delta);
 
-      this.basePoint = newPos;
+      this.basePoint['x'] += delta['x'];
+      this.basePoint['y'] += delta['y'];
 
       this.activeObject.dragProvided = true;
     };
@@ -139,6 +140,7 @@ function _UIDragProvider ()
    */
   this.handleDelta = function (delta)
     {
+      return delta;
     };
 }
 
