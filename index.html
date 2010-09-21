@@ -128,7 +128,7 @@
         uiManager.registerContext ($('#myDiv3')[0]);*/
         uiManager.registerContext ($('.UIPopup')[0]);
 
-        var viewport = new UIViewport({'fill': true});
+        var viewport = new UIViewport({'fill': true, 'itemsMovable': true});
         var vp = viewport.build ();
         document.body.insertBefore (vp, $('.UIPopup')[0]);
         var topPanel = viewport.addPanel (VP_PANEL_TOP);

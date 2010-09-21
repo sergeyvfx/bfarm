@@ -149,10 +149,11 @@ function _UIViewport ()
    */
   this.addItem = function (image, caption, exec)
     {
-      var item = new UIViewportItem ({'parent' : this,
-                                      'image'  : image,
-                                      'caption': caption,
-                                      'exec'   : exec});
+      var item = new UIViewportItem ({'parent'  : this,
+                                      'image'   : image,
+                                      'caption' : caption,
+                                      'exec'    : exec,
+                                      'movable' : this.itemsMovable});
 
       this.items.push (item);
       this.buildItem (item);
@@ -211,6 +212,8 @@ function UIViewport (opts)
     {
       uiMainViewport = this;
     }
+
+  this.itemsMovable = defVal (opts['itemsMovable'], false);
 
   this.viewport    = null;
   this.background  = null;
