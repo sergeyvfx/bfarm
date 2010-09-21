@@ -100,6 +100,9 @@ function _UIWindowManager ()
 
       if (oldIndex > 0 && oldIndex == zIndex.getLastIndex ())
         {
+          window.onRaise ();
+          this.onWindowRaised (window);
+
           return;
         }
 
