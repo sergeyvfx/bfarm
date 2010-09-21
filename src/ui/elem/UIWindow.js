@@ -94,12 +94,23 @@ function _UIWindow ()
               wrapMeth (this, 'onMenuClick'));
         }
 
-      this.buildTitleButton ('window-close', 'close', 'right', 'UIWindowCloseButton',
-          wrapMeth (this, 'onCloseClick'));
-      this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
-          wrapMeth (this, 'onToggleMaximizeClick'));
-      this.buildTitleButton ('window-minimize', 'minimize', 'right', 'UIWindowMinimizeButton',
-          wrapMeth (this, 'onMinimizeClick'));
+      if (indexOf (this.buttons, 'CLOSE') >= 0)
+        {
+          this.buildTitleButton ('window-close', 'close', 'right', 'UIWindowCloseButton',
+              wrapMeth (this, 'onCloseClick'));
+        }
+
+      if (indexOf (this.buttons, 'MAXIMIZE') >= 0)
+        {
+          this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
+            wrapMeth (this, 'onToggleMaximizeClick'));
+        }
+
+      if (indexOf (this.buttons, 'MINIMIZE') >= 0)
+        {
+          this.buildTitleButton ('window-minimize', 'minimize', 'right', 'UIWindowMinimizeButton',
+              wrapMeth (this, 'onMinimizeClick'));
+        }
     };
 
   this.customizeUIMovableHandlers = function (dom)
@@ -339,6 +350,11 @@ function _UIWindow ()
    */
   this.onToggleMaximizeClick = function ()
     {
+      if (indexOf (this.buttons, 'MAXIMIZE') < 0)
+        {
+          return;
+        }
+
       if (this.isMaximized)
         {
           this.restore ();
@@ -447,6 +463,8 @@ function UIWindow (opts)
         }
     };
   } (this));
+
+  this.buttons = ['MINIMIZE', 'MAXIMIZE', 'CLOSE'];
 
   /* Internal use */
   this.abortClose   = false;
