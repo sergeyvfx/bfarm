@@ -145,6 +145,9 @@ function _UIWindowManager ()
           return;
         }
 
+      remove (this.usageStack, window);
+      remove (this.windows, window);
+
       this.hideWindow (window);
       this.removeWindow (window);
 
