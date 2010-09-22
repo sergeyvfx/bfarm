@@ -23,10 +23,9 @@ Element.prototype.moveBy = function (delta)
   if (!absolute || !('' + this.style.left).match (/px$/) ||
       !('' + this.style.top).match (/px$/))
     {
-      this.style.position = 'absolute';
-
       this.style.left = this.offsetLeft + 'px';
       this.style.top  = this.offsetTop + 'px';
+      this.style.position = 'absolute';
     }
 
   this.style.left = parseInt (this.style.left || '0') + delta['x'] + 'px';
