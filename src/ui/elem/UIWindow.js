@@ -173,6 +173,11 @@ function _UIWindow ()
         var w = this.offsetWidth;
         var h = this.offsetHeight;
 
+        if (wnd.isMaximized)
+          {
+            return {'x': 0, 'y': 0};
+          }
+
         if (w + delta['x'] < wnd.minWidth)
           {
             delta['x'] = wnd.minWidth - w;
