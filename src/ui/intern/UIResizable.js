@@ -60,10 +60,12 @@ function _UIResizeManager ()
       /* Validate delta, by which user tries to resize object */
       if (this.activeObject.validateResizeDelta)
         {
-          delta = this.movingObject.validateResizeDelta (delta);
+          delta = this.activeObject.validateResizeDelta (delta);
         }
 
       this.activeObject.resizeBy (delta);
+
+      return delta;
     };
 }
 

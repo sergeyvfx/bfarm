@@ -113,6 +113,9 @@ function _UIWindow ()
         }
     };
 
+  /**
+   * Customize handlers needed for UIMovable
+   */
   this.customizeUIMovableHandlers = function (dom)
     {
       dom.moveBy = function (self, origHandler) {return function (delta) {
@@ -159,6 +162,36 @@ function _UIWindow ()
     };
 
   /**
+   * Customize handlers needed for UIMovable
+   */
+  this.customizeUIResizableHandlers = function (dom)
+    {
+      dom.validateResizeDelta = function (delta) {
+        var wnd = this.uiWidget;
+        var w = this.offsetWidth;
+        var h = this.offsetHeight;
+
+        if (w + delta['x'] < wnd.minWidth)
+          {
+            delta['x'] = wnd.minWidth - w;
+          }
+
+        if (h + delta['y'] < wnd.minHeight)
+          {
+            delta['y'] = wnd.minHeight - h;
+          }
+
+        return delta;
+      };
+
+      dom.resizeBy = function (self, origHandler) {return function (delta) {
+            origHandler.call (dom, delta);
+            self.onResize (delta);
+          }
+        } (this, dom.resizeBy);
+    };
+
+  /**
    * Build DOM tree
    */
   this.doBuild = function ()
@@ -198,12 +231,7 @@ function _UIWindow ()
           result.appendChild (sizer);
 
           UI_MakeResizable (result, {'resizeArea': sizer});
-
-          result.resizeBy = function (self, origHandler) {return function (delta) {
-                origHandler.call (result, delta);
-                self.onResize (delta);
-              }
-            } (this, result.resizeBy);
+          this.customizeUIResizableHandlers (result);
         }
 
       /* Client area */
@@ -437,12 +465,19 @@ function UIWindow (opts)
   this.left = opts['left'] || 0;
 
   /* Width of window */
-  this.width = opts['width'] || 320;
+  this.width = defVal (opts['width'], 320);
 
   /* Height of window */
-  this.height = opts['height'] || 240;
+  this.height = defVal (opts['height'], 240);
+
+  /* Minimal width of window */
+  this.minWidth = defVal (opts['minWidth'], 120);
+
+  /* Minimal height of window */
+  this.minHeight = defVal (opts['minHeight'], 90);
 
   this.resizable = true;
+
   if (!isUnknown (opts['resizable']))
     {
       this.resizable = isTruth (opts['resizable']);
