@@ -129,11 +129,13 @@ function _UIWindow ()
         } (this, dom.moveBy);
 
       dom.validateMoveDelta = function (delta) {
+        var window = this.uiWidget;
+
         var p = this.offsetParent;
         var x = this.offsetLeft;
         var y = this.offsetTop;
         var w = this.offsetWidth;
-        var h = this.offsetHeight;
+        var h = window.titleBg.offsetHeight;
 
         /* Horisontal limits */
         if (x + delta['x'] < 0)
