@@ -78,8 +78,11 @@ function _UIPopupManager ()
 
           // XXX: need registration of zIndex in viewport and object's
           //      viewport should be used instead of main
-          var zIndex = uiMainViewport.getZIndex ().getLastIndex () + 1;
-          object.setPupZIndex (zIndex);
+          if (uiMainViewport)
+            {
+              var zIndex = uiMainViewport.getZIndex ().getLastIndex () + 1;
+              object.setPupZIndex (zIndex);
+            }
 
           var item = {'object' : args['object'],
                       'opts'   : args['opts'],
