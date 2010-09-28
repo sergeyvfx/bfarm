@@ -88,17 +88,9 @@ function _UIWindowManager ()
    */
   this.raiseWindow = function (window)
     {
-      var viewport = window.viewport;
-
-      if (!viewport)
-        {
-          return;
-        }
-
-      var zIndex = viewport.getZIndex ();
       var oldIndex = window.dom.style.zIndex;
 
-      if (oldIndex > 0 && oldIndex == zIndex.getLastIndex ())
+      if (oldIndex > 0 && oldIndex == uiMainZIndex.getLastIndex ())
         {
           window.onRaise ();
           this.onWindowRaised (window);
@@ -106,11 +98,11 @@ function _UIWindowManager ()
           return;
         }
 
-      var index = zIndex.newIndex ();
+      var index = uiMainZIndex.newIndex ();
 
       if (oldIndex)
         {
-          zIndex.removeIndex ();
+          uiMainZIndex.removeIndex ();
         }
 
       window.dom.style.zIndex = index;

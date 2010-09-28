@@ -189,16 +189,6 @@ function _UIViewport ()
           this.removeItem (this.items[0]);
         }
     };
-
-  /**
-   * Get viewport's zindex object
-   *
-   * @return viewport's zindex object
-   */
-  this.getZIndex = function ()
-    {
-      return this.zIndex;
-    };
 }
 
 function UIViewport (opts)
@@ -221,8 +211,6 @@ function UIViewport (opts)
 
   this.panels = [];
   this.items = [];
-
-  this.zIndex = new UIZIndex ();
 }
 
 UIViewport.prototype = new _UIViewport;

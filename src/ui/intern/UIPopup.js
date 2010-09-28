@@ -76,13 +76,8 @@ function _UIPopupManager ()
           var context = args['object'].getUIContext ();
           object.popupAt (args['point']);
 
-          // XXX: need registration of zIndex in viewport and object's
-          //      viewport should be used instead of main
-          if (uiMainViewport)
-            {
-              var zIndex = uiMainViewport.getZIndex ().getLastIndex () + 1;
-              object.setPupZIndex (zIndex);
-            }
+          var zIndex = uiMainZIndex.getLastIndex () + 1;
+          object.setPupZIndex (zIndex);
 
           var item = {'object' : args['object'],
                       'opts'   : args['opts'],
