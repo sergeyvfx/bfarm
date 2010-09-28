@@ -72,8 +72,10 @@ function _UIPopupManager ()
           point['y'] = point['pos']['y'];
         }
 
+
       callOut (function (args) {
           var context = args['object'].getUIContext ();
+          args['this'].hide (object);
           object.popupAt (args['point']);
 
           var zIndex = uiMainZIndex.getLastIndex () + 1;
@@ -87,6 +89,12 @@ function _UIPopupManager ()
           uiManager.registerContext (context);
 
           args['this'].callOutHandler (item, 'onShow');
+
+          if (args['this'].isMouseDown)
+            {
+              args['this'].mouseDownPups.push (item);
+            }
+
         }, mkargs (['object', 'point', 'opts'], arguments, {'this': this}));
     }
 
@@ -106,6 +114,23 @@ function _UIPopupManager ()
       this.hideFromContext (context);
 
       userData.cancel (true);
+      this.mouseDownPups = [];
+    };
+
+  /**
+   * Handler of mouse down event
+   */
+  this.mousedownHandler = function (userData)
+    {
+      this.isMouseDown = true;
+    };
+
+  /**
+   * Handler of mouse up event
+   */
+  this.mouseupHandler = function (userData)
+    {
+      this.isMouseDown = false;
     };
 
   /**
@@ -127,6 +152,11 @@ function _UIPopupManager ()
    */
   this.hideStackItem = function (item)
     {
+      if (indexOf (this.mouseDownPups, item) >= 0)
+        {
+          return;
+        }
+
       var obj = item['object'];
 
       obj.hidePopup ();
@@ -242,6 +272,18 @@ function UIPopupManager ()
       };
     } (this));
 
+  uiManager.addHandler ('mousedown', function (self) {
+      return function (userData) {
+        self.mousedownHandler (userData);
+      };
+    } (this));
+
+  uiManager.addHandler ('mouseup', function (self) {
+      return function (userData) {
+        self.mouseupHandler (userData);
+      };
+    } (this));
+
   uiManager.addHandler (['mousedownCancel', 'clickCancel'], function (self) {
     return function (userData) {
       self.hideFromContext (userData['context']);
@@ -254,6 +296,10 @@ function UIPopupManager ()
         self.keypressHandler (userData);
       };
     } (this));
+
+  /* internal use to make correct popup at mousedown event working under FF */
+  this.mouseDownPups = [];
+  this.isMouseDown = false;
 }
 
 UIPopupManager.prototype = new _UIPopupManager;
