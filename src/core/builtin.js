@@ -214,9 +214,9 @@ function indexOf(arr, obj)
       return arr.indexOf (obj);
     }
 
-  for (var i = 0; i < this.length; i++)
+  for (var i = 0; i < arr.length; i++)
     {
-      if (this[i] == obj)
+      if (arr[i] == obj)
         {
           return i;
         }
