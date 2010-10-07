@@ -47,6 +47,8 @@ function _UIWindowManager ()
       wndHolder.appendChild (wnd);
       window.viewport = viewport;
 
+      this.add (window);
+
       window.onShow ();
       this.onWindowShown (window);
 
@@ -141,7 +143,7 @@ function _UIWindowManager ()
         }
 
       remove (this.usageStack, window);
-      remove (this.windows, window);
+      this.remove (window);
 
       this.hideWindow (window);
       this.removeWindow (window);
@@ -310,7 +312,6 @@ function UIWindowManager ()
   IObject.call (this);
   IContainer.call (this);
 
-  this.windows    = []; /* list of all windows */
   this.usageStack = []; /* ordered by last focus windows */
 
   this.raiseOnFocus = true;
