@@ -40,16 +40,33 @@ function _UIPanelMenu ()
     {
       var point = {'x': 0, 'y': 0};
 
-      var p = this.parent;
-      if (p)
+      var x = parseInt (this.menuWidth);
+      if (!isNaN(x) && x > 0)
         {
-          var offset = p.dom.offset ();
+          var offset = this.dom.offset ();
+          var height = this.dom.getHeight ();
 
-          // XXX:
-          if (p.position == VP_PANEL_TOP)
+          point['x'] = offset.left - height;
+          point['y'] = offset.top + height;
+
+          if (point['x'] < 0)
             {
-              point['x'] = offset.left;
-              point['y'] = offset.top + p.dom.getHeight ();
+              point['x'] = 0;
+            }
+        }
+      else
+        {
+          var p = this.parent;
+          if (p)
+            {
+              var offset = p.dom.offset ();
+
+              // XXX:
+              if (p.position == VP_PANEL_TOP)
+                {
+                  point['x'] = offset.left;
+                  point['y'] = offset.top + p.dom.getHeight ();
+                }
             }
         }
 
@@ -63,12 +80,20 @@ function _UIPanelMenu ()
     {
       var dim = {'x': 'auto', 'y': 'auto'};
 
-      var p = this.parent;
-      if (p)
+      var x = parseInt (this.menuWidth);
+      if (!isNaN(x) && x > 0)
         {
-          if (p.position == VP_PANEL_TOP || p.position == VP_PANEL_BOTTOM)
+          dim['x'] = x + 'px';
+        }
+      else
+        {
+          var p = this.parent;
+          if (p)
             {
-              dim['x'] = p.dom.outerWidth () - 2 + 'px';
+              if (p.position == VP_PANEL_TOP || p.position == VP_PANEL_BOTTOM)
+                {
+                  dim['x'] = p.dom.outerWidth () - 2 + 'px';
+                }
             }
         }
 
@@ -156,6 +181,7 @@ function UIPanelMenu (opts)
   this.caption = opts['caption'];
   this.image   = opts['image'];
   this.bold    = opts['bold'];
+  this.menuWidth   = opts['menuWidth'];
 
   this.menuButton = null;
   this.activated = false;
