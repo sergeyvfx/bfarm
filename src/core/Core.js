@@ -71,7 +71,7 @@ function setEmbedHandlers (node)
         node['__' + h] = node[h];
 
         node[h] = function (h) { return function (a, b) {
-              var result = this['__' + h] (a, b);
+              var result = this['__' + h].call (this, a, b);
 
               if (a.uiWidget)
                 {
