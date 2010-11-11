@@ -38,6 +38,12 @@ function _UIDragProvider ()
       var handler = function (self, object) { return function (oldHandler) {
               return function (event) {
                 var evt = event || window.event;
+
+                if (evt.which != 1)
+                  {
+                    return true;
+                  }
+
                 stopEvent (evt);
 
                 /* Call previous handler */
