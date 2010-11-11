@@ -78,10 +78,8 @@ if(jQuery) (function(){
 						return true;
 					}
 				});
-				$(this)[0].oncontextmenu = function() {
-					return false;
-				}
 			});
+			$(this).noContext();
 			return $(this);
 		},
 		
@@ -95,16 +93,24 @@ if(jQuery) (function(){
 						return true;
 					}
 				});
-				$(this)[0].oncontextmenu = function() {
-					return false;
-				}
 			});
+			$(this).noContext();
 			return $(this);
 		},
 		
 		noContext: function() {
 			$(this).each( function() {
-				$(this)[0].oncontextmenu = function() {
+				$(this)[0].oncontextmenu = function(event) {
+					var evt = event || window.event;
+
+					evt.cancelBubble = true;
+					evt.returnValue = false;
+					if (evt.stopPropagation)
+						{
+							evt.stopPropagation();
+							evt.preventDefault();
+						}
+
 					return false;
 				}
 			});

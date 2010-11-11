@@ -39,7 +39,7 @@ function _UIDragProvider ()
               return function (event) {
                 var evt = event || window.event;
 
-                if (evt.which != 1)
+                if( (!$.browser.msie && evt.button != 0) || ($.browser.msie && evt.button != 1) )
                   {
                     return true;
                   }

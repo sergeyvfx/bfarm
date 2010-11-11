@@ -257,7 +257,12 @@ function _UIWindow ()
       UI_MakeMovable (result, {'moveArea': title});
       this.customizeUIMovableHandlers (result);
 
+      /* set handlers */
       $(title).dblclick(wrapMeth (this, 'onToggleMaximizeClick'));
+      $(title).rightMouseDown (function (self) { return function (event) {
+            self.onTitleRightClick (event);
+          };
+        } (this));
 
       /* Store DOM elements */
       this.titleBg    = titleBg;
@@ -403,15 +408,29 @@ function _UIWindow ()
   /**
    * Handler of menu button click
    */
-  this.onMenuClick = function ()
+  this.onMenuClick = function (atPoint)
     {
-      var point = {'x': 0, 'y': 0};
+      var point = defVal (atPoint, {'x': 0, 'y': 0});
       var offset = this.dom.offset ();
 
-      point['x'] = offset['left'];
-      point['y'] = offset['top'] + $(this.titleBg).height ();
+      if (isUnknown (atPoint))
+        {
+          point['x'] = offset['left'];
+          point['y'] = offset['top'] + $(this.titleBg).height ();
+        }
 
       uiPopupManager.popup (this.menu, point);
+    };
+
+  /**
+   * Handle right click on title
+   */
+  this.onTitleRightClick = function (event)
+    {
+      /* XXX: ocffset {1,1} is needed to prevent intersection of new DOM with
+              mouse pointer -- default context menu would be displayed in this case */
+
+      this.onMenuClick ({'x': event.clientX + 1, 'y': event.clientY + 1});
     };
 
   /**
