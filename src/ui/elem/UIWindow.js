@@ -430,7 +430,10 @@ function _UIWindow ()
       /* XXX: ocffset {1,1} is needed to prevent intersection of new DOM with
               mouse pointer -- default context menu would be displayed in this case */
 
-      this.onMenuClick ({'x': event.clientX + 1, 'y': event.clientY + 1});
+      if (this.menu.length ())
+        {
+          this.onMenuClick ({'x': event.clientX + 1, 'y': event.clientY + 1});
+        }
     };
 
   /**
