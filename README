@@ -1,0 +1,4 @@
+This is highly-development version of renderfarm, to run it you should at least
+rename config.template.py to config.py and customize settings there.
+
+No documantation would be avaliable before more stable version, sorry
