@@ -30,31 +30,16 @@
 import bpy
 import os, shutil, stat, sys, socket
 
-node_id        =  None
-task_id        =  None
-file_format    = 'PNG'
-output_fpath   = None
-resol_x        = 2048
-resol_y        = 872
-percentage     = 100
-color_mode     = 'RGB'
-render_frame   = 1
-render_threads = None
-tiles_x        = 32
-tiles_y        = 16
-use_stamp      = False
-server_addr    = None
+from optparse import OptionParser
 
-def get_ip():
+def get_ip(opts):
     """
     Quite silly function to get node IP address
     """
 
-    global server_addr
-
-    if server_addr is not None:
+    if opts.server_addr is not None:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        host, port = server_addr.split(':')
+        host, port = opts.server_addr.split(':')
         s.connect((host, int(port)))
         ip = s.getsockname() [0]
         s.close()
@@ -62,80 +47,36 @@ def get_ip():
     else:
         return [ip for ip in socket.gethostbyname_ex(socket.gethostname())[2] if not ip.startswith("127.")] [0]
 
-def next_arg(argv, i):
-    """
-    get next argument from command line if any or raise otherwise
-    """
-
-    if i >= len(argv) - 1:
-        raise Exception('Unable to parse arguments: missed value for argument {0}'.format(argv[i]))
-
-    return argv[i + 1]
-
-def parse_args(argv):
+def parseOptions(argv = None):
     """
     Parse arguments passed on command line
     """
 
-    global node_id, task_id, output_fpath, file_format, resol_x, resol_y, percentage, color_mode, render_frame
-    global render_threads, tiles_x, tiles_y, use_stamp, server_addr
+    op = OptionParser()
 
-    i = 0
-    n = len(argv)
-    while i < n:
-        if argv[i] == '--node-id':
-            node_id = next_arg(argv, i)
-            i += 1
+    # System
+    op.add_option('--node-id', dest = 'node_id', default = None)
+    op.add_option('--task-id', dest = 'task_id', default = None)
+    op.add_option('--server-addr', dest = 'server_addr', default = None)
 
-        if argv[i] == '--task-id':
-            task_id = next_arg(argv, i)
-            i += 1
+    # Output parameters
+    op.add_option('-o', '--output-path', dest = 'output_path', default = None)
+    op.add_option('-f', '--file-format', dest = 'file_format', default = 'PNG')
+    op.add_option('--resolution-x', dest = 'resol_x', default = '2048')
+    op.add_option('--resolution-y', dest = 'resol_y', default = '872')
+    op.add_option('--percentage', dest = 'percentage', default = '100')
+    op.add_option('--color-mode', dest = 'color_mode', default = 'RGB')
 
-        if argv[i] == '--output-path' or argv[i] == '-o':
-            output_fpath = next_arg(argv, i)
-            i += 1
+    # Performance
+    op.add_option('--render-frame', dest = 'render_frame', default = '1')
+    op.add_option('--render-threads', dest = 'render_threads', default = None)
+    op.add_option('--tiles-x', dest = 'tiles_x', default = 32)
+    op.add_option('--tiles-y', dest = 'tiles_y', default = 16)
 
-        if argv[i] == '--file-format' or argv[i] == '-f':
-            file_format = next_arg(argv, i)
-            i += 1
+    # Misc
+    op.add_option('--use-stamp', dest = 'use_stamp', action = 'store_true', default = False)
 
-        if argv[i] == '--resolution-x':
-            resol_x = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--resolution-y':
-            resol_y = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--percentage':
-            percentage = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--render-frame':
-            render_frame = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--render-threads':
-            render_threads = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--tiles-x':
-            tiles_x = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--tiles-y':
-            tiles_y = int(next_arg(argv, i))
-            i += 1
-
-        if argv[i] == '--use-stamp':
-            use_stamp = True
-
-        # needed for correct IP detection
-        if argv[i] == '--server-addr':
-            server_addr = next_arg(argv, i)
-            i += 1
-
-        i += 1
+    return op.parse_args(argv)
 
 def mk_tmp_dir(tmp_dir):
     """
@@ -172,14 +113,12 @@ def mk_tmp_dir(tmp_dir):
     else:
         raise Exception('Unable to set up temporary directory: {0} is neither directory nor regular file' . format(tmp_dir))
 
-def setupTmp():
+def setupTmp(opts):
     """
     Setup temporary directories
     """
 
-    global node_id
-
-    tmp_dir = '/tmp/node-{0}' . format(node_id)
+    tmp_dir = '/tmp/node-{0}' . format(opts.node_id)
 
     # Ensure temporary directory exists
     mk_tmp_dir(tmp_dir)
@@ -187,13 +126,10 @@ def setupTmp():
     # Set temporary path
     bpy.context.user_preferences.filepaths.temporary_directory = tmp_dir
 
-def setupScenes():
+def setupScenes(opts):
     """
     Customize scenes' settings
     """
-
-    global node_id, task_id, output_fpath, file_format, resol_x, resol_y, percentage, color_mode, render_frame
-    global render_threads, tiles_x, tiles_y, use_stamp
 
     fpath = bpy.data.filepath
     fname = os.path.splitext(os.path.basename(fpath))[0]
@@ -202,46 +138,47 @@ def setupScenes():
         rd = scene.render
 
         # File output
-        rd.file_format = file_format
-        rd.filepath = ('{0}' + os.path.sep + '{1}_######') . format(output_fpath, fname)
+        rd.file_format = opts.file_format
+        rd.filepath    = ('{0}' + os.path.sep + '{1}_######') . format(opts.output_path, fname)
         rd.use_file_extension = True
-        rd.use_placeholder = False
-        rd.use_overwrite = False
+        rd.use_placeholder    = False
+        rd.use_overwrite      = False
 
         # stamp
-        rd.use_stamp = use_stamp
-        rd.use_stamp_note = True
+        rd.use_stamp             = opts.use_stamp
+        rd.use_stamp_note        = True
         rd.use_stamp_render_time = True
 
-        #rd.stamp_note_text = "rev:%s, art_rev:%s, %s" % (bpy.app.build_revision, str(get_revision()), ip)
-        rd.stamp_note_text = 'rev:{0}, node:{1}, ip:{2}, task:{3}' . format(bpy.app.build_revision, node_id, get_ip(), task_id)
-        rd.stamp_font_size = 18
+        #rd.stamp_note_text  = "rev:%s, art_rev:%s, %s" % (bpy.app.build_revision, str(get_revision()), ip)
+        rd.stamp_note_text  = 'rev:{0}, node:{1}, ip:{2}, task:{3}' . format(bpy.app.build_revision, opts.node_id, get_ip(opts), opts.task_id)
+        rd.stamp_font_size  = 18
         rd.stamp_foreground = 1.0, 1.0, 1.0, 1.0
         rd.stamp_background = 0.0, 0.0, 0.0, 0.75
 
         # Performance/memory
         rd.use_free_image_textures = True
-        rd.use_save_buffers = True
-        rd.use_full_sample = True
+        rd.use_save_buffers        = True
+        rd.use_full_sample         = True
 
-        if render_threads is None:
+        if opts.render_threads is None:
             rd.threads_mode = 'AUTO'
         else:
             rd.threads_mode = 'FIXED'
-            rd.threads = render_threads
+            rd.threads = int(opts.render_threads)
 
         rd.use_local_coords = False
-        if rd.parts_x < tiles_x: rd.parts_x = tiles_x
-        if rd.parts_y < tiles_y: rd.parts_y = tiles_y
+        if rd.parts_x < int(opts.tiles_x): rd.parts_x = int(opts.tiles_x)
+        if rd.parts_y < int(opts.tiles_y): rd.parts_y = int(opts.tiles_y)
 
         # Resolution
-        rd.resolution_percentage = percentage
-        rd.resolution_x = resol_x
-        rd.resolution_y = resol_y
+        rd.resolution_percentage = int(opts.percentage)
+        rd.resolution_x = int(opts.resol_x)
+        rd.resolution_y = int(opts.resol_y)
         rd.use_border   = False
-        rd.color_mode   = color_mode
+        rd.color_mode   = opts.color_mode
 
         # Set render frame
+        render_frame = int(opts.render_frame)
         if render_frame > scene.frame_end:
           scene.frame_end = render_frame
           scene.frame_set(render_frame)
@@ -256,20 +193,22 @@ def main():
     All initialization stuff here
     """
 
-    global node_id, output_fpath
+    i  = sys.argv.index('--')
+    argv = sys.argv[i + 1:]
 
     ## XXX: debug only
-    #parse_args(['--render-frame', '20', '--node-id', '0', '--percentage', '80', '--output-path', '/home/nazgul/tmp', '--file-format', 'PNG', '--resolution-x', '800', '--resolution-y', '600'])
-    parse_args(sys.argv)
+    #argv = ['--render-frame', '20', '--node-id', '0', '--task-id', '2', '--percentage', '80', '--output-path', '/home/nazgul/tmp', '--file-format', 'PNG', '--resolution-x', '800', '--resolution-y', '600']
 
-    if node_id is None or output_fpath is None:
+    (opts, args) = parseOptions(argv)
+
+    if opts.node_id is None or opts.output_path is None:
         raise Exception('Missed at least one of mandatory arguments: --node-id or --output-path')
 
     # Setup temporary directories
-    setupTmp()
+    setupTmp(opts)
 
     # Setup all scenes
-    setupScenes()
+    setupScenes(opts)
 
     # Start render
     bpy.ops.render.render(animation = True)

@@ -28,12 +28,7 @@
 #
 
 import os, sys
-
-def next_arg(argv, i):
-    if i >= len(argv) - 1:
-        raise Exception('Unable to parse arguments: missed value for argument {0}' . format(argv[i]))
-
-    return argv[i + 1]
+from optparse import OptionParser
 
 # Append libs to search path
 abs_file = os.path.abspath(__file__)
@@ -47,14 +42,15 @@ from config import Config
 role = Config.role
 
 # Parse command line
-i = 0
-n = len(sys.argv)
-while i < n:
-    if sys.argv[i] == '--role':
-        role = next_arg(sys.argv, i)
-        if role not in ['server', 'client']:
-            raise Exception('Invalid role specified: {0} (expected [server|client])' . format(role))
-    i += 1
+op = OptionParser()
+op.add_option('--role', default = None)
+(opts, args) = op.parse_args()
+
+if opts.role is not None:
+    if opts.role not in ['server', 'client']:
+        raise Exception('Invalid role specified: {0} (expected [server|client])' . format(role))
+    else:
+        role = opts.role
 
 # Banner
 Logger.log('=' * 23, False)
