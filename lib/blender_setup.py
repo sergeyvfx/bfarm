@@ -139,7 +139,7 @@ def setupScenes(opts):
 
         # File output
         rd.file_format = opts.file_format
-        rd.filepath    = ('{0}' + os.path.sep + '{1}_######') . format(opts.output_path, fname)
+        rd.filepath    = os.path.join(opts.output_path, fname + '_######')
         rd.use_file_extension = True
         rd.use_placeholder    = False
         rd.use_overwrite      = False
