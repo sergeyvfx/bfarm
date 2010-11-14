@@ -32,13 +32,16 @@ import socket, time
 try:
     # Python 3.0 and newer
     import http.server
+    import http.client
 
 except ImportError:
     import BaseHTTPServer
+    import httplib
 
     # ssmall hack to make API py3-compatible
     class http:
         server = BaseHTTPServer
+        client = httplib
 
 import Logger
 from SignalThread import SignalThread
@@ -54,11 +57,27 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         Handle GET requests
         """
 
-        pass
+        # XXX: just for now
+        self.send_error(500, 'Internal server error')
 
     def do_POST(self):
         """
         Handle POST requests
+        """
+
+        # XXX: just for now
+        self.send_error(500, 'Internal server error')
+
+    def log_request(self, *args):
+        """
+        Silent logging
+        """
+
+        pass
+
+    def log_error(self, *args):
+        """
+        Silent logging
         """
 
         pass
@@ -68,7 +87,7 @@ class HTTPServer(http.server.HTTPServer, SignalThread):
     HTTP server for web-interface
     """
 
-    def __init__(self, address, render_server):
+    def __init__(self, address):
         """
         Initialize stoppable HTTP server for renderfarm
         """
@@ -76,16 +95,38 @@ class HTTPServer(http.server.HTTPServer, SignalThread):
         http.server.HTTPServer.__init__(self, address, HTTPRequestHandler)
         SignalThread.__init__(self, name = 'HTTPServerThread')
 
-        self.render_server = render_server
-        self.daemon = True
-        self.address = address
+        self.daemon    = True
+        self.address   = address
+        self.stop_flag = False
 
     def run(self):
         """
         Handle requests until stopped
         """
 
-        Logger.log('Started HTTP server at {0}:{1}'.format(self.address[0], self.address[1]))
+        Logger.log('Started HTTP server at {0}:{1}' . format(self.address[0], self.address[1]))
 
-        while not self.render_server.isStopped():
+        while not self.stop_flag:
             self.handle_request()
+
+    def requestStop(self):
+        """
+        Stop server
+        """
+
+        self.stop_flag = True
+
+        # Actually, server would be stopped after next request handle
+        # so create one to prevent locking
+
+        self._createDummyRequest()
+
+    def _createDummyRequest(self):
+        """
+        Create dummy request to self
+        """
+
+        url = '{0}:{1}' . format(self.address[0], self.address[1])
+        conn = http.client.HTTPConnection(url)
+        conn.request('GET', '/index.html')
+        r1 = conn.getresponse()

@@ -29,6 +29,7 @@
 
 import os
 
+import client
 from config import Config
 
 class Environ:
@@ -36,16 +37,18 @@ class Environ:
     Blend source environment
     """
 
-    def __init__(self, node, options):
+    def __init__(self, options):
         """
         Initialize environment
         """
 
-        self.node     = node
-        self.options  = options
-        self.storage  = os.path.join(Config.client['storage_path'], 'node-' + self.node.uuid, 'job-' + self.options['jobUUID'])
+        node = client.Client().getRenderNode()
 
-    def prepare(self, options):
+        self.jobUUID  = options['jobUUID']
+        self.task_nr  = options['task']
+        self.storage  = os.path.join(Config.client['storage_path'], 'node-' + node.uuid, 'job-' + options['jobUUID'])
+
+    def prepare(self):
         """
         Prepare environment
         """
@@ -65,7 +68,7 @@ class Environ:
         Get output directory
         """
 
-        output = os.path.join(self.storage, 'task-{0}-out' . format(self.options['task']))
+        output = os.path.join(self.storage, 'task-{0}-out' . format(self.task_nr))
 
         try:
             os.makedirs(output)

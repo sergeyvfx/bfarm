@@ -27,12 +27,47 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-from client.FileEnviron import FileEnviron
+import threading
 
-def spawnNewEnviron(options):
+class Singleton(object):
     """
-    Spawn new environment object depends on passed options
+    Implementation of singleton
     """
 
-    if options['fname'].startswith('file://'):
-        return FileEnviron(options)
+    _lock = threading.Lock()
+    _instance = None
+
+    def __new__(cls, *args, **kargs):
+      """
+      Override creating new instance
+      """
+
+      return cls.getInstance(cls, *args, **kargs)
+
+    def __init__(self, *args):
+        """
+        Object initialization
+        """
+
+        # Nothig to here, make instance initialization in initINstance
+
+    def getInstance(cls, *args, **kargs):
+        """
+        Static method to get object instance
+        """
+
+        with cls._lock:
+            if cls._instance is None:
+                cls._instance = object.__new__(cls)
+                cls._instance.initInstance(*args [1:])
+
+        return cls._instance
+
+    def initInstance(instance):
+        """
+        Initialize instance
+        """
+
+        pass
+
+    getInstance = classmethod(getInstance)

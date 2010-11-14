@@ -31,12 +31,13 @@ import signal
 import Logger
 
 from config import Config
+from Singleton import Singleton
 from server.RenderServer import RenderServer
 from server.HTTPServer import HTTPServer
 from server.XMLRPCServer import XMLRPCServer
 
-class Server:
-    def __init__(self):
+class Server(Singleton):
+    def initInstance(self):
         """
         Initialize server
         """
@@ -47,9 +48,10 @@ class Server:
         # Create servers
         xmlrpc_address     = (Config.server['address'], Config.server['port'])
         http_address       = (Config.server['http_address'], Config.server['http_port'])
+
         self.render_server = RenderServer()
-        self.xmlrpc_server = XMLRPCServer(xmlrpc_address, self.render_server)
-        self.http_server   = HTTPServer(http_address, self.render_server)
+        self.xmlrpc_server = XMLRPCServer(xmlrpc_address)
+        self.http_server   = HTTPServer(http_address)
 
     def sigint_handler(self, sig, frame):
         """
@@ -57,6 +59,7 @@ class Server:
         """
 
         Logger.log('Caught SIGINT signal, terminating...')
+
         self.render_server.requestStop()
 
     def setSignals(self):
@@ -76,7 +79,19 @@ class Server:
         self.xmlrpc_server.start()
         self.http_server.start()
 
-        # Join all threads
+        # Join main render thread
         self.render_server.join()
-        #self.xmlrpc_server.join()
-        #self.http_server.join()
+
+        # XML and HTTP servers should be stopped after main render server finito
+        self.xmlrpc_server.requestStop()
+        self.xmlrpc_server.join()
+
+        self.http_server.requestStop()
+        self.http_server.join()
+
+    def getRenderServer(self):
+        """
+        Get render server instance
+        """
+
+        return self.render_server

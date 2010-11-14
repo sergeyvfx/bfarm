@@ -30,6 +30,7 @@
 import sys, subprocess, os
 
 import Logger
+import client
 from config import Config
 from SignalThread import SignalThread
 
@@ -40,7 +41,7 @@ class RenderTask(SignalThread):
     Render task implementation
     """
 
-    def __init__(self, node, options):
+    def __init__(self, options):
         """
         Initialize task
         """
@@ -49,7 +50,6 @@ class RenderTask(SignalThread):
 
         self.jobUUID  = options['jobUUID']
         self.task     = options['task']
-        self.node     = node
         self.options  = options
 
         # Runtime calculated fields
@@ -59,14 +59,14 @@ class RenderTask(SignalThread):
 
         self.finishFlag = False
 
-        self.environ = spawnNewEnviron(self.node, options)
+        self.environ = spawnNewEnviron(options)
 
     def prepareEnv(self):
         """
         Prepare environment before start rendering
         """
 
-        self.environ.prepare(self.options)
+        self.environ.prepare()
         self.fpath = self.environ.getBlend()
         self.output_fpath = self.environ.getOutput()
 
@@ -86,7 +86,10 @@ class RenderTask(SignalThread):
         program_startup = os.path.abspath(os.path.dirname(sys.argv[0]))
         blender_setup = os.path.join(program_startup, 'lib', 'blender_setup.py')
 
-        args = []
+        args       = []
+        cl         = client.Client()
+        proxy_addr = cl.getProxyAddress()
+        node       = cl.getRenderNode()
 
         # File to be rendered
         args.append('--background')
@@ -100,7 +103,7 @@ class RenderTask(SignalThread):
         args.append('--')
 
         args.append('--node-id')
-        args.append(self.node.uuid)
+        args.append(node.getUUID())
 
         args.append('--task-id')
         args.append(str(self.task))
@@ -113,7 +116,8 @@ class RenderTask(SignalThread):
 
         # For correct node IP detection (for stamp)
         args.append('--server-addr')
-        args.append(self.node.proxy_addr[0] + ':' + str(self.node.proxy_addr[1]))
+
+        args.append(proxy_addr[0] + ':' + str(proxy_addr[1]))
 
         return args
 

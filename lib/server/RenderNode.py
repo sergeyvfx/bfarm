@@ -44,7 +44,6 @@ class RenderNode:
 
         self.uuid        = str(RenderNode.total_nodes)
         self.ip          = client_info['address'][0]
-        self.client_info = client_info
         self.access_time = time.time()
         self.enabled     = True
 
@@ -56,13 +55,6 @@ class RenderNode:
         """
 
         return self.uuid
-
-    def getClientInfo(self):
-        """
-        Get client information
-        """
-
-        return self.client_info
 
     def isAlive(self):
         """

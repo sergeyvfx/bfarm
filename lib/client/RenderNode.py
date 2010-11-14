@@ -29,22 +29,10 @@
 
 import time, socket, sys, os
 
-try:
-    # python 3.0 and newer
-    import xmlrpc.client
-
-except ImportError:
-    import xmlrpclib
-
-    # ssmall hack to make API py3-compatible
-    class xmlrpc:
-        client = xmlrpclib
-
-    setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
-
 import Logger
 
 from config import Config
+import client
 from SignalThread import SignalThread
 from client.RenderTaskSpawner import spawnNewTask
 from client.TaskSender import TaskSender
@@ -61,18 +49,18 @@ class RenderNode(SignalThread):
 
         SignalThread.__init__(self, name = 'RenderNodeThread')
 
-        address = Config.client['server_address']
-        port    = Config.client['server_port']
-        url = 'http://{0}:{1}/'.format(address, port)
-
-        self.proxy      = xmlrpc.client.ServerProxy(url)
         self.stop_flag  = False
-        self.proxy_addr = (address, int(port))
-
         self.uuid        = None
         self.currentTask = None
 
-        self.taskSender = TaskSender(self.proxy)
+        self.taskSender = TaskSender()
+
+    def getUUID(self):
+        """
+        Get node's UUID
+        """
+
+        return self.uuid
 
     def requestStop(self):
         """
@@ -96,8 +84,10 @@ class RenderNode(SignalThread):
         if self.uuid is not None:
             return
 
+        proxy = client.Client().getProxy()
+
         try:
-            self.uuid = self.proxy.node.register()
+            self.uuid = proxy.node.register()
             Logger.log('Registered at server under uuid {0}' . format(self.uuid))
         except socket.error as strerror:
             Logger.log('Error registering self: {0}'. format (strerror))
@@ -110,8 +100,10 @@ class RenderNode(SignalThread):
         Unregister node from renderfarm server
         """
 
+        proxy = client.Client().getProxy()
+
         try:
-            self.proxy.node.unregister(self.uuid)
+            proxy.node.unregister(self.uuid)
             self.uuid = None
             Logger.log('Node unregisered')
         except socket.error as strerror:
@@ -131,8 +123,10 @@ class RenderNode(SignalThread):
         if self.uuid is None:
             return
 
+        proxy = client.Client().getProxy()
+
         try:
-            self.proxy.node.touch(self.uuid)
+            proxy.node.touch(self.uuid)
         except socket.error as strerror:
             Logger.log('Error touching server: {0}'. format (strerror))
         except:
@@ -154,11 +148,13 @@ class RenderNode(SignalThread):
             # Already got task
             return
 
+        proxy = client.Client().getProxy()
+
         try:
-            options = self.proxy.job.requestTask(self.uuid)
+            options = proxy.job.requestTask(self.uuid)
             if options:
                 Logger.log('Got new task {0} for job {1}' . format(options['task'], options['jobUUID']))
-                self.currentTask = spawnNewTask(self, options)
+                self.currentTask = spawnNewTask(options)
         except socket.error as strerror:
             Logger.log('Error requesting task: {0}'. format (strerror))
         except:
@@ -203,6 +199,9 @@ class RenderNode(SignalThread):
                         self.currentTask.start()
                     else:
                         self.sendRenderedImage()
+
+                        # Request next task just after render finish
+                        # it should save a bit of time
                         self.requestTask()
                         last_request_time = cur_time
 

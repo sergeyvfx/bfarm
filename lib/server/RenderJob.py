@@ -50,25 +50,33 @@ class RenderJob:
 
         self.uuid    = str(RenderJob.total_jobs)
         self.time    = time.time()
-        self.options = options
 
         self.storage_fpath = os.path.join(Config.server['storage_path'], 'job-' + self.uuid)
 
         self.blendRequired = False
         self.blendReceived = False
 
-        self.fname = self.options.get('fname')
+        self.job_type    = options['type']
+
+        if self.job_type == 'anim':
+            self.start_frame = options['start-frame']
+            self.end_frame   = options['start-frame']
+        else:
+            # XXX: ...
+            pass
+
+        self.fname = options.get('fname')
         self.fname_path = None
 
         # get base and full .blend file name
         if self.fname:
             if self.fname.startswith('file://'):
-                self.fname = self.fname[7:]
-                self.fname_path = os.path.join(self.storage_fpath, self.fname)
+                self.blend_name    = self.fname[7:]
+                self.blend_path    = os.path.join(self.storage_fpath, self.blend_name)
                 self.blendRequired = True
 
         self.ntasks = 0
-        if self.options['type'] == 'anim':
+        if self.job_type == 'anim':
             # task for each frame
             self.ntasks = int(options['end-frame']) - int(options['start-frame']) + 1
         else:
@@ -105,7 +113,7 @@ class RenderJob:
         """
 
         try:
-            statinfo = os.stat(self.fname_path)
+            statinfo = os.stat(self.blend_path)
         except OSError:
             return None
 
@@ -114,7 +122,7 @@ class RenderJob:
         if offset > statinfo.st_size:
             return None
 
-        with open(self.fname_path, 'rb') as handle:
+        with open(self.blend_path, 'rb') as handle:
             if handle is None:
                 return None
 
@@ -129,10 +137,10 @@ class RenderJob:
         Get checksum for .blend file
         """
 
-        if self.fname_path is None:
+        if self.blend_path is None:
             return ''
 
-        return md5_for_file(self.fname_path)
+        return md5_for_file(self.blend_path)
 
     def _putFileChunk(self, fpath, chunk, chunk_nr):
         """
@@ -158,15 +166,15 @@ class RenderJob:
         """
 
         if chunk_nr == 0:
-            Logger.log('Job {0}: begin receiving .blend file {1}' . format(self.uuid, self.fname))
+            Logger.log('Job {0}: begin receiving .blend file {1}' . format(self.uuid, self.blend_name))
 
         with self.task_lock:
             if chunk_nr == -1:
-                Logger.log('Job {0}: .blend file {1} fully received' . format(self.uuid, self.fname))
+                Logger.log('Job {0}: .blend file {1} fully received' . format(self.uuid, self.blend_name))
                 self.blendReceived = True
                 return True
 
-        return self._putFileChunk(self.fname_path, chunk, chunk_nr)
+        return self._putFileChunk(self.blend_path, chunk, chunk_nr)
 
     def putRenderChunk(self, fname, chunk, chunk_nr):
         """
@@ -221,18 +229,20 @@ class RenderJob:
                 if self.tasks[x] == RenderJob.TASK_NONE:
                     self.tasks[x] = RenderJob.TASK_RUNNING
 
-                    # list of options which are safe to copy
-                    copy_ops = ['fname', 'type', 'start-frame', 'end-frame']
-
+                    # Common options
                     options = {'jobUUID': self.uuid,
                                'task'   : x,
-                               'ntasks' : self.ntasks}
+                               'ntasks' : self.ntasks,
+                               'type'   : self.job_type,
+                               'fname'  : self.fname}
 
-                    # copy options from original job
-                    for opt in copy_ops:
-                        val = self.options.get(opt)
-                        if val is not None:
-                            options[opt] = val
+                    # Job-type specified options
+                    if self.job_type == 'anim':
+                        options['start-frame'] = self.start_frame
+                        options['end-frame']   = self.end_frame
+                    else:
+                        # XXX: ...
+                        pass
 
                     return options
 

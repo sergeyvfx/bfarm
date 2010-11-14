@@ -27,22 +27,45 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
+import sys
 import signal
 import Logger
 
+try:
+    # python 3.0 and newer
+    import xmlrpc.client
+
+except ImportError:
+    import xmlrpclib
+
+    # ssmall hack to make API py3-compatible
+    class xmlrpc:
+        client = xmlrpclib
+
+    setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
+
+from config import Config
+from Singleton import Singleton
 from client.RenderNode import RenderNode
 
-class Client:
+class Client(Singleton):
     """
     Render farm node client
     """
 
-    def __init__(self):
+    def initInstance(self):
         """
         Initialize client
         """
 
         self.render_node = RenderNode()
+
+        address = Config.client['server_address']
+        port    = Config.client['server_port']
+        url = 'http://{0}:{1}/'.format(address, port)
+
+        self.proxy  = xmlrpc.client.ServerProxy(url)
+        self.proxy_addr = (address, port)
 
         # Set signal handlers
         self.setSignals()
@@ -54,6 +77,7 @@ class Client:
 
         Logger.log('Caught SIGINT signal, terminating...')
         self.render_node.requestStop()
+        sys.exit(1)
 
     def setSignals(self):
         """
@@ -69,3 +93,24 @@ class Client:
 
         self.render_node.start()
         self.render_node.join()
+
+    def getRenderNode(self):
+        """
+        Get node descriptor
+        """
+
+        return self.render_node
+
+    def getProxy(self):
+        """
+        Get XML-RPC proxy
+        """
+
+        return self.proxy
+
+    def getProxyAddress(self):
+        """
+        Get XML-RPC proxy address
+        """
+
+        return self.proxy_addr

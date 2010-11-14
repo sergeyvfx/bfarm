@@ -31,6 +31,8 @@ import os
 
 import Logger
 
+import client
+
 from Hash import md5_for_file
 from client.Environ import Environ
 
@@ -39,12 +41,12 @@ class FileEnviron(Environ):
     Environment for single file rendering
     """
 
-    def __init__(self, node, options):
+    def __init__(self, options):
         """
         Initialize environment
         """
 
-        Environ.__init__(self, node, options)
+        Environ.__init__(self, options)
 
         self.fname = options['fname']
         if self.fname.startswith('file://'):
@@ -55,8 +57,10 @@ class FileEnviron(Environ):
         Compare MD5 checksum of received file and file at serevr
         """
 
+        proxy = client.Client().getProxy()
+
         self_checksum = md5_for_file(self.getBlend())
-        server_checksum = self.node.proxy.job.getBlendChecksum(self.options['jobUUID'])
+        server_checksum = proxy.job.getBlendChecksum(self.jobUUID)
 
         return self_checksum == server_checksum
 
@@ -66,6 +70,7 @@ class FileEnviron(Environ):
         """
 
         fname = self.getBlend()
+        proxy = client.Client().getProxy()
 
         if os.path.isfile(fname):
             if self.isChecksumOk():
@@ -78,11 +83,9 @@ class FileEnviron(Environ):
             Logger.log('Receiving file {0} from server' . format(self.fname))
 
         with open(fname, 'wb') as handle:
-            jobUUID = self.options['jobUUID']
-
             chunk_nr = 0
             while True:
-                chunk = self.node.proxy.job.getBlendChunk(jobUUID, chunk_nr)
+                chunk = proxy.job.getBlendChunk(self.jobUUID, chunk_nr)
 
                 if chunk == False:
                     break
@@ -91,12 +94,12 @@ class FileEnviron(Environ):
 
                 chunk_nr += 1
 
-    def prepare(self, options):
+    def prepare(self):
         """
         Prepare environment
         """
 
-        Environ.prepare(self, options)
+        Environ.prepare(self)
 
         # Receive file from server
         self.receiveFile()

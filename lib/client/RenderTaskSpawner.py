@@ -43,16 +43,16 @@ import client.RenderTask
 from client.StillRenderTask import StillRenderTask
 from client.AnimRenderTask import AnimRenderTask
 
-def spawnNewTask(node, options):
+def spawnNewTask(options):
     """
     Spawn new task object depending on options
     """
 
     # quiet silly determination atm, but KISS :)
     if options.get('type') == 'still':
-        return StillRenderTask(node, options)
+        return StillRenderTask(options)
     else:
-        return AnimRenderTask(node, options)
+        return AnimRenderTask(options)
 
 if __name__ == '__main__':
     options = {'type'  : 'still',

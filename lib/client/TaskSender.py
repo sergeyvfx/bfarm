@@ -42,6 +42,7 @@ except ImportError:
 
     setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
 
+import client
 import Logger
 
 from config import Config
@@ -53,14 +54,13 @@ class TaskSender(SignalThread):
     Sender of ready tasks to server
     """
 
-    def __init__(self, proxy):
+    def __init__(self):
         """
         Initialize sender
         """
 
         SignalThread.__init__(self, name='TaskSenderThread')
 
-        self.proxy = proxy
         self.tasks = []
         self.stop_flag = False
         self.task_lock = threading.Lock()
@@ -79,39 +79,40 @@ class TaskSender(SignalThread):
         Send specified task to server
         """
 
-        try:
-            chunk_size = Config.client['chunk_size']
-            jobUUID = task.getJobUUID()
-            output_fname = task.getOutputPath()
+        proxy = client.Client().getProxy()
+        chunk_size = Config.client['chunk_size']
+        jobUUID = task.getJobUUID()
+        output_fname = task.getOutputPath()
 
-            # XXX: implement correct restoring after socket errors
-            for root, dirs, files in os.walk(output_fname):
-                for f in files:
-                    Logger.log ('Sending file {0} as result of job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
+        for root, dirs, files in os.walk(output_fname):
+            for f in files:
+                Logger.log ('Sending file {0} as result of job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
 
-                    fname_path = os.path.join(root, f)
+                fname_path = os.path.join(root, f)
 
-                    with open(fname_path, 'rb') as handle:
-                        chunk = handle.read(chunk_size)
-                        chunk_nr = 0
+                with open(fname_path, 'rb') as handle:
+                    chunk = handle.read(chunk_size)
+                    chunk_nr = 0
 
+                    try:
                         while len(chunk) > 0:
                             enc_chunk = xmlrpc.client.Binary(chunk)
-                            self.proxy.job.putRenderChunk(jobUUID, f, enc_chunk, chunk_nr)
+                            proxy.job.putRenderChunk(jobUUID, f, enc_chunk, chunk_nr)
                             chunk = handle.read(chunk_size)
                             chunk_nr += 1
 
-                        self.proxy.job.putRenderChunk(jobUUID, f, False, -1)
+                        proxy.job.putRenderChunk(jobUUID, f, False, -1)
+                    except socket.error as strerror:
+                        # XXX: implement correct restoring after socket errors
+                        Logger.log('Error sending image to server: {0}'. format (strerror))
+                        break
+                    except:
+                        Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
+                        raise
 
-                    Logger.log ('File {0} sent to job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
+                Logger.log ('File {0} sent to job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
 
-            self.proxy.job.taskComplete(jobUUID, task.getTaskNum())
-
-        except socket.error as strerror:
-            Logger.log('Error sending image to server: {0}'. format (strerror))
-        except:
-            Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
-            raise
+        proxy.job.taskComplete(jobUUID, task.getTaskNum())
 
     def requestStop(self):
         """

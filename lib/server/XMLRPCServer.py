@@ -45,6 +45,7 @@ except ImportError:
 
     setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
 
+import server
 import Logger
 
 from SignalThread import SignalThread
@@ -55,85 +56,100 @@ class XMLRPCHandlers:
     """
 
     class XMLRPCNode:
-        def __init__(self, render_server):
+        def __init__(self):
             """
             Initialize XML-RPC node handlers
             """
 
-            self.render_server = render_server
+            pass
 
         def register(self, client_info):
             """
             Register rendering node
             """
 
-            return self.render_server.registerNode(client_info)
+            render_server = server.Server().getRenderServer()
+
+            return render_server.registerNode(client_info)
 
         def unregister(self, nodeUUID, client_info):
             """
             Register rendering node
             """
 
-            node = self.render_server.getNode(nodeUUID)
+            render_server = server.Server().getRenderServer()
+
+            node = render_server.getNode(nodeUUID)
 
             if node is None:
                 return False
 
-            return self.render_server.unregisterNode(node)
+            return render_server.unregisterNode(node)
 
         def touch(self, nodeUUID, client_info):
             """
             Register rendering node
             """
 
-            node = self.render_server.getNode(nodeUUID)
+            render_server = server.Server().getRenderServer()
+
+            node = render_server.getNode(nodeUUID)
 
             if node is None:
                 return False
 
-            return self.render_server.touchNode(node)
+            return render_server.touchNode(node)
 
     class XMLRPCJob:
-        def __init__(self, render_server):
+        def __init__(self):
             """
             Initialize XML-RPC job handlers
             """
 
-            self.render_server = render_server
+            pass
 
         def register(self, options, client_info):
             """
             Register new job
             """
 
-            return self.render_server.registerJob(options)
+            render_server = server.Server().getRenderServer()
+
+            return render_server.registerJob(options)
 
         def unregister(self, jobUUID, client_info):
             """
             Unregister job
             """
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
             if job is None:
                 return job
 
-            return self.render_server.unregisterJob(job)
+            return render_server.unregisterJob(job)
 
         def requestTask(self, nodeUUID, client_info):
             """
             Request task for rendering node
             """
 
-            node = self.render_server.getNode(nodeUUID)
+            render_server = server.Server().getRenderServer()
 
-            return self.render_server.requestTask(node)
+            node = render_server.getNode(nodeUUID)
+
+            return render_server.requestTask(node)
 
         def getBlendChunk(self, jobUUID, chunk_nr, client_info):
             """
             Get chunk of .blend file
             """
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
+
             if job is None:
                 return False
 
@@ -148,7 +164,9 @@ class XMLRPCHandlers:
             Get checksum of .blend file
             """
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
 
             if job is None:
                 return ''
@@ -165,7 +183,9 @@ class XMLRPCHandlers:
                 Logger.log('Attempt to write to invalid file {0}, ip {2}' . format(fname, client_info['address'][0]))
                 return False
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
             if job is None:
                 return False
 
@@ -179,7 +199,9 @@ class XMLRPCHandlers:
             Get chunk of .blend file
             """
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
             if job is None:
                 return False
 
@@ -193,27 +215,30 @@ class XMLRPCHandlers:
             Mark task as DONE
             """
 
-            job = self.render_server.getJob(jobUUID)
+            render_server = server.Server().getRenderServer()
+
+            job = render_server.getJob(jobUUID)
             if job is None:
                 return False
 
-            return self.render_server.taskComplete(job, task_nr)
+            return render_server.taskComplete(job, task_nr)
 
-    def __init__(self, render_server):
+    def __init__(self):
         """
         Initialize XML-RPC handlers
         """
 
-        self.job  = XMLRPCHandlers.XMLRPCJob(render_server)
-        self.node = XMLRPCHandlers.XMLRPCNode(render_server)
-        self.render_server = render_server
+        self.job  = XMLRPCHandlers.XMLRPCJob()
+        self.node = XMLRPCHandlers.XMLRPCNode()
 
     def requestStop(self, clientInfo):
         """
         Stop serve
         """
 
-        self.render_server.requestStop()
+        render_server = server.Server().getRenderServer()
+
+        render_server.requestStop()
 
         return True
 
@@ -228,6 +253,8 @@ class XMLRPCRequestHandler(xmlrpc.server.SimpleXMLRPCRequestHandler):
         """
 
         self.client_address = client_address;
+
+        # XXX: We'd better get rid of manual server descriptor passing 
         self.server = server
 
         xmlrpc.server.SimpleXMLRPCRequestHandler.__init__(self, request, client_address, server)
@@ -278,7 +305,7 @@ class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
     XML-RPC access for render frame server
     """
 
-    def __init__(self, address, render_server):
+    def __init__(self, address):
         """
         Initialize XML-RPC server
         """
@@ -286,12 +313,13 @@ class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
         SignalThread.__init__(self, name = 'XMLRPCServerThread')
         xmlrpc.server.SimpleXMLRPCServer.__init__(self, address, XMLRPCRequestHandler)
 
-        self.render_server = render_server
-        self.handlers      = XMLRPCHandlers(render_server)
+        self.handlers      = XMLRPCHandlers()
         self.register_instance(self.handlers)
-        self.daemon        = True
         self.address       = address
         self.allow_dotted_names = True
+        self.stop_flag     = False
+
+        self.register_function(lambda client_info: 'OK', 'ping')
 
     def server_bind(self):
         """
@@ -319,7 +347,28 @@ class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
         Serve requests till server stop
         """
 
-        Logger.log('XML-RPC started at {0}:{1}'.format(self.address[0], self.address[1]))
+        Logger.log('XML-RPC started at {0}:{1}' . format(self.address[0], self.address[1]))
 
-        while not self.render_server.isStopped():
+        while not self.stop_flag:
             self.handle_request()
+
+    def requestStop(self):
+        """
+        Stop server
+        """
+
+        self.stop_flag = True
+
+        # Actually, server would be stopped after next request handle
+        # so create one to prevent locking
+
+        self._createDummyRequest()
+
+    def _createDummyRequest(self):
+        """
+        Create dummy request to self
+        """
+
+        url = 'http://{0}:{1}' . format(self.address[0], self.address[1])
+        proxy = xmlrpc.client.ServerProxy(url)
+        proxy.ping()
