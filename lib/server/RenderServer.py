@@ -27,7 +27,7 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import signal, time, os
+import signal, time, os, threading
 
 import Logger
 
@@ -52,6 +52,9 @@ class RenderServer(SignalThread):
 
         self.daemon    = True
         self.stop_flag = False
+
+        self.job_lock = threading.Lock()
+        self.node_lock = threading.Lock()
 
         self.nodes = {}
         self.jobs  = {}
@@ -83,8 +86,10 @@ class RenderServer(SignalThread):
 
         nodes = []
 
-        for x in self.nodes:
-            nodes.append(self.nodes[x])
+        # XXX: could be a bit optimized?
+        with self.node_lock:
+            for x in self.nodes:
+                nodes.append(self.nodes[x])
 
         return nodes
 
@@ -93,7 +98,12 @@ class RenderServer(SignalThread):
         Get node by it's UUID
         """
 
-        return self.nodes.get(uuid)
+        node = None
+
+        with self.node_lock:
+            node = self.nodes.get(uuid)
+
+        return node
 
     def registerNode(self, client_info):
         """
@@ -101,7 +111,9 @@ class RenderServer(SignalThread):
         """
 
         node = RenderNode(client_info)
-        self.nodes[node.getUUID()] = node
+
+        with self.node_lock:
+            self.nodes[node.getUUID()] = node
 
         Logger.log('Registered new render node {0}'.format(node.getUUID()))
 
@@ -116,7 +128,8 @@ class RenderServer(SignalThread):
         # TODO: Add jobs reassign here
         #
 
-        del self.nodes[node.getUUID()]
+        with self.node_lock:
+            del self.nodes[node.getUUID()]
 
         Logger.log('Node {0} unregistered'.format(node.getUUID()))
 
@@ -155,8 +168,9 @@ class RenderServer(SignalThread):
 
         jobs = []
 
-        for x in self.jobs:
-            jobs.append(self.jobs[x])
+        with self.job_lock:
+            for x in self.jobs:
+                jobs.append(self.jobs[x])
 
         return jobs
 
@@ -165,7 +179,12 @@ class RenderServer(SignalThread):
         Get job by it's UUID
         """
 
-        return self.jobs.get(jobUUID)
+        job = None
+
+        with self.job_lock:
+            job = self.jobs.get(jobUUID)
+
+        return job
 
     def registerJob(self, options):
         """
@@ -173,7 +192,9 @@ class RenderServer(SignalThread):
         """
 
         job = RenderJob(options)
-        self.jobs[job.getUUID()] = job
+
+        with self.job_lock:
+            self.jobs[job.getUUID()] = job
 
         Logger.log('Registered new render job {0}' . format(job.getUUID()))
 
@@ -184,7 +205,9 @@ class RenderServer(SignalThread):
         Unregister job
         """
 
-        del self.jobs[job.getUUID()]
+        with self.job_lock:
+            # XXX: what to do with nodes which are still rendering tasks from this job?
+            del self.jobs[job.getUUID()]
 
         Logger.log('Job {0} unregistered'.format(job.getUUID()))
 
@@ -198,8 +221,10 @@ class RenderServer(SignalThread):
         if not node.isEnabled():
             return False
 
-        for uuid in self.jobs:
-            job = self.jobs[uuid]
+        jobs = self.getJobs()
+
+        for job in jobs:
+            uuid = job.getUUID()
             task = job.requestTask()
 
             if task is not None:
@@ -207,6 +232,18 @@ class RenderServer(SignalThread):
                 return task
 
         return False
+
+    def taskComplete(self, job, task_nr):
+        """
+        Mark render task as DONE
+        """
+
+        if job.taskComplete(task_nr):
+            if job.isCompleted():
+                del self.jobs[job.getUUID()]
+            return True
+        else:
+          return False
 
     def prepareStorage(self):
         """

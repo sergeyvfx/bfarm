@@ -188,6 +188,17 @@ class XMLRPCHandlers:
 
             return job.putBlendChunk(chunk, chunk_nr)
 
+        def taskComplete(self, jobUUID, task_nr, client_info):
+            """
+            Mark task as DONE
+            """
+
+            job = self.render_server.getJob(jobUUID)
+            if job is None:
+                return False
+
+            return self.render_server.taskComplete(job, task_nr)
+
     def __init__(self, render_server):
         """
         Initialize XML-RPC handlers

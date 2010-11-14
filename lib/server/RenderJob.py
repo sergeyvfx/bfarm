@@ -76,6 +76,7 @@ class RenderJob:
             self.ntasks = 9
 
         self.tasks = [RenderJob.TASK_NONE] * self.ntasks
+        self.tasks_remain = self.ntasks
 
         self.task_lock = threading.Lock()
 
@@ -213,6 +214,9 @@ class RenderJob:
                 # .blend file is needed and hasn't been received yet
                 return None
 
+            if self.tasks_remain == 0:
+                return None
+
             for x in range(self.ntasks):
                 if self.tasks[x] == RenderJob.TASK_NONE:
                     self.tasks[x] = RenderJob.TASK_RUNNING
@@ -233,3 +237,26 @@ class RenderJob:
                     return options
 
             return None
+
+    def taskComplete(self, task_nr):
+        """
+        Mark specified task as DONE
+        """
+
+        with self.task_lock:
+            Logger.log('Job {0}: task {0} completed' . format(self.uuid, task_nr))
+
+            self.tasks[task_nr] = RenderJob.TASK_DONE
+            self.tasks_remain -= 1
+
+            if self.tasks_remain == 0:
+                Logger.log('Job {0} completed' . format(self.uuid))
+
+        return True
+
+    def isCompleted(self):
+        """
+        Check if job is completed
+        """
+
+        return self.tasks_remain == 0

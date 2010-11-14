@@ -105,6 +105,8 @@ class TaskSender(SignalThread):
 
                     Logger.log ('File {0} sent to job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
 
+            self.proxy.job.taskComplete(jobUUID, task.getTaskNum())
+
         except socket.error as strerror:
             Logger.log('Error sending image to server: {0}'. format (strerror))
         except:
