@@ -53,8 +53,8 @@ class RenderServer(SignalThread):
         self.daemon    = True
         self.stop_flag = False
 
-        self.job_lock  = threading.Lock()
-        self.node_lock = threading.Lock()
+        self.jobs_lock  = threading.Lock()
+        self.nodes_lock = threading.Lock()
 
         # Store both of list and dict to be able:
         #   1. Review nodes/jobs in order they were registered
@@ -97,7 +97,7 @@ class RenderServer(SignalThread):
         nodes = []
 
         # XXX: could be a bit optimized?
-        with self.node_lock:
+        with self.nodes_lock:
             nodes = self.nodes[:]
 
         return nodes
@@ -109,7 +109,7 @@ class RenderServer(SignalThread):
 
         node = None
 
-        with self.node_lock:
+        with self.nodes_lock:
             node = self.nodes_hash.get(uuid)
 
         return node
@@ -121,7 +121,7 @@ class RenderServer(SignalThread):
 
         node = RenderNode(client_info)
 
-        with self.node_lock:
+        with self.nodes_lock:
             self.nodes.append(node)
             self.nodes_hash[node.getUUID()] = node
 
@@ -138,7 +138,7 @@ class RenderServer(SignalThread):
         # TODO: Add jobs reassign here
         #
 
-        with self.node_lock:
+        with self.nodes_lock:
             self.nodes.remove(node)
             del self.nodes_hash[node.getUUID()]
 
@@ -179,7 +179,7 @@ class RenderServer(SignalThread):
 
         jobs = []
 
-        with self.job_lock:
+        with self.jobs_lock:
             jobs = self.jobs[:]
 
         return jobs
@@ -191,7 +191,7 @@ class RenderServer(SignalThread):
 
         job = None
 
-        with self.job_lock:
+        with self.jobs_lock:
             job = self.jobs_hash[jobUUID]
 
         return job
@@ -203,7 +203,7 @@ class RenderServer(SignalThread):
 
         job = RenderJob(options)
 
-        with self.job_lock:
+        with self.jobs_lock:
             # XXX: Add priority handling here
             self.jobs.append(job)
             self.jobs_hash[job.getUUID()] = job
@@ -217,7 +217,7 @@ class RenderServer(SignalThread):
         Unregister job
         """
 
-        with self.job_lock:
+        with self.jobs_lock:
             # XXX: what to do with nodes which are still rendering tasks from this job?
             self.jobs.remove(job)
             del self.jobs_hash[job.getUUID()]
@@ -234,15 +234,14 @@ class RenderServer(SignalThread):
         if not node.isEnabled():
             return False
 
-        jobs = self.getJobs()
+        with self.jobs_lock:
+            for job in self.jobs:
+                uuid = job.getUUID()
+                task = job.requestTask()
 
-        for job in jobs:
-            uuid = job.getUUID()
-            task = job.requestTask()
-
-            if task is not None:
-                Logger.log('Job {0} task {1} assigned to node {2}' . format(uuid, task['task'], node.getUUID()))
-                return task
+                if task is not None:
+                    Logger.log('Job {0} task {1} assigned to node {2}' . format(uuid, task['task'], node.getUUID()))
+                    return task
 
         return False
 
