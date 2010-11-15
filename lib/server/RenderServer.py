@@ -53,11 +53,21 @@ class RenderServer(SignalThread):
         self.daemon    = True
         self.stop_flag = False
 
-        self.job_lock = threading.Lock()
+        self.job_lock  = threading.Lock()
         self.node_lock = threading.Lock()
 
-        self.nodes = {}
-        self.jobs  = {}
+        # Store both of list and dict to be able:
+        #   1. Review nodes/jobs in order they were registered
+        #   2. Get plain lists fast for web-unterface
+        #   3. Fast accessing by UUID
+        #   4. Use priorited jobs
+        #
+        # Fill free to use something smarter ;)
+        self.nodes      = []
+        self.nodes_hash = {}
+
+        self.jobs      = []
+        self.jobs_hash = {}
 
         self.prepareStorage ();
 
@@ -88,8 +98,7 @@ class RenderServer(SignalThread):
 
         # XXX: could be a bit optimized?
         with self.node_lock:
-            for x in self.nodes:
-                nodes.append(self.nodes[x])
+            nodes = self.nodes[:]
 
         return nodes
 
@@ -101,7 +110,7 @@ class RenderServer(SignalThread):
         node = None
 
         with self.node_lock:
-            node = self.nodes.get(uuid)
+            node = self.nodes_hash.get(uuid)
 
         return node
 
@@ -113,7 +122,8 @@ class RenderServer(SignalThread):
         node = RenderNode(client_info)
 
         with self.node_lock:
-            self.nodes[node.getUUID()] = node
+            self.nodes.append(node)
+            self.nodes_hash[node.getUUID()] = node
 
         Logger.log('Registered new render node {0}'.format(node.getUUID()))
 
@@ -129,7 +139,8 @@ class RenderServer(SignalThread):
         #
 
         with self.node_lock:
-            del self.nodes[node.getUUID()]
+            self.nodes.remove(node)
+            del self.nodes_hash[node.getUUID()]
 
         Logger.log('Node {0} unregistered'.format(node.getUUID()))
 
@@ -152,7 +163,7 @@ class RenderServer(SignalThread):
         # make copy of nodes list to be thread-safe here
         nodes = self.getNodes()
 
-        for node in nodes:
+        for node in self.nodes:
             if not node.isAlive():
                 Logger.log('Node {0} became zombie - unregister'.format(node.getUUID()))
                 self.unregisterNode(node)
@@ -169,8 +180,7 @@ class RenderServer(SignalThread):
         jobs = []
 
         with self.job_lock:
-            for x in self.jobs:
-                jobs.append(self.jobs[x])
+            jobs = self.jobs[:]
 
         return jobs
 
@@ -182,7 +192,7 @@ class RenderServer(SignalThread):
         job = None
 
         with self.job_lock:
-            job = self.jobs.get(jobUUID)
+            job = self.jobs_hash[jobUUID]
 
         return job
 
@@ -194,7 +204,9 @@ class RenderServer(SignalThread):
         job = RenderJob(options)
 
         with self.job_lock:
-            self.jobs[job.getUUID()] = job
+            # XXX: Add priority handling here
+            self.jobs.append(job)
+            self.jobs_hash[job.getUUID()] = job
 
         Logger.log('Registered new render job {0}' . format(job.getUUID()))
 
@@ -207,7 +219,8 @@ class RenderServer(SignalThread):
 
         with self.job_lock:
             # XXX: what to do with nodes which are still rendering tasks from this job?
-            del self.jobs[job.getUUID()]
+            self.jobs.remove(job)
+            del self.jobs_hash[job.getUUID()]
 
         Logger.log('Job {0} unregistered'.format(job.getUUID()))
 
@@ -240,7 +253,8 @@ class RenderServer(SignalThread):
 
         if job.taskComplete(task_nr):
             if job.isCompleted():
-                del self.jobs[job.getUUID()]
+                self.jobs.remove(job)
+                del self.jobs_hash[job.getUUID()]
             return True
         else:
           return False
