@@ -27,7 +27,7 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import socket, time, os, sys, socketserver
+import socket, time, os, sys
 
 from os import curdir, sep
 
@@ -35,15 +35,19 @@ try:
     # Python 3.0 and newer
     import http.server
     import http.client
+    import socketserver
 
 except ImportError:
     import BaseHTTPServer
     import httplib
+    import SocketServer
 
     # ssmall hack to make API py3-compatible
     class http:
         server = BaseHTTPServer
         client = httplib
+
+    socketserver = SocketServer
 
 import Logger
 from SignalThread import SignalThread
