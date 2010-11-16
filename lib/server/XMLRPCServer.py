@@ -261,7 +261,7 @@ class XMLRPCRequestHandler(xmlrpc.server.SimpleXMLRPCRequestHandler):
         # XXX: We'd better get rid of manual server descriptor passing
         self.server = server
 
-        xmlrpc.server.SimpleXMLRPCRequestHandler.__init__(request,
+        xmlrpc.server.SimpleXMLRPCRequestHandler.__init__(self, request,
             client_address, server)
 
     def log_request(self,  code='-', size='-'):
