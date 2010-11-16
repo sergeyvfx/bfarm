@@ -27,7 +27,9 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import socket, time
+import socket, time, os, sys, socketserver
+
+from os import curdir, sep
 
 try:
     # Python 3.0 and newer
@@ -46,19 +48,22 @@ except ImportError:
 import Logger
 from SignalThread import SignalThread
 from config import Config
+from server.HTTPHandlers import FileHandler
+import Version
 
 class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     """
     HTTP request handler class
     """
 
+    server_version = 'bfarm/{0} webserver at {1}:{2}' . format (Version.bfarm_version, socket.gethostname(), Config.server['http_port'])
+
     def do_GET(self):
         """
         Handle GET requests
         """
 
-        # XXX: just for now
-        self.send_error(500, 'Internal server error')
+        FileHandler.execute(self)
 
     def do_POST(self):
         """
@@ -82,7 +87,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         pass
 
-class HTTPServer(http.server.HTTPServer, SignalThread):
+
+class HTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer, SignalThread):
     """
     HTTP server for web-interface
     """
@@ -95,9 +101,15 @@ class HTTPServer(http.server.HTTPServer, SignalThread):
         http.server.HTTPServer.__init__(self, address, HTTPRequestHandler)
         SignalThread.__init__(self, name = 'HTTPServerThread')
 
-        self.daemon    = True
+        self.daemon = True
+
         self.address   = address
         self.stop_flag = False
+
+        program_startup = os.path.abspath(os.path.dirname(sys.argv[0]))
+
+        fpath = os.path.join(program_startup, 'web')
+        self.site_root = os.path.realpath(fpath)
 
     def run(self):
         """
@@ -116,9 +128,6 @@ class HTTPServer(http.server.HTTPServer, SignalThread):
 
         self.stop_flag = True
 
-        # Actually, server would be stopped after next request handle
-        # so create one to prevent locking
-
         self._createDummyRequest()
 
     def _createDummyRequest(self):
@@ -130,3 +139,10 @@ class HTTPServer(http.server.HTTPServer, SignalThread):
         conn = http.client.HTTPConnection(url)
         conn.request('GET', '/index.html')
         r1 = conn.getresponse()
+
+    def getSiteRoot(self):
+        """
+        Get site root directory
+        """
+
+        return self.site_root

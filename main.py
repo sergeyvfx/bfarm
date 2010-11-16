@@ -35,7 +35,7 @@ abs_file = os.path.abspath(__file__)
 cwd = os.path.dirname(abs_file)
 sys.path.append(cwd + os.path.sep + 'lib')
 
-import Logger
+import Logger, Version
 from config import Config
 
 # Some default values
@@ -54,7 +54,7 @@ if opts.role is not None:
 
 # Banner
 Logger.log('=' * 23, False)
-Logger.log(' bfarm version 0.1pre ', False)
+Logger.log(' bfarm version {0} ' . format (Version.bfarm_version), False)
 Logger.log('=' * 23, False)
 Logger.log('', False)
 

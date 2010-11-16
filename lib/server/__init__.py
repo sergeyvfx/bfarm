@@ -86,8 +86,12 @@ class Server(Singleton):
         self.xmlrpc_server.requestStop()
         self.xmlrpc_server.join()
 
+        # Do not join HTTP server due to some clients could be still be connected
+        # (chrome, i.e. locks handle_request)
+        # not sure why this happens, but better use daemon thread for web server
+
         self.http_server.requestStop()
-        self.http_server.join()
+        #self.http_server.join()
 
     def getRenderServer(self):
         """
@@ -95,3 +99,10 @@ class Server(Singleton):
         """
 
         return self.render_server
+
+    def getHTTPServer(self):
+        """
+        Get render server instance
+        """
+
+        return self.http_server

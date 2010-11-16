@@ -27,22 +27,3 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import threading
-from datetime import datetime
-
-logger_lock = threading.Lock()
-
-def log(text, time_stamp = True):
-    """
-    Log text
-    """
-
-    global logger_lock
-
-    with logger_lock:
-        if time_stamp:
-            d = datetime.now()
-            strd = d.strftime('%Y-%m-%d %H:%M:%S')
-            print('[{0}] {1}' . format (strd, text))
-        else:
-            print(text)

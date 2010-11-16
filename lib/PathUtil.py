@@ -27,22 +27,20 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import threading
-from datetime import datetime
+import os
 
-logger_lock = threading.Lock()
-
-def log(text, time_stamp = True):
+def isPathInside(path, parent):
     """
-    Log text
+    Check if path inside given parent
     """
 
-    global logger_lock
+    if not path.startswith(parent):
+        return False
 
-    with logger_lock:
-        if time_stamp:
-            d = datetime.now()
-            strd = d.strftime('%Y-%m-%d %H:%M:%S')
-            print('[{0}] {1}' . format (strd, text))
-        else:
-            print(text)
+    if len(path) == len(parent):
+        return True
+
+    if path[len(parent)] != os.path.sep:
+        return  False
+
+    return True
