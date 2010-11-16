@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,10 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import socket, time, os, sys
+import socket
+import time
+import os
+import sys
 
 from os import curdir, sep
 
@@ -55,12 +58,15 @@ from config import Config
 from server.HTTPHandlers import FileHandler
 import Version
 
+
 class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     """
     HTTP request handler class
     """
 
-    server_version = 'bfarm/{0} webserver at {1}:{2}' . format (Version.bfarm_version, socket.gethostname(), Config.server['http_port'])
+    server_version = 'bfarm/{0} webserver at {1}:{2}' . \
+        format(Version.bfarm_version, socket.gethostname(),
+            Config.server['http_port'])
 
     def do_GET(self):
         """
@@ -92,7 +98,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         pass
 
 
-class HTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer, SignalThread):
+class HTTPServer(socketserver.ThreadingMixIn,
+                 http.server.HTTPServer, SignalThread):
     """
     HTTP server for web-interface
     """
@@ -103,11 +110,11 @@ class HTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer, SignalThre
         """
 
         http.server.HTTPServer.__init__(self, address, HTTPRequestHandler)
-        SignalThread.__init__(self, name = 'HTTPServerThread')
+        SignalThread.__init__(self, name='HTTPServerThread')
 
         self.daemon = True
 
-        self.address   = address
+        self.address = address
         self.stop_flag = False
 
         program_startup = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -120,7 +127,8 @@ class HTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer, SignalThre
         Handle requests until stopped
         """
 
-        Logger.log('Started HTTP server at {0}:{1}' . format(self.address[0], self.address[1]))
+        Logger.log('Started HTTP server at {0}:{1}' .
+            format(self.address[0], self.address[1]))
 
         while not self.stop_flag:
             self.handle_request()

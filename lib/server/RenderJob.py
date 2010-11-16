@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,12 +27,15 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import time, os, threading
+import time
+import os
+import threading
 
 from Hash import md5_for_file
 from config import Config
 
 import Logger
+
 
 class RenderJob:
     """
@@ -48,19 +51,20 @@ class RenderJob:
         Initialize job descriptor
         """
 
-        self.uuid    = str(RenderJob.total_jobs)
-        self.time    = time.time()
+        self.uuid = str(RenderJob.total_jobs)
+        self.time = time.time()
 
-        self.storage_fpath = os.path.join(Config.server['storage_path'], 'job-' + self.uuid)
+        storage = Config.server['storage_path']
+        self.storage_fpath = os.path.join(storage, 'job-' + self.uuid)
 
         self.blendRequired = False
         self.blendReceived = False
 
-        self.job_type    = options['type']
+        self.job_type = options['type']
 
         if self.job_type == 'anim':
             self.start_frame = options['start-frame']
-            self.end_frame   = options['start-frame']
+            self.end_frame = options['start-frame']
         else:
             # XXX: ...
             pass
@@ -71,14 +75,16 @@ class RenderJob:
         # get base and full .blend file name
         if self.fname:
             if self.fname.startswith('file://'):
-                self.blend_name    = self.fname[7:]
-                self.blend_path    = os.path.join(self.storage_fpath, self.blend_name)
+                self.blend_name = self.fname[7:]
+                self.blend_path = os.path.join(self.storage_fpath,
+                                               self.blend_name)
                 self.blendRequired = True
 
         self.ntasks = 0
         if self.job_type == 'anim':
             # task for each frame
-            self.ntasks = int(options['end-frame']) - int(options['start-frame']) + 1
+            self.ntasks = int(options['end-frame']) - \
+                int(options['start-frame']) + 1
         else:
             # XXX: need better detection of still parts
             self.ntasks = 9
@@ -166,11 +172,13 @@ class RenderJob:
         """
 
         if chunk_nr == 0:
-            Logger.log('Job {0}: begin receiving .blend file {1}' . format(self.uuid, self.blend_name))
+            Logger.log('Job {0}: begin receiving .blend file {1}' .
+                format(self.uuid, self.blend_name))
 
         with self.task_lock:
             if chunk_nr == -1:
-                Logger.log('Job {0}: .blend file {1} fully received' . format(self.uuid, self.blend_name))
+                Logger.log('Job {0}: .blend file {1} fully received' .
+                    format(self.uuid, self.blend_name))
                 self.blendReceived = True
                 return True
 
@@ -182,10 +190,12 @@ class RenderJob:
         """
 
         if chunk_nr == 0:
-            Logger.log('Job {0}: begin receiving rendered image {1}' . format(self.uuid, fname))
+            Logger.log('Job {0}: begin receiving rendered image {1}' .
+                format(self.uuid, fname))
 
         if chunk_nr == -1:
-            Logger.log('Job {0}: rendered image {1} fully received' . format(self.uuid, fname))
+            Logger.log('Job {0}: rendered image {1} fully received' .
+                format(self.uuid, fname))
             return True
 
         fpath = os.path.join(self.storage_fpath, 'out', fname)
@@ -231,15 +241,15 @@ class RenderJob:
 
                     # Common options
                     options = {'jobUUID': self.uuid,
-                               'task'   : x,
-                               'ntasks' : self.ntasks,
-                               'type'   : self.job_type,
-                               'fname'  : self.fname}
+                               'task':    x,
+                               'ntasks':  self.ntasks,
+                               'type':    self.job_type,
+                               'fname':   self.fname}
 
                     # Job-type specified options
                     if self.job_type == 'anim':
                         options['start-frame'] = self.start_frame
-                        options['end-frame']   = self.end_frame
+                        options['end-frame'] = self.end_frame
                     else:
                         # XXX: ...
                         pass
@@ -254,7 +264,8 @@ class RenderJob:
         """
 
         with self.task_lock:
-            Logger.log('Job {0}: task {0} completed' . format(self.uuid, task_nr))
+            Logger.log('Job {0}: task {0} completed' .
+                format(self.uuid, task_nr))
 
             self.tasks[task_nr] = RenderJob.TASK_DONE
             self.tasks_remain -= 1

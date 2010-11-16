@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -48,6 +48,7 @@ from config import Config
 from Singleton import Singleton
 from client.RenderNode import RenderNode
 
+
 class Client(Singleton):
     """
     Render farm node client
@@ -61,10 +62,10 @@ class Client(Singleton):
         self.render_node = RenderNode()
 
         address = Config.client['server_address']
-        port    = Config.client['server_port']
+        port = Config.client['server_port']
         url = 'http://{0}:{1}/'.format(address, port)
 
-        self.proxy  = xmlrpc.client.ServerProxy(url)
+        self.proxy = xmlrpc.client.ServerProxy(url)
         self.proxy_addr = (address, port)
 
         # Set signal handlers
@@ -84,7 +85,8 @@ class Client(Singleton):
         Set signals handlers
         """
 
-        signal.signal(signal.SIGINT, lambda sig, frame: self.sigint_handler(sig, frame))
+        signal.signal(signal.SIGINT,
+            lambda sig, frame: self.sigint_handler(sig, frame))
 
     def run(self):
         """

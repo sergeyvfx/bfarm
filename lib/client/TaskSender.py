@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,11 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import sys, os, socket, threading, time
+import sys
+import os
+import socket
+import threading
+import time
 
 try:
     # python 3.0 and newer
@@ -49,6 +53,7 @@ from config import Config
 
 from SignalThread import SignalThread
 
+
 class TaskSender(SignalThread):
     """
     Sender of ready tasks to server
@@ -64,7 +69,6 @@ class TaskSender(SignalThread):
         self.tasks = []
         self.stop_flag = False
         self.task_lock = threading.Lock()
-
 
     def sendTask(self, task):
         """
@@ -86,7 +90,8 @@ class TaskSender(SignalThread):
 
         for root, dirs, files in os.walk(output_fname):
             for f in files:
-                Logger.log ('Sending file {0} as result of job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
+                Logger.log('Sending file {0} as result of job {1} task {2}' .
+                    format(f, task.getJobUUID(), task.getTaskNum()))
 
                 fname_path = os.path.join(root, f)
 
@@ -97,20 +102,24 @@ class TaskSender(SignalThread):
                     try:
                         while len(chunk) > 0:
                             enc_chunk = xmlrpc.client.Binary(chunk)
-                            proxy.job.putRenderChunk(jobUUID, f, enc_chunk, chunk_nr)
+                            proxy.job.putRenderChunk(jobUUID, f,
+                                                     enc_chunk, chunk_nr)
                             chunk = handle.read(chunk_size)
                             chunk_nr += 1
 
                         proxy.job.putRenderChunk(jobUUID, f, False, -1)
                     except socket.error as strerror:
                         # XXX: implement correct restoring after socket errors
-                        Logger.log('Error sending image to server: {0}'. format (strerror))
+                        Logger.log('Error sending image to server: {0}' .
+                            format(strerror))
                         break
                     except:
-                        Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
+                        Logger.log('Unexpected error: {0}' .
+                            format(sys.exc_info()[0]))
                         raise
 
-                Logger.log ('File {0} sent to job {1} task {2}' . format(f, task.getJobUUID(), task.getTaskNum()))
+                Logger.log('File {0} sent to job {1} task {2}' .
+                    format(f, task.getJobUUID(), task.getTaskNum()))
 
         proxy.job.taskComplete(jobUUID, task.getTaskNum())
 

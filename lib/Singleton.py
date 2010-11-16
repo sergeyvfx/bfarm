@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -29,6 +29,7 @@
 
 import threading
 
+
 class Singleton(object):
     """
     Implementation of singleton
@@ -38,11 +39,11 @@ class Singleton(object):
     _instance = None
 
     def __new__(cls, *args, **kargs):
-      """
-      Override creating new instance
-      """
+        """
+        Override creating new instance
+        """
 
-      return cls.getInstance(cls, *args, **kargs)
+        return cls.getInstance(cls, *args, **kargs)
 
     def __init__(self, *args):
         """
@@ -59,7 +60,7 @@ class Singleton(object):
         with cls._lock:
             if cls._instance is None:
                 cls._instance = object.__new__(cls)
-                cls._instance.initInstance(*args [1:])
+                cls._instance.initInstance(*args[1:])
 
         return cls._instance
 

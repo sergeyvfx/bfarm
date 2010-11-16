@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -35,6 +35,7 @@ import client
 
 from Hash import md5_for_file
 from client.Environ import Environ
+
 
 class FileEnviron(Environ):
     """
@@ -75,9 +76,10 @@ class FileEnviron(Environ):
         if os.path.isfile(fname):
             if self.isChecksumOk():
                 # checksum matched -- nothing to do here
-               return
+                return
             else:
-                Logger.log('Checksum mistmatch, re-receiving file {0} from server' . format(self.fname))
+                Logger.log('Checksum mistmatch, ' +
+                    're-receiving file {0} from server' . format(self.fname))
         else:
             # XXX: need better handling
             Logger.log('Receiving file {0} from server' . format(self.fname))

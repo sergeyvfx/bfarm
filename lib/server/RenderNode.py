@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -29,6 +29,7 @@
 
 import time
 from config import Config
+
 
 class RenderNode:
     """
@@ -42,10 +43,10 @@ class RenderNode:
         Initialize node descriptor
         """
 
-        self.uuid        = str(RenderNode.total_nodes)
-        self.ip          = client_info['address'][0]
+        self.uuid = str(RenderNode.total_nodes)
+        self.ip = client_info['address'][0]
         self.access_time = time.time()
-        self.enabled     = True
+        self.enabled = True
 
         RenderNode.total_nodes += 1
 
@@ -61,7 +62,10 @@ class RenderNode:
         Check is node still alive or could be dropped
         """
 
-        return time.time() - self.access_time <= Config.server['client_max_age']
+        cur = time.time()
+        max_age = Config.server['client_max_age']
+
+        return cur - self.access_time <= max_age
 
     def touch(self):
         """
@@ -78,8 +82,8 @@ class RenderNode:
         return self.enabled
 
     def setEnabled(self, enabled):
-         """
-         Set enabled flag
-         """
+        """
+        Set enabled flag
+        """
 
-         self.enabled = enabled
+        self.enabled = enabled

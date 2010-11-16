@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -32,7 +32,8 @@ from datetime import datetime
 
 logger_lock = threading.Lock()
 
-def log(text, time_stamp = True):
+
+def log(text, time_stamp=True):
     """
     Log text
     """
@@ -43,6 +44,6 @@ def log(text, time_stamp = True):
         if time_stamp:
             d = datetime.now()
             strd = d.strftime('%Y-%m-%d %H:%M:%S')
-            print('[{0}] {1}' . format (strd, text))
+            print('[{0}] {1}' . format(strd, text))
         else:
             print(text)

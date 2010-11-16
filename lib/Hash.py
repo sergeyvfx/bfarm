@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -29,7 +29,8 @@
 
 import hashlib
 
-def md5_for_file(filename, block_size=2**20):
+
+def md5_for_file(filename, block_size=2 ** 20):
     """
     Get MD5 checksub of file
     """
@@ -52,9 +53,9 @@ def md5_for_file(filename, block_size=2**20):
     byteStr = ''
     for x in bytes:
         if type(x) == int:
-          b = x
+            b = x
         else:
-          b = ord(x)
+            b = ord(x)
 
         byteStr += '%x%x' % (b / 16, b % 16)
 

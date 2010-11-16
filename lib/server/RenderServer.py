@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,10 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import signal, time, os, threading
+import signal
+import time
+import os
+import threading
 
 import Logger
 
@@ -37,6 +40,7 @@ from config import Config
 from SignalThread import SignalThread
 from server.RenderNode import RenderNode
 from server.RenderJob import RenderJob
+
 
 class RenderServer(SignalThread):
     """
@@ -48,12 +52,12 @@ class RenderServer(SignalThread):
         Initialize render server
         """
 
-        SignalThread.__init__(self, name = 'RenderServerThread')
+        SignalThread.__init__(self, name='RenderServerThread')
 
-        self.daemon    = True
+        self.daemon = True
         self.stop_flag = False
 
-        self.jobs_lock  = threading.Lock()
+        self.jobs_lock = threading.Lock()
         self.nodes_lock = threading.Lock()
 
         # Store both of list and dict to be able:
@@ -63,13 +67,13 @@ class RenderServer(SignalThread):
         #   4. Use priorited jobs
         #
         # Fill free to use something smarter ;)
-        self.nodes      = []
+        self.nodes = []
         self.nodes_hash = {}
 
-        self.jobs      = []
+        self.jobs = []
         self.jobs_hash = {}
 
-        self.prepareStorage ();
+        self.prepareStorage()
 
     def requestStop(self):
         """
@@ -165,7 +169,8 @@ class RenderServer(SignalThread):
 
         for node in self.nodes:
             if not node.isAlive():
-                Logger.log('Node {0} became zombie - unregister'.format(node.getUUID()))
+                Logger.log('Node {0} became zombie - unregister' .
+                    format(node.getUUID()))
                 self.unregisterNode(node)
 
     #
@@ -218,7 +223,8 @@ class RenderServer(SignalThread):
         """
 
         with self.jobs_lock:
-            # XXX: what to do with nodes which are still rendering tasks from this job?
+            # XXX: what to do with nodes
+            #      which are still rendering tasks from this job?
             self.jobs.remove(job)
             del self.jobs_hash[job.getUUID()]
 
@@ -240,7 +246,8 @@ class RenderServer(SignalThread):
                 task = job.requestTask()
 
                 if task is not None:
-                    Logger.log('Job {0} task {1} assigned to node {2}' . format(uuid, task['task'], node.getUUID()))
+                    Logger.log('Job {0} task {1} assigned to node {2}' .
+                        format(uuid, task['task'], node.getUUID()))
                     return task
 
         return False
@@ -256,7 +263,7 @@ class RenderServer(SignalThread):
                 del self.jobs_hash[job.getUUID()]
             return True
         else:
-          return False
+            return False
 
     def prepareStorage(self):
         """
@@ -279,11 +286,12 @@ class RenderServer(SignalThread):
         Logger.log('Started main renderfarm thread')
 
         last_review_time = time.time()
+        review_int = Config.server['review_nodes_timeout']
 
         while not self.stop_flag:
             cur_time = time.time()
 
-            if cur_time - last_review_time > Config.server['review_nodes_timeout']:
+            if cur_time - last_review_time > review_int:
                 self.reviewNodes()
                 last_review_time = cur_time
 

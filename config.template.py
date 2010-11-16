@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,30 +27,27 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
+
 class Config:
-    role   = 'server'
+    role = 'server'
 
-    server = {
-               'address'      : '0.0.0.0',
-               'port'         : 4043,
+    server = {'address':              '0.0.0.0',
+              'port':                 4043,
 
-               'http_address' : '0.0.0.0',
-               'http_port'    : 8080,
+              'http_address':         '0.0.0.0',
+              'http_port':            8080,
 
-               'storage_path' : 'storage',
+              'storage_path':         'storage',
 
-               'chunk_size'   : 32768,
+              'chunk_size':           32768,
 
-               'review_nodes_timeout' : 30,
-               'client_max_age'       : 90
-             }
+              'review_nodes_timeout': 30,
+              'client_max_age':       90}
 
-    client = {
-               'server_address'       : '127.0.0.1',
-               'server_port'          : 4043,
-               'job_request_interval' : 5,
-               'blender-binary'       : '/home/nazgul/lib/blender2.5/blender',
-               'touch_interval'       : 5,
-               'storage_path'         : 'storage',
-               'chunk_size'           : 32768
-             }
+    client = {'server_address':       '127.0.0.1',
+              'server_port':          4043,
+              'job_request_interval': 5,
+              'blender-binary':       '/home/nazgul/lib/blender2.5/blender',
+              'touch_interval':       5,
+              'storage_path':         'storage',
+              'chunk_size':           32768}

@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -36,6 +36,7 @@ from server.RenderServer import RenderServer
 from server.HTTPServer import HTTPServer
 from server.XMLRPCServer import XMLRPCServer
 
+
 class Server(Singleton):
     def initInstance(self):
         """
@@ -46,12 +47,13 @@ class Server(Singleton):
         self.setSignals()
 
         # Create servers
-        xmlrpc_address     = (Config.server['address'], Config.server['port'])
-        http_address       = (Config.server['http_address'], Config.server['http_port'])
+        xmlrpc_address = (Config.server['address'], Config.server['port'])
+        http_address = (Config.server['http_address'],
+                        Config.server['http_port'])
 
         self.render_server = RenderServer()
         self.xmlrpc_server = XMLRPCServer(xmlrpc_address)
-        self.http_server   = HTTPServer(http_address)
+        self.http_server = HTTPServer(http_address)
 
     def sigint_handler(self, sig, frame):
         """
@@ -67,7 +69,8 @@ class Server(Singleton):
         Set signals handlers
         """
 
-        signal.signal(signal.SIGINT, lambda sig, frame: self.sigint_handler(sig, frame))
+        signal.signal(signal.SIGINT,
+            lambda sig, frame: self.sigint_handler(sig, frame))
 
     def run(self):
         """
@@ -82,13 +85,15 @@ class Server(Singleton):
         # Join main render thread
         self.render_server.join()
 
-        # XML and HTTP servers should be stopped after main render server finito
+        # XML and HTTP servers should be stopped
+        # after main render server finito
         self.xmlrpc_server.requestStop()
         self.xmlrpc_server.join()
 
-        # Do not join HTTP server due to some clients could be still be connected
-        # (chrome, i.e. locks handle_request)
-        # not sure why this happens, but better use daemon thread for web server
+        # Do not join HTTP server due to some clients could
+        # still be connected (chrome, i.e. locks handle_request)
+        # not sure why this happens, but better use
+        # daemon thread for web server
 
         self.http_server.requestStop()
         #self.http_server.join()

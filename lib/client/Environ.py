@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -32,6 +32,7 @@ import os
 import client
 from config import Config
 
+
 class Environ:
     """
     Blend source environment
@@ -44,9 +45,10 @@ class Environ:
 
         node = client.Client().getRenderNode()
 
-        self.jobUUID  = options['jobUUID']
-        self.task_nr  = options['task']
-        self.storage  = os.path.join(Config.client['storage_path'], 'node-' + node.uuid, 'job-' + options['jobUUID'])
+        self.jobUUID = options['jobUUID']
+        self.task_nr = options['task']
+        self.storage = os.path.join(Config.client['storage_path'],
+            'node-' + node.uuid, 'job-' + options['jobUUID'])
 
     def prepare(self):
         """
@@ -59,16 +61,18 @@ class Environ:
         except OSError:
             # Direcotyr exists?
             # XXX: need better checking
-           pass
+            pass
         except Exception as strerror:
-            raise Exception('Unable to set up environment: {0}' . format(strerror))
+            raise Exception('Unable to set up environment: {0}' .
+                format(strerror))
 
     def getOutput(self):
         """
         Get output directory
         """
 
-        output = os.path.join(self.storage, 'task-{0}-out' . format(self.task_nr))
+        output = os.path.join(self.storage, 'task-{0}-out' .
+            format(self.task_nr))
 
         try:
             os.makedirs(output)
@@ -77,7 +81,8 @@ class Environ:
             # XXX: need better checking
             pass
         except Exception as strerror:
-            raise Exception('Unable to create outout directory: {0}' . format(strerror))
+            raise Exception('Unable to create outout directory: {0}' .
+                format(strerror))
 
         return output
 

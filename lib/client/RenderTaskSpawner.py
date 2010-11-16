@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -29,7 +29,8 @@
 
 # XXX: for debug only
 if __name__ == '__main__':
-    import os, sys
+    import os
+    import sys
 
     abs_file = os.path.abspath(__file__)
     cwd = abs_file
@@ -43,6 +44,7 @@ import client.RenderTask
 from client.StillRenderTask import StillRenderTask
 from client.AnimRenderTask import AnimRenderTask
 
+
 def spawnNewTask(options):
     """
     Spawn new task object depending on options
@@ -55,7 +57,7 @@ def spawnNewTask(options):
         return AnimRenderTask(options)
 
 if __name__ == '__main__':
-    options = {'type'  : 'still',
-               'fname' : '/home/nazgul/tmp/test.blend'}
+    options = {'type':  'still',
+               'fname': '/home/nazgul/tmp/test.blend'}
     task = spawnNewTask(0, None, options)
     task.run()

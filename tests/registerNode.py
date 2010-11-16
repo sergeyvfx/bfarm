@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,11 +27,11 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import xmlrpclib, sys
+import xmlrpclib
+import sys
 
 url = 'http://localhost:4043/'
 proxy = xmlrpclib.ServerProxy(url)
-uuid=proxy.registerNode()
+uuid = proxy.registerNode()
 print(proxy.requestJob(uuid))
 proxy.unregisterNode(uuid)
-

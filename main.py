@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,8 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import os, sys
+import os
+import sys
 from optparse import OptionParser
 
 # Append libs to search path
@@ -35,7 +36,8 @@ abs_file = os.path.abspath(__file__)
 cwd = os.path.dirname(abs_file)
 sys.path.append(cwd + os.path.sep + 'lib')
 
-import Logger, Version
+import Logger
+import Version
 from config import Config
 
 # Some default values
@@ -43,18 +45,19 @@ role = Config.role
 
 # Parse command line
 op = OptionParser()
-op.add_option('--role', default = None)
+op.add_option('--role', default=None)
 (opts, args) = op.parse_args()
 
 if opts.role is not None:
     if opts.role not in ['server', 'client']:
-        raise Exception('Invalid role specified: {0} (expected [server|client])' . format(role))
+        raise Exception('Invalid role specified: {0} ' +
+                        '(expected [server|client])' . format(role))
     else:
         role = opts.role
 
 # Banner
 Logger.log('=' * 23, False)
-Logger.log(' bfarm version {0} ' . format (Version.bfarm_version), False)
+Logger.log(' bfarm version {0} ' . format(Version.bfarm_version), False)
 Logger.log('=' * 23, False)
 Logger.log('', False)
 

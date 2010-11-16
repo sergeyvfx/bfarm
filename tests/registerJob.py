@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -30,7 +30,8 @@
 # For python2.5 compatibility
 from __future__ import with_statement
 
-import sys, os
+import sys
+import os
 
 try:
     # python 3.0 and newer
@@ -47,10 +48,10 @@ except ImportError:
 
 url = 'http://localhost:4043/'
 proxy = xmlrpc.client.ServerProxy(url)
-uuid = proxy.job.register({'fname'       : 'file://test.blend',
-                           'type'        : 'anim',
-                           'start-frame' : 3,
-                           'end-frame'   : 5})
+uuid = proxy.job.register({'fname':       'file://test.blend',
+                           'type':        'anim',
+                           'start-frame': 3,
+                           'end-frame':   5})
 
 with open('test.blend', 'rb') as handle:
     if handle is not None:
@@ -59,7 +60,8 @@ with open('test.blend', 'rb') as handle:
         chunk = handle.read(chunk_size)
 
         while len(chunk):
-            proxy.job.putBlendChunk(uuid, xmlrpc.client.Binary(chunk), chunk_nr)
+            chunk_enc = xmlrpc.client.Binary(chunk)
+            proxy.job.putBlendChunk(uuid, chunk_enc, chunk_nr)
             chunk = handle.read(chunk_size)
             chunk_nr += 1
 

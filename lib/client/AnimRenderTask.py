@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -28,6 +28,7 @@
 #
 
 from client.RenderTask import RenderTask
+
 
 class AnimRenderTask(RenderTask):
     """
@@ -43,7 +44,7 @@ class AnimRenderTask(RenderTask):
 
         render_frame = self.options['start-frame'] + self.options['task']
 
-        args.append ('--render-frame')
+        args.append('--render-frame')
         args.append(str(render_frame))
 
         return args

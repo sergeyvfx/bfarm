@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,8 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import os, socket
+import os
+import socket
 
 try:
     # python 3.0 and newer
@@ -49,6 +50,7 @@ import server
 import Logger
 
 from SignalThread import SignalThread
+
 
 class XMLRPCHandlers:
     """
@@ -180,7 +182,8 @@ class XMLRPCHandlers:
 
             # XXX: should it be something else?
             if fname.find(os.path.sep) >= 0:
-                Logger.log('Attempt to write to invalid file {0}, ip {2}' . format(fname, client_info['address'][0]))
+                Logger.log('Attempt to write to invalid file {0}, ip {2}' .
+                    format(fname, client_info['address'][0]))
                 return False
 
             render_server = server.Server().getRenderServer()
@@ -228,7 +231,7 @@ class XMLRPCHandlers:
         Initialize XML-RPC handlers
         """
 
-        self.job  = XMLRPCHandlers.XMLRPCJob()
+        self.job = XMLRPCHandlers.XMLRPCJob()
         self.node = XMLRPCHandlers.XMLRPCNode()
 
     def requestStop(self, clientInfo):
@@ -242,6 +245,7 @@ class XMLRPCHandlers:
 
         return True
 
+
 class XMLRPCRequestHandler(xmlrpc.server.SimpleXMLRPCRequestHandler):
     """
     Request handler class
@@ -252,12 +256,13 @@ class XMLRPCRequestHandler(xmlrpc.server.SimpleXMLRPCRequestHandler):
         Initialize request handler
         """
 
-        self.client_address = client_address;
+        self.client_address = client_address
 
-        # XXX: We'd better get rid of manual server descriptor passing 
+        # XXX: We'd better get rid of manual server descriptor passing
         self.server = server
 
-        xmlrpc.server.SimpleXMLRPCRequestHandler.__init__(self, request, client_address, server)
+        xmlrpc.server.SimpleXMLRPCRequestHandler.__init__(request,
+            client_address, server)
 
     def log_request(self,  code='-', size='-'):
         """
@@ -289,16 +294,15 @@ class XMLRPCRequestHandler(xmlrpc.server.SimpleXMLRPCRequestHandler):
                         func = xmlrpc.server.resolve_dotted_attribute(
                                 self.server.instance,
                                 method,
-                                self.server.allow_dotted_names
-                                )
+                                self.server.allow_dotted_names)
                     except AttributeError:
                         pass
-
 
         if func is not None:
             return func(*params)
         else:
             raise Exception('method "%s" is not supported' % method)
+
 
 class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
     """
@@ -310,14 +314,15 @@ class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
         Initialize XML-RPC server
         """
 
-        SignalThread.__init__(self, name = 'XMLRPCServerThread')
-        xmlrpc.server.SimpleXMLRPCServer.__init__(self, address, XMLRPCRequestHandler)
+        SignalThread.__init__(self, name='XMLRPCServerThread')
+        xmlrpc.server.SimpleXMLRPCServer.__init__(self, address,
+            XMLRPCRequestHandler)
 
-        self.handlers      = XMLRPCHandlers()
+        self.handlers = XMLRPCHandlers()
         self.register_instance(self.handlers)
-        self.address       = address
+        self.address = address
         self.allow_dotted_names = True
-        self.stop_flag     = False
+        self.stop_flag = False
 
         self.register_function(lambda client_info: 'OK', 'ping')
 
@@ -341,13 +346,13 @@ class XMLRPCServer(xmlrpc.server.SimpleXMLRPCServer, SignalThread):
 
         return True
 
-
     def run(self):
         """
         Serve requests till server stop
         """
 
-        Logger.log('XML-RPC started at {0}:{1}' . format(self.address[0], self.address[1]))
+        Logger.log('XML-RPC started at {0}:{1}' .
+            format(self.address[0], self.address[1]))
 
         while not self.stop_flag:
             self.handle_request()

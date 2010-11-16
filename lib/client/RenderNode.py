@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,10 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import time, socket, sys, os
+import time
+import socket
+import sys
+import os
 
 import Logger
 
@@ -36,6 +39,7 @@ import client
 from SignalThread import SignalThread
 from client.RenderTaskSpawner import spawnNewTask
 from client.TaskSender import TaskSender
+
 
 class RenderNode(SignalThread):
     """
@@ -47,10 +51,10 @@ class RenderNode(SignalThread):
         Initialize render node
         """
 
-        SignalThread.__init__(self, name = 'RenderNodeThread')
+        SignalThread.__init__(self, name='RenderNodeThread')
 
-        self.stop_flag  = False
-        self.uuid        = None
+        self.stop_flag = False
+        self.uuid = None
         self.currentTask = None
 
         self.taskSender = TaskSender()
@@ -88,9 +92,10 @@ class RenderNode(SignalThread):
 
         try:
             self.uuid = proxy.node.register()
-            Logger.log('Registered at server under uuid {0}' . format(self.uuid))
+            Logger.log('Registered at server under uuid {0}' .
+                format(self.uuid))
         except socket.error as strerror:
-            Logger.log('Error registering self: {0}'. format (strerror))
+            Logger.log('Error registering self: {0}'. format(strerror))
         except:
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
@@ -107,7 +112,7 @@ class RenderNode(SignalThread):
             self.uuid = None
             Logger.log('Node unregisered')
         except socket.error as strerror:
-            Logger.log('Error registering self: {0}'. format (strerror))
+            Logger.log('Error registering self: {0}'. format(strerror))
         except:
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
@@ -128,7 +133,7 @@ class RenderNode(SignalThread):
         try:
             proxy.node.touch(self.uuid)
         except socket.error as strerror:
-            Logger.log('Error touching server: {0}'. format (strerror))
+            Logger.log('Error touching server: {0}'. format(strerror))
         except:
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
@@ -153,10 +158,11 @@ class RenderNode(SignalThread):
         try:
             options = proxy.job.requestTask(self.uuid)
             if options:
-                Logger.log('Got new task {0} for job {1}' . format(options['task'], options['jobUUID']))
+                Logger.log('Got new task {0} for job {1}' .
+                    format(options['task'], options['jobUUID']))
                 self.currentTask = spawnNewTask(options)
         except socket.error as strerror:
-            Logger.log('Error requesting task: {0}'. format (strerror))
+            Logger.log('Error requesting task: {0}'. format(strerror))
         except:
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
@@ -182,14 +188,18 @@ class RenderNode(SignalThread):
         last_touch_time = last_request_time = time.time()
         first_time = True
 
+        touch_int = Config.client['touch_interval']
+        req_int = Config.client['job_request_interval']
+
         while not self.stop_flag:
             cur_time = time.time()
 
-            if first_time or cur_time - last_touch_time >= Config.client['touch_interval']:
+            if first_time or cur_time - last_touch_time >= touch_int:
                 self.touch()
                 last_touch_time = cur_time
 
-            if first_time or cur_time - last_request_time >= Config.client['job_request_interval']:
+            if first_time or \
+               cur_time - last_request_time >= req_int:
                 self.requestTask()
                 last_request_time = cur_time
 

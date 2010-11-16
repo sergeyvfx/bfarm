@@ -1,4 +1,4 @@
-#!/usr/bin/env python 
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
 # ***** BEGIN GPL LICENSE BLOCK *****
@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software  Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #
-# The Original Code is Copyright (C) 2010 by Sergey Sharybin <g.ulairi@gmail.com>
+# The Original Code is Copyright (C) 2010 by Sergey Sharybin
 # All rights reserved.
 #
 # The Original Code is: all of this file.
@@ -27,7 +27,9 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import sys, subprocess, os
+import sys
+import subprocess
+import os
 
 import Logger
 import client
@@ -35,6 +37,7 @@ from config import Config
 from SignalThread import SignalThread
 
 from client.EnvironSpawner import spawnNewEnviron
+
 
 class RenderTask(SignalThread):
     """
@@ -46,16 +49,16 @@ class RenderTask(SignalThread):
         Initialize task
         """
 
-        SignalThread.__init__(self, name = 'RenderTaskThread')
+        SignalThread.__init__(self, name='RenderTaskThread')
 
-        self.jobUUID  = options['jobUUID']
-        self.task     = options['task']
-        self.options  = options
+        self.jobUUID = options['jobUUID']
+        self.task = options['task']
+        self.options = options
 
         # Runtime calculated fields
-        self.fpath        = None
+        self.fpath = None
         self.output_fpath = None
-        self.pipe         = None
+        self.pipe = None
 
         self.finishFlag = False
 
@@ -84,12 +87,13 @@ class RenderTask(SignalThread):
 
         # Get absolute path to blender setup script
         program_startup = os.path.abspath(os.path.dirname(sys.argv[0]))
-        blender_setup = os.path.join(program_startup, 'lib', 'blender_setup.py')
+        blender_setup = os.path.join(program_startup, 'lib',
+                                     'blender_setup.py')
 
-        args       = []
-        cl         = client.Client()
+        args = []
+        cl = client.Client()
         proxy_addr = cl.getProxyAddress()
-        node       = cl.getRenderNode()
+        node = cl.getRenderNode()
 
         # File to be rendered
         args.append('--background')
@@ -136,23 +140,26 @@ class RenderTask(SignalThread):
         Run blender process
         """
 
-        Logger.log('Blender started rendering task {0} of job {1}' . format(self.task, self.jobUUID))
+        Logger.log('Blender started rendering task {0} of job {1}' .
+            format(self.task, self.jobUUID))
 
         command = self.getBlenderCommand()
 
-        proc = subprocess.Popen(args = command, stdin = subprocess.PIPE, stdout = subprocess.PIPE,
-                                stderr = subprocess.PIPE, shell = False)
+        proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                shell=False)
         data, err = proc.communicate()
         rv = proc.wait()
 
         Logger.log('Blender finished work with errcode {0}' . format(rv))
 
-        self.pipe = {'stdout'   : data.decode(),
-                     'stderr'   : err.decode(),
-                     'exitcode' : rv}
+        self.pipe = {'stdout':   data.decode(),
+                     'stderr':   err.decode(),
+                     'exitcode': rv}
 
         if len(self.pipe['stderr']) > 0:
-            Logger.log("Error from Blender:\n{0}" . format(self.pipe['stderr']))
+            Logger.log("Error from Blender:\n{0}" .
+                format(self.pipe['stderr']))
 
         return rv
 
