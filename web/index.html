@@ -2,11 +2,51 @@
 
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="SHORTCUT ICON" href="favicon.ico">
     <title>bfarm renderfarm</title>
+
+    <link rel="SHORTCUT ICON" href="/favicon.ico">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="content-language" content="en">
+
+    <link rel="stylesheet" type="text/css" href="/styles/content.css">
+
+    <script type="text/javascript" src="/src/jquery.js"></script>
+    <script type="text/javascript" src="/src/bfarm.js"></script>
   </head>
   <body>
-    <h1>It works!</h1>
+    <div class="header">
+      <img class="logo" src="/pics/logo.png">
+      <span class="site">
+        <span>bfarm</span>
+        <span class="description">.WebIface</span>
+      </span>
+    </div>
+    <div class="features">
+      <div class="nav">
+        <ul >
+          <li class="act">
+            <a href="/">Home</a>
+          </li>
+        </ul>
+
+        <div class="term"></div>
+      </div>
+    </div>
+
+    <div class="mainHolder">
+      <h3>Jobs:</h3>
+      <table class="wide data" id="jobsList">
+        <tr>
+          <th>UUID</th>
+          <th>Title</th>
+          <th>Type</th>
+          <th>File</th>
+        </tr>
+      </table>
+    </div>
+
+    <div class="footer"></div>
+    <div class="copyright">Copyright &copy; 2010 Sergey Sharybin</div>
   </body>
 </html>

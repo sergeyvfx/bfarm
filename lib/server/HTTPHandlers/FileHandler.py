@@ -77,8 +77,7 @@ def translate_path(path):
     http_server = server.Server().getHTTPServer()
     site_root = http_server.getSiteRoot()
 
-    path = path.split('?', 1)[0]
-    path = path.split('#', 1)[0]
+    path = urllib.parse.splitquery(path)[0]
     path = urllib.parse.unquote(path)
 
     path = os.path.join(site_root, path[1:])
@@ -165,7 +164,10 @@ def list_directory(httpRequest, path):
 
     list.sort(key=lambda a: a.lower())
     r = []
-    displaypath = cgi.escape(urllib.parse.unquote(httpRequest.path))
+
+    prefix = urllib.parse.splitquery(httpRequest.path)[0]
+
+    displaypath = cgi.escape(urllib.parse.unquote(prefix))
     r.append('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
     r.append("<html>\n<title>Directory listing for {0}</title>\n" .
         format(displaypath))
@@ -173,8 +175,8 @@ def list_directory(httpRequest, path):
     r.append("<table><tr><th></th><th>Name</th><th>Last modified</th>" +
              "<th>Size</th></tr><tr><th colspan=\"5\"><hr></th></tr>\n")
 
-    if PathUtil.isPathInside(os.path.dirname(path), site_root):
-        parent = os.path.dirname(httpRequest.path[:-1])
+    parent = os.path.dirname(prefix[:-1])
+    if parent != '':
         r.append("<tr><td valign=\"top\">" +
                  "<img src=\"/pics/icons/back.gif\" alt=\"[DIR]\"></td>" +
                  "<td><a href=\"{0}\">Parent Directory</a></td>" .
@@ -236,10 +238,19 @@ def execute(httpRequest):
         return
 
     if os.path.isdir(path):
-        if not httpRequest.path.endswith('/'):
+        prefix = httpRequest.path.split('?', 1)[0]
+        prefix = prefix.split('#', 1)[0]
+
+        if not prefix.endswith('/'):
+            suffix = urllib.parse.splitquery(httpRequest.path)[1]
+            if suffix is not None:
+                suffix = '?' + suffix
+            else:
+                suffix = ''
+
             # redirect browser - doing basically what apache does
             httpRequest.send_response(301)
-            httpRequest.send_header('Location', httpRequest.path + '/')
+            httpRequest.send_header('Location', prefix + '/' + suffix)
             httpRequest.end_headers()
             return
         else:

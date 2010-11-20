@@ -97,6 +97,10 @@ class RenderJob:
         # steup storage directory structure
         self.prepareStorage()
 
+        self.title = options.get('title')
+        if self.title is None:
+            self.title = 'Untitled'
+
         RenderJob.total_jobs += 1
 
     def getUUID(self):
@@ -281,3 +285,24 @@ class RenderJob:
         """
 
         return self.tasks_remain == 0
+
+    def getType(self):
+        """
+        Get type of job
+        """
+
+        return self.job_type
+
+    def getFileName(self):
+        """
+        Get name of fiel to render
+        """
+
+        return self.fname
+
+    def getTitle(self):
+        """
+        Get title for job
+        """
+
+        return self.title

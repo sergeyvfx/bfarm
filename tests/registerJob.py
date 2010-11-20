@@ -51,7 +51,8 @@ proxy = xmlrpc.client.ServerProxy(url)
 uuid = proxy.job.register({'fname':       'file://test.blend',
                            'type':        'anim',
                            'start-frame': 3,
-                           'end-frame':   5})
+                           'end-frame':   5,
+                           'title':       'Job for testing'})
 
 with open('test.blend', 'rb') as handle:
     if handle is not None:

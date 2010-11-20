@@ -56,6 +56,7 @@ import Logger
 from SignalThread import SignalThread
 from config import Config
 from server.HTTPHandlers import FileHandler
+from server.HTTPHandlers import AjaxHandler
 import Version
 
 
@@ -73,7 +74,10 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         Handle GET requests
         """
 
-        FileHandler.execute(self)
+        if self.path.startswith('/ajax'):
+            AjaxHandler.execute(self)
+        else:
+            FileHandler.execute(self)
 
     def do_POST(self):
         """

@@ -87,3 +87,10 @@ class RenderNode:
         """
 
         self.enabled = enabled
+
+    def getIP(self):
+        """
+        Get IP address of node
+        """
+
+        return self.ip
