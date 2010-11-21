@@ -38,19 +38,10 @@ import cgi
 
 try:
     # Python 3.0 and newer
-    import http.server
-    import http.client
     import urllib.parse
 
 except ImportError:
-    import BaseHTTPServer
-    import httplib
     import urllib
-
-    # ssmall hack to make API py3-compatible
-    class http:
-        server = BaseHTTPServer
-        client = httplib
 
     setattr(urllib, 'parse', urllib)
 
@@ -92,7 +83,7 @@ def guess_type(path):
 
     global extensions_map
 
-    base, ext = os.path.splitext(path)
+    ext = os.path.splitext(path) [1]
     if ext in extensions_map:
         return extensions_map[ext]
     ext = ext.lower()
@@ -158,8 +149,6 @@ def list_directory(httpRequest, path):
         httpRequest.send_error(403, 'Prermittion denied')
         return None
 
-    http_server = server.Server().getHTTPServer()
-    site_root = http_server.getSiteRoot()
     serv = httpRequest.server_version
 
     list.sort(key=lambda a: a.lower())

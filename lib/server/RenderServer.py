@@ -27,7 +27,6 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-import signal
 import time
 import os
 import threading
@@ -98,8 +97,6 @@ class RenderServer(SignalThread):
         Get list of nodes
         """
 
-        nodes = []
-
         # XXX: could be a bit optimized?
         with self.nodes_lock:
             nodes = self.nodes[:]
@@ -110,8 +107,6 @@ class RenderServer(SignalThread):
         """
         Get node by it's UUID
         """
-
-        node = None
 
         with self.nodes_lock:
             node = self.nodes_hash.get(uuid)
@@ -167,7 +162,7 @@ class RenderServer(SignalThread):
         # make copy of nodes list to be thread-safe here
         nodes = self.getNodes()
 
-        for node in self.nodes:
+        for node in nodes:
             if not node.isAlive():
                 Logger.log('Node {0} became zombie - unregister' .
                     format(node.getUUID()))
@@ -182,8 +177,6 @@ class RenderServer(SignalThread):
         Get list of all jobs
         """
 
-        jobs = []
-
         with self.jobs_lock:
             jobs = self.jobs[:]
 
@@ -193,8 +186,6 @@ class RenderServer(SignalThread):
         """
         Get job by it's UUID
         """
-
-        job = None
 
         with self.jobs_lock:
             job = self.jobs_hash[jobUUID]

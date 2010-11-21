@@ -64,7 +64,7 @@ class Singleton(object):
 
         return cls._instance
 
-    def initInstance(instance):
+    def initInstance(self):
         """
         Initialize instance
         """

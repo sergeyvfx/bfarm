@@ -30,7 +30,6 @@
 import time
 import socket
 import sys
-import os
 
 import Logger
 

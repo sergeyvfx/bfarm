@@ -28,11 +28,8 @@
 #
 
 import socket
-import time
 import os
 import sys
-
-from os import curdir, sep
 
 try:
     # Python 3.0 and newer
@@ -155,6 +152,8 @@ class HTTPServer(socketserver.ThreadingMixIn,
         conn = http.client.HTTPConnection(url)
         conn.request('GET', '/index.html')
         r1 = conn.getresponse()
+
+        del r1
 
     def getSiteRoot(self):
         """

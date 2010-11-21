@@ -2,3 +2,6 @@
 *.pyo
 storage/
 config.py
+.settings
+.project
+.pydevproject

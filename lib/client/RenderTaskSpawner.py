@@ -40,7 +40,6 @@ if __name__ == '__main__':
     cwd = os.path.dirname(cwd)
     sys.path.append(cwd)
 
-import client.RenderTask
 from client.StillRenderTask import StillRenderTask
 from client.AnimRenderTask import AnimRenderTask
 
