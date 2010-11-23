@@ -30,3 +30,7 @@ DIV.UIMenuImagedItems DIV.UIMenuItem SPAN {
 DIV.UIMenuItemImage SPAN {
   margin-left: 8px !important;
 }
+
+DIV.UIMenuItemDefault {
+  font-weight: bold;
+}
