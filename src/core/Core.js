@@ -109,9 +109,16 @@ function setEmbedHandlers (node)
         }
     }
 
-  $(document).ready (function () {
+  if (document.body)
+    {
       setEmbedHandlers (document.body);
-    });
+    }
+  else
+    {
+      $(document).ready (function () {
+          setEmbedHandlers (document.body);
+        });
+    }
 }
 
 /**

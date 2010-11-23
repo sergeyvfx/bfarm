@@ -46,8 +46,9 @@ function _UIPopupManager ()
     {
       if (item && item['opts'] && item['opts'][handler])
         {
-          item['opts'][handler] ();
+          return item['opts'][handler] ();
         }
+      return null;
     };
 
   /**
@@ -72,6 +73,12 @@ function _UIPopupManager ()
           point['y'] = point['pos']['y'];
         }
 
+      if (this.isPupping)
+        {
+          return;
+        }
+
+      this.isPupping = true;
 
       callOut (function (args) {
           var context = args['object'].getUIContext ();
@@ -95,6 +102,8 @@ function _UIPopupManager ()
               args['this'].mouseDownPups.push (item);
             }
 
+          args['this'].isPupping = false;
+
         }, mkargs (['object', 'point', 'opts'], arguments, {'this': this}));
     }
 
@@ -114,7 +123,6 @@ function _UIPopupManager ()
       this.hideFromContext (context);
 
       userData.cancel (true);
-      this.mouseDownPups = [];
     };
 
   /**
@@ -123,6 +131,13 @@ function _UIPopupManager ()
   this.mousedownHandler = function (userData)
     {
       this.isMouseDown = true;
+
+      window.setTimeout (function () {return function () {
+            this.hideFromContext (userData['context']);
+          };
+        }, 10)
+
+      //this.hideFromContext (userData['context']);
     };
 
   /**
@@ -131,6 +146,10 @@ function _UIPopupManager ()
   this.mouseupHandler = function (userData)
     {
       this.isMouseDown = false;
+      window.setTimeout (function (self) { return function () {
+              self.mouseDownPups = [];
+            };
+          } (this), 10);
     };
 
   /**
@@ -159,12 +178,17 @@ function _UIPopupManager ()
 
       var obj = item['object'];
 
-      obj.hidePopup ();
+      if (this.callHandler (item, 'onHide') == 'ABORT')
+        {
+          return false;
+        }
 
-      this.callHandler (item, 'onHide');
+      obj.hidePopup ();
 
       var index = indexOf (this.stack, item);
       this.stack.splice (index, 1);
+
+      return true;
     };
 
   /**
@@ -192,7 +216,10 @@ function _UIPopupManager ()
 
       for (var i = this.stack.length - 1; i >= index; --i)
         {
-          this.hideStackItem (this.stack[i]);
+          if (!this.hideStackItem (this.stack[i]))
+            {
+              break;
+            }
         }
     };
 
@@ -266,29 +293,23 @@ function UIPopupManager ()
 
   /* Handle click callback for hiding popup objects which are */
   /* "outside" of clicked place */
-  uiManager.addHandler ('click', function (self) {
+  uiManager.addHandler (['click', 'clickCancel'], function (self) {
       return function (userData) {
         self.clickHandler (userData);
       };
     } (this));
 
-  uiManager.addHandler ('mousedown', function (self) {
+  uiManager.addHandler (['mousedown', 'mousedownCancel'], function (self) {
       return function (userData) {
         self.mousedownHandler (userData);
       };
     } (this));
 
-  uiManager.addHandler ('mouseup', function (self) {
+  uiManager.addHandler (['mouseup', 'mouseupCancel'], function (self) {
       return function (userData) {
         self.mouseupHandler (userData);
       };
     } (this));
-
-  uiManager.addHandler (['mousedownCancel', 'clickCancel'], function (self) {
-    return function (userData) {
-      self.hideFromContext (userData['context']);
-    };
-  } (this));
 
   /* Use keyup instead of keypress to get ompatibility with more browsers */
   uiManager.addHandler ('keyup', function (self) {
@@ -300,6 +321,8 @@ function UIPopupManager ()
   /* internal use to make correct popup at mousedown event working under FF */
   this.mouseDownPups = [];
   this.isMouseDown = false;
+
+  this.isPupping = false;
 }
 
 UIPopupManager.prototype = new _UIPopupManager;
