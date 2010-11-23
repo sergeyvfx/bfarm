@@ -70,14 +70,17 @@ if(jQuery) (function(){
 		
 		rightMouseDown: function(handler) {
 			$(this).each( function() {
-				$(this).mousedown( function(e) {
-					if( e.button == 2 ) {
+				this.onmousedown = function (oldHandler) { return function(event) {
+					var e = event || window.event;
+					if( e.button == 2 ) {             !
 						handler.call( $(this), e );
 						return false;
 					} else {
+						if (oldHandler)
+							return oldHandler(e);
 						return true;
 					}
-				});
+				}} (this.onmousedown);
 			});
 			$(this).noContext();
 			return $(this);
@@ -110,6 +113,7 @@ if(jQuery) (function(){
 							evt.stopPropagation();
 							evt.preventDefault();
 						}
+					stopEvent(evt);
 
 					return false;
 				}
