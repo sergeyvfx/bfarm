@@ -37,8 +37,6 @@ try:
 except ImportError:
     import urllib
 
-    setattr(urllib, 'parse', urllib)
-
 import server
 from Singleton import Singleton
 

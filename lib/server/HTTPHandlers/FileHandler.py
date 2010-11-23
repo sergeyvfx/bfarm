@@ -43,8 +43,6 @@ try:
 except ImportError:
     import urllib
 
-    setattr(urllib, 'parse', urllib)
-
 import server
 import PathUtil
 

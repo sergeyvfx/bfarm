@@ -172,3 +172,7 @@ TABLE.data TR.l > TD {
 TABLE.data TR:hover > TD {
   background-color: #fff2e5;
 }
+
+TABLE.spacing TR TD {
+  padding: 4px;
+}
