@@ -201,7 +201,8 @@ function _UIViewport ()
 
       if (menu)
         {
-          uiPopupManager.popup (menu, point);
+          var p = {'x': point['x'] + 2, 'y': point['y'] + 2}
+          uiPopupManager.popup (menu, p);
         }
     };
 }
