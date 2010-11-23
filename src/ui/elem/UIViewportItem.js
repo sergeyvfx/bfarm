@@ -45,6 +45,11 @@ function _UIViewportItem ()
           }
         } (this.exec);
 
+      $(item).rightMouseDown (function (self) { return function (event) {
+               self.onContextMenu ({'x': event.clientX, 'y': event.clientY});
+            };
+          } (this))
+
       if (this.movable)
         {
           UI_MakeMovable (item);
@@ -53,7 +58,12 @@ function _UIViewportItem ()
       $(result).disableTextSelect ();
 
       return result;
-    }
+    };
+
+  this.onContextMenu = function (point)
+    {
+      this.parent.showItemContextMenu (this, point);
+    };
 }
 
 function UIViewportItem (opts)

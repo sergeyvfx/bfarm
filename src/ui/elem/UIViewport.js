@@ -189,6 +189,21 @@ function _UIViewport ()
           this.removeItem (this.items[0]);
         }
     };
+
+  this.getMenuForItem = function (item)
+    {
+      return menu;
+    };
+
+  this.showItemContextMenu = function (item, point)
+    {
+      var menu = this.getMenuForItem (item);
+
+      if (menu)
+        {
+          uiPopupManager.popup (menu, point);
+        }
+    };
 }
 
 function UIViewport (opts)
