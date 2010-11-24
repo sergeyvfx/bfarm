@@ -30,6 +30,7 @@
 import time
 import os
 import threading
+import shutil
 
 from Hash import md5_for_file
 from config import Config
@@ -57,6 +58,9 @@ class RenderJob:
         storage = Config.server['storage_path']
         self.storage_fpath = os.path.join(storage, 'job-' + self.uuid)
 
+        # steup storage directory structure
+        self.prepareStorage()
+
         self.blendRequired = False
         self.blendReceived = False
 
@@ -78,7 +82,11 @@ class RenderJob:
                 self.blend_name = self.fname[7:]
                 self.blend_path = os.path.join(self.storage_fpath,
                                                self.blend_name)
-                self.blendRequired = True
+                if options.get('fp'):
+                    self.saveBlend(options['fp'])
+                    self.blendRequired = False
+                else:
+                    self.blendRequired = True
 
         self.ntasks = 0
         if self.job_type == 'anim':
@@ -93,9 +101,6 @@ class RenderJob:
         self.tasks_remain = self.ntasks
 
         self.task_lock = threading.Lock()
-
-        # steup storage directory structure
-        self.prepareStorage()
 
         self.title = options.get('title')
         if self.title is None:
@@ -204,6 +209,14 @@ class RenderJob:
 
         fpath = os.path.join(self.storage_fpath, 'out', fname)
         return self._putFileChunk(fpath, chunk, chunk_nr)
+
+    def saveBlend(self, fp):
+        """
+        Save .blend file from stream
+        """
+
+        with open(self.blend_path, 'wb') as handle:
+            shutil.copyfileobj(fp, handle)
 
     def _makeDir(self, fpath):
         """

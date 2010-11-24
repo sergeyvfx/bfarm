@@ -155,6 +155,7 @@ def _read_line(fp, memfile_max):
 
     return result
 
+
 def _is_termline(line, terminator):
     """
     Check if line is a terminator
@@ -169,6 +170,7 @@ def _is_termline(line, terminator):
             return False
 
     return False
+
 
 def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
     """
@@ -217,7 +219,6 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
             if line == b'':
                 terminator = lastpart  # End outer loop
                 break
-
 
             if _is_termline(line, nextpart):
                 terminator = nextpart
@@ -268,7 +269,7 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
         else:
             continue
 
-        part_fp.seek(0)
+        part_fp.seek(0, os.SEEK_SET)
 
         part = {'fp': part_fp}
         if 'filename' in params:

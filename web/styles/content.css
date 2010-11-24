@@ -42,7 +42,7 @@ TABLE TR TH {
 
 /* Header and logo */
 DIV.header {
-  border-bottom: 8px #eee solid;
+  border-bottom: 4px #eee solid;
 }
 
 DIV.header IMG.logo {
@@ -67,7 +67,7 @@ DIV.header SPAN.site SPAN.description {
 
 /* Features bar */
 DIV.features {
-  padding-top: 8px;
+  padding-top: 4px;
   background-color: #ccc;
 }
 

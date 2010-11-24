@@ -76,6 +76,7 @@ from SignalThread import SignalThread
 from config import Config
 from server.HTTPHandlers import FileHandler
 from server.HTTPHandlers import AjaxHandler
+from server.HTTPActions import RegisterJob
 from server.Multipart import parseMultipart
 import Version
 
@@ -90,6 +91,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
     server_version = 'bfarm/{0} webserver at {1}:{2}' . \
         format(Version.bfarm_version, socket.gethostname(),
             Config.server['http_port'])
+
+    _action_handlers = {'registerJob': RegisterJob}
 
     def __init__(self, *args, **kwargs):
         """
@@ -123,18 +126,18 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.parse()
 
-        if self.GET.get('action') == 'registerJob':
-            #print(self.parts['blenfile'])
-            pass
+        if self.GET.get('action') is not None:
+            action = self.GET['action']
+            handler = self._action_handlers.get(action)
+            if handler is not None:
+                proc = getattr(handler, 'execute')
+                if proc is not None:
+                    proc(self)
 
         if self.headers.get('Referer') is not None:
             self.send_response(301)
             self.send_header('Location', self.headers['Referer'])
             self.end_headers()
-            return
-
-        # XXX: just for now
-        self.send_error(500, 'Internal server error')
 
     def parse(self):
         """
@@ -158,8 +161,9 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('Content-Type'))
 
             if ctype == 'multipart/form-data':
-                memfile_max = self.__class__.MEMFILE_MAX
-                self.parts = parseMultipart(fp, pdict, memfile_max = memfile_max)
+                memfile_max = self.MEMFILE_MAX
+                self.parts = parseMultipart(fp, pdict,
+                                            memfile_max=memfile_max)
 
                 for name in self.parts:
                     if POST.get('name') is not None:
@@ -177,12 +181,12 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                         size = fp.tell()
                         fp.seek(0)
 
-                        if size > self.__class__.MEMFILE_MAX:
+                        if size > self.MEMFILE_MAX:
                             continue
 
                         POST[name] = fp.read()
                         try:
-                            POST[name] = POST[name].decode()
+                            POST[name] = [str(POST[name].decode())]
                         except UnicodeDecodeError:
                             pass
 
@@ -205,14 +209,14 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         if self.body_fp is None:
             maxread = max(0, self.content_length)
 
-            if maxread < self.__class__.MEMFILE_MAX:
+            if maxread < self.MEMFILE_MAX:
                 body = io.BytesIO()
             else:
                 body = TemporaryFile(mode='w+b')
 
             body = io.BytesIO()
             while maxread > 0:
-                nbytes = min(maxread, self.__class__.MEMFILE_MAX)
+                nbytes = min(maxread, self.MEMFILE_MAX)
                 part = self.rfile.read(nbytes)
                 if not part:  # TODO: Wrong content_length. Error? Do nothing?
                     break
