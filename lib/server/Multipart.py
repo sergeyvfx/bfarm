@@ -52,7 +52,9 @@
 #
 
 import re
+import os
 import email.parser
+from tempfile import TemporaryFile
 
 
 def isBoundaryValid(s, _vb_pattern="^[ -~]{0,200}[!-~]$"):
@@ -129,7 +131,46 @@ def parse_headers(fp):
     return email.parser.Parser().parsestr(str(hstring))
 
 
-def parseMultipart(fp, pdict):
+def _read_line(fp, memfile_max):
+    """
+    Read file stream until eoln or max memory would be used
+    """
+
+    result = b''
+    nbytes = memfile_max
+
+    while nbytes > 0:
+        byte = fp.read(1)
+
+        if type(byte) == str:
+            byte = bytes(byte)
+
+        if byte is None or byte == b'':
+            break
+
+        result = result + byte
+
+        if byte == b"\n":
+            break
+
+    return result
+
+def _is_termline(line, terminator):
+    """
+    Check if line is a terminator
+    """
+
+    if line.startswith(terminator):
+        term_len = len(terminator)
+        if len(line) > term_len:
+            return line[term_len:term_len + 1] == b"\n" or \
+                   line[term_len:term_len + 2] == b"\r\n"
+        else:
+            return False
+
+    return False
+
+def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
     """
     Parse multipart content
     """
@@ -163,40 +204,59 @@ def parseMultipart(fp, pdict):
                 except ValueError:
                     pass
             if nbytes > 0:
-                if maxlen and nbytes > maxlen:
+                if maxlen and nbytes > len_max:
                     raise ValueError('Maximum content length exceeded')
                 data = fp.read(nbytes)
             else:
                 data = b''
         # Read lines until end of part.
-        lines = []
+        part_fp = TemporaryFile(mode='w+b')
         while 1:
-            line = fp.readline()
+            line = _read_line(fp, memfile_max)
 
-            if type(line) is str:
-                line = bytes(line)
-
-            if not line:
+            if line == b'':
                 terminator = lastpart  # End outer loop
                 break
-            if line[:2] == b'--':
-                terminator = line.strip()
-                if terminator in (nextpart, lastpart):
+
+
+            if _is_termline(line, nextpart):
+                terminator = nextpart
+                break
+
+            if _is_termline(line, lastpart):
+                terminator = lastpart
+                break
+
+            part_fp.write(line)
+            while not line.endswith(b"\n"):
+                line = _read_line(fp, memfile_max)
+
+                if line == b'':
                     break
-            lines.append(line)
+
+                part_fp.write(line)
+
         # Done with part.
         if data is None:
             continue
         if nbytes < 0:
-            if lines:
-                # Strip final line terminator
-                line = lines[-1]
-                if line[-2:] == b"\r\n":
-                    line = line[:-2]
-                elif line[-1:] == b"\n":
-                    line = line[:-1]
-                lines[-1] = line
-                data = b''.join(lines)
+            # Strip final line terminator
+            part_fp.seek(-1, os.SEEK_END)
+            last = part_fp.read(1)
+
+            part_fp.seek(-2, os.SEEK_END)
+            pre_last = part_fp.read(1)
+
+            trunc = 0
+            if pre_last == b"\r" and last == b"\n":
+                trunc = 2
+            elif last == b"\n":
+                trunk = 1
+
+            if trunc > 0:
+                part_fp.seek(-trunc, os.SEEK_END)
+                part_fp.truncate()
+
         line = headers['content-disposition']
         if not line:
             continue
@@ -207,9 +267,16 @@ def parseMultipart(fp, pdict):
             name = params['name']
         else:
             continue
+
+        part_fp.seek(0)
+
+        part = {'fp': part_fp}
+        if 'filename' in params:
+            part['filename'] = params['filename']
+
         if name in partdict:
-            partdict[name].append(data)
+            partdict[name].append(part)
         else:
-            partdict[name] = [data]
+            partdict[name] = [part]
 
     return partdict

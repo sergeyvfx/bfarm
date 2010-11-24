@@ -32,6 +32,7 @@ import os
 import sys
 import cgi
 import io
+from tempfile import TemporaryFile
 
 try:
     # Python 3.0 and newer
@@ -123,12 +124,14 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.parse()
 
         if self.GET.get('action') == 'registerJob':
+            #print(self.parts['blenfile'])
             pass
 
         if self.headers.get('Referer') is not None:
             self.send_response(301)
             self.send_header('Location', self.headers['Referer'])
             self.end_headers()
+            return
 
         # XXX: just for now
         self.send_error(500, 'Internal server error')
@@ -155,7 +158,36 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
             ctype, pdict = cgi.parse_header(self.headers.get('Content-Type'))
 
             if ctype == 'multipart/form-data':
-                self.parts = parseMultipart(fp, pdict)
+                memfile_max = self.__class__.MEMFILE_MAX
+                self.parts = parseMultipart(fp, pdict, memfile_max = memfile_max)
+
+                for name in self.parts:
+                    if POST.get('name') is not None:
+                        continue
+
+                    all_parts = self.parts[name]
+                    for x in range(len(all_parts)):
+                        part = all_parts[x]
+
+                        if part.get('filename'):
+                            continue
+
+                        fp = part['fp']
+                        fp.seek(0, os.SEEK_END)
+                        size = fp.tell()
+                        fp.seek(0)
+
+                        if size > self.__class__.MEMFILE_MAX:
+                            continue
+
+                        POST[name] = fp.read()
+                        try:
+                            POST[name] = POST[name].decode()
+                        except UnicodeDecodeError:
+                            pass
+
+                        fp.seek(0)
+
             elif ctype == 'application/x-www-form-urlencoded':
                 qs = fp.read()
                 POST = urllib.parse.parse_qs(qs or '')
@@ -173,11 +205,10 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         if self.body_fp is None:
             maxread = max(0, self.content_length)
 
-            # TODO: Enable temporary file stream for big contents
-            #if maxread < self.__class__.MEMFILE_MAX:
-            #    body = io.BytesIO()
-            #else:
-            #    body = TemporaryFile(mode='w+b')
+            if maxread < self.__class__.MEMFILE_MAX:
+                body = io.BytesIO()
+            else:
+                body = TemporaryFile(mode='w+b')
 
             body = io.BytesIO()
             while maxread > 0:
