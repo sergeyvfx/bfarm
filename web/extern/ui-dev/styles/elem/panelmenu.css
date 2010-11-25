@@ -12,12 +12,12 @@ DIV.UIPanelMenuButtonActive {
 }
 
 DIV.UIPanelMenuButton:hover {
-  background: url(../../pics/ui/elem/panelmenu_s_bg.gif) 0 0  repeat-x;
+  background: url(../../pics/elem/panelmenu_s_bg.gif) 0 0  repeat-x;
 }
 
 DIV.UIPanelMenuButtonActive,
 DIV.UIPanelMenuButtonActive:hover {
-  background: url(../../pics/ui/elem/panelmenu_a_bg.gif) 0 0  repeat-x;
+  background: url(../../pics/elem/panelmenu_a_bg.gif) 0 0  repeat-x;
 }
 
 IMG.UIPanelMenuButtonImage {

@@ -15,7 +15,7 @@ DIV.UIComboBoxButton {
   height: 18px;
   border-left: 1px #666 solid;
 
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_bg.gif) 0 0 repeat-x;
   cursor: pointer;
 
   -moz-border-radius: 0 6px 6px 0;
@@ -25,7 +25,7 @@ DIV.UIComboBoxButton {
 }
 
 DIV.UIComboBoxButton DIV.UIComboBoxButtonArr {
-  background: transparent url(../../pics/ui/combobtn.gif) 0 0 no-repeat;
+  background: transparent url(../../pics/combobtn.gif) 0 0 no-repeat;
   width: 7px;
   height: 9px;
   margin: 4px 0 0 5px;
@@ -38,7 +38,7 @@ DIV.UIComboBoxContainer {
   -webkit-border-radius: 6px 0 0 6px;
   -khtml-border-radius: 6px 0 0 6px;
 
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_bg.gif) 0 0 repeat-x;
 
   cursor: pointer;
   height: 18px;
@@ -47,28 +47,28 @@ DIV.UIComboBoxContainer {
 
 DIV.UIComboBoxInsensitive DIV.UIComboBoxContainer,
 DIV.UIComboBoxInsensitive DIV.UIComboBoxButton {
-  background: #aaa url(../../pics/ui/button_d_bg.gif) 0 0 repeat-x;
+  background: #aaa url(../../pics/button_d_bg.gif) 0 0 repeat-x;
   border-color: #666;
 }
 
 DIV.UIComboboxDropdown DIV.UIComboBoxContainer,
 DIV.UIComboboxDropdown DIV.UIComboBoxButton {
-  background: #c0c0c0 url(../../pics/ui/button_t_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_t_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIComboBox:hover DIV.UIComboBoxContainer,
 DIV.UIComboBox:hover DIV.UIComboBoxButton {
-    background: #c0c0c0 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+    background: #c0c0c0 url(../../pics/button_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIComboboxDropdown:hover DIV.UIComboBoxContainer,
 DIV.UIComboboxDropdown:hover DIV.UIComboBoxButton {
-  background: #c0c0c0 url(../../pics/ui/button_t_s_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_t_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxContainer,
 DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxButton {
-  background: #b6b6b6 url(../../pics/ui/button_d_s_bg.gif) 0 0 repeat-x;
+  background: #b6b6b6 url(../../pics/button_d_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIComboBoxText {

@@ -18,13 +18,13 @@ DIV.UISpinButton DIV.UISpinEntryHolder INPUT {
 DIV.UISpinButtonBtn {
   width: 18px;
   height: 18px;
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_bg.gif) 0 0 repeat-x;
   cursor: pointer;
   text-align: left;
 }
 
 DIV.UISpinButtonBtn:hover {
-  background: #c0c0c0 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UISpinButtonBtnLeft {
@@ -48,19 +48,19 @@ DIV.UISpinButtonBtnRight {
 }
 
 DIV.UISpinButtonBtnLeft DIV.UISpinButtonBtnArr {
-  background: transparent url(../../pics/ui/spinbtn_left.gif) 0 0 no-repeat;
+  background: transparent url(../../pics/spinbtn_left.gif) 0 0 no-repeat;
   width: 6px;
   height: 10px;
   margin: 4px 0 0 6px;
 }
 
 DIV.UISpinButtonBtnRight DIV.UISpinButtonBtnArr {
-  background: transparent url(../../pics/ui/spinbtn_right.gif) 0 0 no-repeat;
+  background: transparent url(../../pics/spinbtn_right.gif) 0 0 no-repeat;
   width: 6px;
   height: 10px;
   margin: 4px 0 0 6px;
 }
 
 DIV.UISpinButtonAbjusting {
-  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+  background: #b0b0b0 url(../../pics/button_p_bg.gif) 0 0 repeat-x !important;
 }

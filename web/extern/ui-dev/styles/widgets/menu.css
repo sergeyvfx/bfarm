@@ -14,7 +14,7 @@ DIV.UIMenuItem {
 }
 
 DIV.UIMenuItem:hover {
-  background: #5680c2 url(../../pics/ui/listitem_s_bg.gif) 0 0 repeat-x !important;
+  background: #5680c2 url(../../pics/listitem_s_bg.gif) 0 0 repeat-x !important;
   border: 1px #2d5da6 solid !important;
   color: #fff;
 }

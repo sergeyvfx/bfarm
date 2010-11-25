@@ -6,7 +6,7 @@ DIV.UIButton {
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_bg.gif) 0 0 repeat-x;
   text-align: center;
   cursor: pointer;
   color: #333;
@@ -18,11 +18,11 @@ DIV.UIButton {
 }
 
 DIV.UIButton:hover {
-  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+  background: #cfcfcf url(../../pics/button_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIButtonPressed {
-  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+  background: #b0b0b0 url(../../pics/button_p_bg.gif) 0 0 repeat-x !important;
 }
 
 DIV.UIButtonPressed * {
@@ -49,11 +49,11 @@ DIV.UIButton A IMG.UIButtonImage {
 
 DIV.UIButtonInsensitive {
   border-color: #666;
-  background: #aaa url(../../pics/ui/button_d_bg.gif) 0 0 repeat-x;
+  background: #aaa url(../../pics/button_d_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIButtonInsensitive:hover {
-  background: #b6b6b6 url(../../pics/ui/button_d_s_bg.gif) 0 0 repeat-x;
+  background: #b6b6b6 url(../../pics/button_d_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIButtonInsesitive A {

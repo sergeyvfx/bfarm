@@ -35,7 +35,7 @@ DIV.UIViewportTopPanel {
   left: 0;
   top: 0;
   height: 26px;
-  background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
+  background: #727272 url(../../pics/elem/panel_bg.gif) 0 0 repeat-x;
   padding: 0 6px;
 }
 
@@ -44,7 +44,7 @@ DIV.UIViewportBottomPanel {
   left: 0;
   bottom: 0;
   height: 26px;
-  background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
+  background: #727272 url(../../pics/elem/panel_bg.gif) 0 0 repeat-x;
   border-top: 1px #939393 solid;
   padding: 0 6px;
 }

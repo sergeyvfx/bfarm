@@ -6,7 +6,7 @@ DIV.UIEntry {
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 
-  background: #e7e7e7 url(../../pics/ui/entry_bg.gif) 0 0 repeat-x;
+  background: #e7e7e7 url(../../pics/entry_bg.gif) 0 0 repeat-x;
   color: #333;
   margin: 0px;
 
@@ -34,7 +34,7 @@ DIV.UIEntry DIV.UIEntryInputHolder INPUT {
 }
 
 DIV.UIEntry:hover {
-  background: #ebebeb url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
+  background: #ebebeb url(../../pics/entry_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIEntryWImage {

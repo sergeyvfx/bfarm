@@ -48,13 +48,13 @@ DIV.UIListListItem:hover {
 }
 
 DIV.UIListActiveListItem {
-  background: #5680c2 url(../../pics/ui/listitem_s_bg.gif) 0 0 repeat-x !important;
+  background: #5680c2 url(../../pics/listitem_s_bg.gif) 0 0 repeat-x !important;
   border: 1px #2d5da6 solid !important;
   color: #fff;
 }
 
 DIV.UIList DIV.UIListListItem:hover {
-  background: #768eb2 url(../../pics/ui/listitem_h_bg.gif) 0 0 repeat-x;
+  background: #768eb2 url(../../pics/listitem_h_bg.gif) 0 0 repeat-x;
   border: 1px #4f6c98 solid;
 }
 

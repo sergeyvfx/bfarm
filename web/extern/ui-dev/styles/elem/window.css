@@ -21,7 +21,7 @@ DIV.UIWindowTitleBg {
 }
 
 DIV.UIWindowTitleBg {
-  background: #888888 url(../../pics/ui/elem/window-title.gif) 0 0 repeat-x;
+  background: #888888 url(../../pics/elem/window-title.gif) 0 0 repeat-x;
   border-bottom: 1px #666 solid;
 }
 
@@ -34,7 +34,7 @@ DIV.UIWindowTitleBg SPAN {
 
 DIV.UIWindowSizer {
   position: absolute;
-  background: url(../../pics/ui/sizer.gif) 0 0 no-repeat;
+  background: url(../../pics/sizer.gif) 0 0 no-repeat;
   right: 0;
   bottom: 0;
   width: 10px;
@@ -70,7 +70,7 @@ DIV.UIWindowTitleButton {
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/button_bg.gif) 0 0 repeat-x;
   text-align: center;
   padding-top: 1px;
   cursor: pointer;
@@ -82,7 +82,7 @@ DIV.UIWindowTitleButton {
 }
 
 DIV.UIWindowTitleButton:hover {
-  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+  background: #cfcfcf url(../../pics/button_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIWindowTitleButtonLeft {

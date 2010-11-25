@@ -33,7 +33,7 @@ DIV.UINotebookHeaderTab {
   border: 1px #666 solid;
   border-bottom: 0;
   height: 16px;
-  background: #ddd url(../../pics/ui/notebook_tab.gif);
+  background: #ddd url(../../pics/notebook_tab.gif);
 
   float: left;
 
@@ -42,7 +42,7 @@ DIV.UINotebookHeaderTab {
 }
 
 DIV.UINotebookHeaderTab:hover {
-  background: #cfcfcf url(../../pics/ui/notebook_tab_s.gif);
+  background: #cfcfcf url(../../pics/notebook_tab_s.gif);
 }
 
 DIV.UINotebookHeaderActiveTab:hover {
