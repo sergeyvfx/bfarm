@@ -199,7 +199,7 @@ function _UIViewport ()
 
   this.getMenuForItem = function (item)
     {
-      return menu;
+      return null;
     };
 
   this.showItemContextMenu = function (item, point)

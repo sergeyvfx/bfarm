@@ -45,11 +45,6 @@ function _UIViewportItem ()
           }
         } (this.exec);
 
-      $(item).rightMouseDown (function (self) { return function (event) {
-               self.onContextMenu ({'x': event.clientX, 'y': event.clientY});
-            };
-          } (this))
-
       if (this.point)
         {
           item.style.position = 'absolute';
@@ -67,6 +62,11 @@ function _UIViewportItem ()
               }
             } (this);
         }
+
+      $(item).rightMouseDown (function (self) { return function (event) {
+               self.onContextMenu ({'x': event.clientX, 'y': event.clientY});
+            };
+          } (this))
 
       $(result).disableTextSelect ();
 
