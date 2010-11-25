@@ -38,6 +38,12 @@ function _UIViewport ()
 
       this.buildPanels ();
 
+      if (this.itemsMovable)
+        {
+          // XXX: Better to attach resize event of parent
+          $(window).resize (wrapMeth (this, 'validateItemsPosition'));
+        }
+
       return result;
     };
 
@@ -209,6 +215,14 @@ function _UIViewport ()
 
   this.onItemEndMove = function (item, point)
     {
+    };
+
+  this.validateItemsPosition = function ()
+    {
+      for (var i = 0, n = this.items.length; i < n; ++i)
+        {
+          this.items[i].validatePosition ();
+        }
     };
 }
 

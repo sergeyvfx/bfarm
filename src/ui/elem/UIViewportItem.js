@@ -79,7 +79,40 @@ function _UIViewportItem ()
       var left = parseInt (item.style.left);
       var top = parseInt (item.style.top);
 
+      item._uiSavedPos = null;
+
       this.parent.onItemEndMove (this, {'x': left, 'y': top});
+    };
+
+  this.validatePosition = function ()
+    {
+      var item = this.dom.childNodes[0];
+
+      if (item.style.position != 'absolute')
+        {
+          return;
+        }
+
+      var left = parseInt (item.style.left);
+      var top = parseInt (item.style.top);
+
+      if (item._uiSavedPos)
+        {
+          left = item._uiSavedPos['x'];
+          top = item._uiSavedPos['y'];
+        }
+
+      var width = item.offsetWidth;
+      var height = item.offsetHeight;
+      var vp = this.parent.getViewport ();
+
+      item._uiSavedPos = {'x': left, 'y': top}
+
+      left = Math.min(left, vp.clientWidth - width);
+      top  = Math.min(top, vp.clientHeight - height);
+
+      item.style.left = left + 'px';
+      item.style.top = top + 'px';
     };
 }
 
