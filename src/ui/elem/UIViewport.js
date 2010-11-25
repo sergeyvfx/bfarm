@@ -147,13 +147,14 @@ function _UIViewport ()
    * @param caption - item's caption
    * @return new item object
    */
-  this.addItem = function (image, caption, exec)
+  this.addItem = function (image, caption, exec, point)
     {
       var item = new UIViewportItem ({'parent'  : this,
                                       'image'   : image,
                                       'caption' : caption,
                                       'exec'    : exec,
-                                      'movable' : this.itemsMovable});
+                                      'movable' : this.itemsMovable,
+                                      'point'   : point});
 
       this.items.push (item);
       this.buildItem (item);

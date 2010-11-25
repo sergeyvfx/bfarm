@@ -50,6 +50,13 @@ function _UIViewportItem ()
             };
           } (this))
 
+      if (this.point)
+        {
+          item.style.position = 'absolute';
+          item.style.left = this.point['x'] + 'px';
+          item.style.top  = this.point['y'] + 'px';
+        }
+
       if (this.movable)
         {
           UI_MakeMovable (item);
@@ -86,6 +93,7 @@ function UIViewportItem (opts)
   this.image   = opts['image'];
   this.exec    = opts['exec'];
   this.movable = defVal (opts['movable'], false);
+  this.point   = defVal (opts['point'], null);
 
   this.caption_d = null;
   this.image_d = null;
