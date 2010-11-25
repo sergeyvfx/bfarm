@@ -101,7 +101,10 @@ function _UIDragProvider ()
     {
       if (this.activeObject)
         {
-          this.activeObject[this.endDragMethod] ();
+          if (this.notifierSent)
+            {
+              this.activeObject[this.endDragMethod] ();
+            }
         }
 
       this.activeObject = null;
