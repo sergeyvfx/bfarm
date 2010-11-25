@@ -61,11 +61,49 @@ function _UIViewportItem ()
         {
           UI_MakeMovable (item);
           item.onEndMove = wrapMeth (this, 'onEndMove');
+
+          item.validateMoveDelta = function (self) { return function (delta) {
+                return self.validateItemMoveDelta (this, delta);
+              }
+            } (this);
         }
 
       $(result).disableTextSelect ();
 
       return result;
+    };
+
+  this.validateItemMoveDelta = function (item, delta)
+    {
+      var x = item.offsetLeft;
+      var y = item.offsetTop;
+      var w = item.offsetWidth;
+      var h = item.offsetHeight;
+      var vp = this.parent.getViewport ();
+
+      /* Horisontal limits */
+      if (x + delta['x'] < 0)
+        {
+          delta['x'] = -x;
+        }
+
+      if (x + delta['x'] + w > vp.clientWidth)
+        {
+          delta['x'] = vp.clientWidth - x - w;
+        }
+
+      /* Horisontal limits */
+      if (y + delta['y'] < 0)
+        {
+          delta['y'] = -y;
+        }
+
+      if (y + delta['y'] + h > vp.clientHeight)
+        {
+          delta['y'] = vp.clientHeight - y - h;
+        }
+
+      return delta;
     };
 
   this.onContextMenu = function (point)
