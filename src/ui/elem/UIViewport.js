@@ -205,6 +205,10 @@ function _UIViewport ()
           uiPopupManager.popup (menu, p);
         }
     };
+
+  this.onItemEndMove = function (item, point)
+    {
+    };
 }
 
 function UIViewport (opts)

@@ -53,6 +53,7 @@ function _UIViewportItem ()
       if (this.movable)
         {
           UI_MakeMovable (item);
+          item.onEndMove = wrapMeth (this, 'onEndMove');
         }
 
       $(result).disableTextSelect ();
@@ -63,6 +64,15 @@ function _UIViewportItem ()
   this.onContextMenu = function (point)
     {
       this.parent.showItemContextMenu (this, point);
+    };
+
+  this.onEndMove = function ()
+    {
+      var item = this.dom.childNodes[0];
+      var left = parseInt (item.style.left);
+      var top = parseInt (item.style.top);
+
+      this.parent.onItemEndMove (this, {'x': left, 'y': top});
     };
 }
 
