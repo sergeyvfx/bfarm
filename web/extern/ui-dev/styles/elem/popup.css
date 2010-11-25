@@ -1,0 +1,23 @@
+DIV.UIPopup {
+  border: 1px #666 solid;
+  background: #c2c2c2;
+  position: absolute;
+  display: none;
+  padding: 4px;
+  overflow: hidden;
+}
+
+DIV.UISizingPopup {
+  padding-bottom: 10px;
+}
+
+DIV.UIPopupSizer {
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+
+  background: url(../../pics/ui/sizer.gif)
+}

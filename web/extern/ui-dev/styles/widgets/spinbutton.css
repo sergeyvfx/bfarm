@@ -1,0 +1,66 @@
+DIV.UISpinButton {
+  padding: 0;
+}
+
+DIV.UISpinEntryHolder {
+  margin: 0 20px;
+}
+
+DIV.UISpinButtonWImage DIV.UISpinEntryHolder {
+  padding-left: 24px;
+  position: relative;
+}
+
+DIV.UISpinButton DIV.UISpinEntryHolder INPUT {
+  text-align: center;
+}
+
+DIV.UISpinButtonBtn {
+  width: 18px;
+  height: 18px;
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  cursor: pointer;
+  text-align: left;
+}
+
+DIV.UISpinButtonBtn:hover {
+  background: #c0c0c0 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UISpinButtonBtnLeft {
+  float: left;
+  border-right: 1px #666 solid;
+
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+}
+
+DIV.UISpinButtonBtnRight {
+  float: right;
+  border-left: 1px #666 solid;
+
+  -moz-border-radius: 0 6px 6px 0;
+  border-radius: 0 6px 6px 0;
+  -webkit-border-radius: 0 6px 6px 0;
+  -khtml-border-radius: 0 6px 6px 0;
+}
+
+DIV.UISpinButtonBtnLeft DIV.UISpinButtonBtnArr {
+  background: transparent url(../../pics/ui/spinbtn_left.gif) 0 0 no-repeat;
+  width: 6px;
+  height: 10px;
+  margin: 4px 0 0 6px;
+}
+
+DIV.UISpinButtonBtnRight DIV.UISpinButtonBtnArr {
+  background: transparent url(../../pics/ui/spinbtn_right.gif) 0 0 no-repeat;
+  width: 6px;
+  height: 10px;
+  margin: 4px 0 0 6px;
+}
+
+DIV.UISpinButtonAbjusting {
+  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+}

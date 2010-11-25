@@ -1,0 +1,14 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  border: none;
+  overflow: hidden;
+
+  font-size: 8pt;
+  font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";
+}
+
+DIV.floatTerm {
+  clear: both;
+}

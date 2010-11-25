@@ -1,0 +1,93 @@
+DIV.UIViewportHolder {
+  border: 1px #666 solid;
+  width: 320px;
+  height: 240px;
+  position: relative;
+}
+
+DIV.UIViewport {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+DIV.UIViewportBackground {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
+  overflow: hidden;
+  z-index: 0
+}
+
+DIV.UIViewportPanel {
+  position: absolute;
+  overflow: hidden;
+}
+
+DIV.UIViewportTopPanel {
+  right: 0;
+  left: 0;
+  top: 0;
+  height: 26px;
+  background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
+  padding: 0 6px;
+}
+
+DIV.UIViewportBottomPanel {
+  right: 0;
+  left: 0;
+  bottom: 0;
+  height: 26px;
+  background: #727272 url(../../pics/ui/elem/panel_bg.gif) 0 0 repeat-x;
+  border-top: 1px #939393 solid;
+  padding: 0 6px;
+}
+
+UL.UIViewportItemsHolder {
+  margin: 0;
+  padding: 4px;
+}
+
+LI.UIViewportItemHolder {
+  list-style: none;
+  display: inline;
+}
+
+DIV.UIViewportItem {
+  padding: 5px;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+/*        width: 64px;*/
+  text-align: center;
+  min-width: 64px;
+}
+
+DIV.UIViewportItem:hover {
+  padding: 4px;
+  cursor: pointer;
+  border: 1px #007 solid;
+  background-color: #a8b8ff;
+}
+
+DIV.UIViewportPanelItem {
+  height: 26px;
+  float: left;
+  margin-right: 8px;
+}
+
+DIV.UIViewportPanelBlockItem {
+  float: inherit;
+}
+
+DIV.UIViewportPanelEndItem {
+  float: right;
+  margin-right: 0px;
+  margin-left: 8px;
+}

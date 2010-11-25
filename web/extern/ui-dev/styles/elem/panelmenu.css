@@ -1,0 +1,36 @@
+DIV.UIPanelMenuButton {
+  height: 26px;
+  cursor: pointer;
+  padding: 5px 6px 0 6px;
+}
+
+DIV.UIPanelMenuButton:hover,
+DIV.UIPanelMenuButtonActive {
+  padding: 5px 5px 0 5px;
+  border: 1px #8c8c8c solid;
+  border-width: 0 1px 0 1px;
+}
+
+DIV.UIPanelMenuButton:hover {
+  background: url(../../pics/ui/elem/panelmenu_s_bg.gif) 0 0  repeat-x;
+}
+
+DIV.UIPanelMenuButtonActive,
+DIV.UIPanelMenuButtonActive:hover {
+  background: url(../../pics/ui/elem/panelmenu_a_bg.gif) 0 0  repeat-x;
+}
+
+IMG.UIPanelMenuButtonImage {
+  margin-right: 6px;
+  vertical-align: top;
+}
+
+DIV.UIPanelMenuHolder {
+  background: #e7e7e7;
+  border: 1px #8c8c8c solid;
+  border-top: 0;
+}
+
+DIV.UIPanelMenu {
+  margin: 4px;
+}

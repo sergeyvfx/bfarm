@@ -1,0 +1,61 @@
+DIV.UIButton {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  text-align: center;
+  cursor: pointer;
+  color: #333;
+
+  overflow: hidden;
+  height: 18px;
+
+  padding: 1px 4px 0 4px;
+}
+
+DIV.UIButton:hover {
+  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIButtonPressed {
+  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+}
+
+DIV.UIButtonPressed * {
+  color: #fff !important;
+}
+
+DIV.UIButton IMG.UIButtonImage {
+  vertical-align: middle;
+  margin-right: 6px;
+  position: relative;
+}
+
+DIV.UIButton A {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  width: 100%;
+  margin-top: 1px;
+}
+
+DIV.UIButton A IMG.UIButtonImage {
+  border: 0;
+}
+
+DIV.UIButtonInsensitive {
+  border-color: #666;
+  background: #aaa url(../../pics/ui/button_d_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIButtonInsensitive:hover {
+  background: #b6b6b6 url(../../pics/ui/button_d_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIButtonInsesitive A {
+  color: #666;
+}

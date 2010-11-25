@@ -1,0 +1,112 @@
+DIV.UIComboBox {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  height: 18px;
+}
+
+DIV.UIComboBoxButton {
+  float: right;
+  width: 18px;
+  height: 18px;
+  border-left: 1px #666 solid;
+
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  cursor: pointer;
+
+  -moz-border-radius: 0 6px 6px 0;
+  border-radius: 0 6px 6px 0;
+  -webkit-border-radius: 0 6px 6px 0;
+  -khtml-border-radius: 0 6px 6px 0;
+}
+
+DIV.UIComboBoxButton DIV.UIComboBoxButtonArr {
+  background: transparent url(../../pics/ui/combobtn.gif) 0 0 no-repeat;
+  width: 7px;
+  height: 9px;
+  margin: 4px 0 0 5px;
+}
+
+DIV.UIComboBoxContainer {
+  margin-right: 19px;
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+
+  cursor: pointer;
+  height: 18px;
+  color: #333;
+}
+
+DIV.UIComboBoxInsensitive DIV.UIComboBoxContainer,
+DIV.UIComboBoxInsensitive DIV.UIComboBoxButton {
+  background: #aaa url(../../pics/ui/button_d_bg.gif) 0 0 repeat-x;
+  border-color: #666;
+}
+
+DIV.UIComboboxDropdown DIV.UIComboBoxContainer,
+DIV.UIComboboxDropdown DIV.UIComboBoxButton {
+  background: #c0c0c0 url(../../pics/ui/button_t_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIComboBox:hover DIV.UIComboBoxContainer,
+DIV.UIComboBox:hover DIV.UIComboBoxButton {
+    background: #c0c0c0 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIComboboxDropdown:hover DIV.UIComboBoxContainer,
+DIV.UIComboboxDropdown:hover DIV.UIComboBoxButton {
+  background: #c0c0c0 url(../../pics/ui/button_t_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxContainer,
+DIV.UIComboBoxInsensitive:hover DIV.UIComboBoxButton {
+  background: #b6b6b6 url(../../pics/ui/button_d_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIComboBoxText {
+  height: 16px;
+  text-align: center;
+  padding: 2px 4px 0 4px;
+}
+
+DIV.UIComboBoxPupList {
+  color: #fff;
+}
+
+DIV.UIComboBoxPupListContainer {
+  position: absolute;
+  background: transparent;
+  padding: 4px;
+  right: 0;
+  left: 0;
+}
+
+DIV.UIComboBoxPupListContainer * {
+  color: #fff;
+}
+
+DIV.UIComboBoxPupListBLayer {
+  position: absolute;
+  background: #222;
+  left: 0;
+  right: 0;
+  top: 0;
+
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
+
+  filter: alpha(opacity=90);
+  -moz-opacity: 0.9;
+  -khtml-opacity: 0.9;
+  opacity: 0.9;
+}

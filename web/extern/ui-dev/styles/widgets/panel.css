@@ -1,0 +1,7 @@
+DIV.UIPanel {
+  position: relative;
+}
+
+DIV.UIPanelHeader {
+  margin: 4px;
+}

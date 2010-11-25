@@ -1,0 +1,36 @@
+DIV.UIMenu {
+  border: 1px #666 solid;
+
+  background: #c2c2c2;
+  color: #333;
+
+  padding: 2px;
+}
+
+DIV.UIMenuItem {
+  cursor: pointer;
+  padding: 1px 4px;
+  border: 1px #c2c2c2 solid;
+}
+
+DIV.UIMenuItem:hover {
+  background: #5680c2 url(../../pics/ui/listitem_s_bg.gif) 0 0 repeat-x !important;
+  border: 1px #2d5da6 solid !important;
+  color: #fff;
+}
+
+DIV.UIMenuItem IMG {
+  vertical-align: middle;
+}
+
+DIV.UIMenuImagedItems DIV.UIMenuItem SPAN {
+  margin-left: 24px;
+}
+
+DIV.UIMenuItemImage SPAN {
+  margin-left: 8px !important;
+}
+
+DIV.UIMenuItemDefault {
+  font-weight: bold;
+}

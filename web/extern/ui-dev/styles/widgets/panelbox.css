@@ -1,0 +1,51 @@
+DIV.UIPanelBox {
+  border-style: solid;
+  border-color: #666;
+  border-width: 1px 0 0 0;
+}
+
+DIV.UIPanelBoxHeader {
+  border-style: solid;
+  border-color: #e7e7e7;
+  border-width: 1px 0 0 0;
+}
+
+DIV.UIPanelBoxFirst {
+  border-width: 0 !important;
+}
+
+DIV.UIPanelBoxFirstHeader {
+  border-width: 0 !important;
+}
+
+DIV.UIPanelBoxContainer {
+  padding: 4px;
+}
+
+TABLE.UIPanelBoxHeaderRowBlockHolder {
+  width: 100%;
+}
+
+TD.UIPanelBoxHeaderHolder {
+  text-align: left;
+  vertical-align: middle;
+  padding: 0 0 0 6px;
+}
+
+TD.UIPanelBoxHeaderFirstHolder {
+  padding-left: 0;
+}
+
+TD.UIPanelBoxCollapseButtonHolder {
+  width: 16px;
+}
+
+IMG.UIPanelBoxCollapseButton {
+  cursor: pointer;
+  vertical-align: top;
+}
+
+DIV.UIPanelBoxTitle {
+  font-weight: bold;
+  cursor: default;
+}
