@@ -38,8 +38,8 @@ function UIPanelBox (opts)
   this.outerClassName = 'UIPanelBox';
 
   /* Sources for expand/collapse images */
-  this.collapseImageSrc = 'pics/ui/elem/panelbox_expand.gif';
-  this.expandImageSrc = 'pics/ui/elem/panelbox_collapse.gif';
+  this.collapseImageSrc = UI_PREFI + 'pics/elem/panelbox_expand.gif';
+  this.expandImageSrc = UI_PREFIX + 'pics/elem/panelbox_collapse.gif';
 }
 
 UIPanelBox.prototype = new _UIPanelBox;

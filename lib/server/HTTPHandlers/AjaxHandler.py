@@ -39,6 +39,7 @@ except ImportError:
 
 import server
 from Singleton import Singleton
+from PathUtil import getObjectPath
 
 
 def _send_json(httpRequest, obj):
@@ -107,36 +108,6 @@ class _Ajaxhandlers(Singleton):
         self.get = _Ajaxhandlers.Get()
 
 
-def translate_path(obj, path):
-    """
-    Translate path and return handler
-    """
-
-    if len(path) == 0:
-        return obj
-
-    i = path.find('/')
-    rest = ''
-    if i >= 0:
-        field = path[:i]
-        rest = path[i + 1:]
-    else:
-        field = path
-
-    if field.startswith('_'):
-        return None
-
-    try:
-        nobj = getattr(obj, field)
-    except AttributeError:
-        return None
-
-    if nobj is not None:
-        return translate_path(nobj, rest)
-
-    return None
-
-
 def execute(httpRequest):
     """
     Execute file/directory handler
@@ -147,7 +118,7 @@ def execute(httpRequest):
     path = urllib.parse.splitquery(httpRequest.path)[0]
     path = path.replace('/ajax/', '')
 
-    handler = translate_path(_Ajaxhandlers(), path)
+    handler = getObjectPath(_Ajaxhandlers(), path)
     if handler is not None:
         handler(httpRequest)
         return

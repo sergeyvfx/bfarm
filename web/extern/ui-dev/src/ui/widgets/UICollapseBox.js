@@ -248,8 +248,8 @@ function UICollapseBox (opts)
   this.collapseButtonDom = null;
 
   /* Sources for expand/collapse images */
-  this.collapseImageSrc = 'pics/ui/elem/collapsebox_expand.gif';
-  this.expandImageSrc = 'pics/ui/elem/collapsebox_collapse.gif';
+  this.collapseImageSrc = UI_PREFIX + 'pics/elem/collapsebox_expand.gif';
+  this.expandImageSrc = UI_PREFIX + 'pics/elem/collapsebox_collapse.gif';
 }
 
 UICollapseBox.prototype = new _UICollapseBox;

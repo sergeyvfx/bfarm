@@ -319,5 +319,3 @@ function UIWindowManager ()
 
 UIWindowManager.prototype = new _UIWindowManager;
 UIWindowManager.prototype.constructor = UIWindowManager;
-
-var uiWindowManager = new UIWindowManager();

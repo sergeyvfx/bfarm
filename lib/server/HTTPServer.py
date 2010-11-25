@@ -76,6 +76,7 @@ from SignalThread import SignalThread
 from config import Config
 from server.HTTPHandlers import FileHandler
 from server.HTTPHandlers import AjaxHandler
+from server.HTTPHandlers import PackHandler
 from server.HTTPActions import RegisterJob
 from server.Multipart import parseMultipart
 import Version
@@ -116,6 +117,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         if self.path.startswith('/ajax'):
             AjaxHandler.execute(self)
+        if self.path.startswith('/pack'):
+            PackHandler.execute(self)
         else:
             FileHandler.execute(self)
 

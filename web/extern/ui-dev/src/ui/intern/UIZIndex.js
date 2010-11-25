@@ -75,5 +75,3 @@ function UIZIndex ()
 
 UIZIndex.prototype = new _UIZIndex;
 UIZIndex.prototype.constructor = UIZIndex;
-
-var uiMainZIndex = new UIZIndex ();

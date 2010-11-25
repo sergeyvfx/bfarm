@@ -123,4 +123,4 @@ if(jQuery) (function(){
 		
 	});
 	
-})(jQuery);	
+})(jQuery);

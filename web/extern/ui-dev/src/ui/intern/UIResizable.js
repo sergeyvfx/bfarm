@@ -89,8 +89,6 @@ function UIResizeManager ()
 UIResizeManager.prototype = new _UIResizeManager;
 UIResizeManager.prototype.constructor = UIMoveManager;
 
-var uiResizeManager = new UIResizeManager;
-
 /**
  * Register new moveble object
  *

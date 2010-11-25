@@ -89,8 +89,6 @@ function UIMoveManager ()
 UIMoveManager.prototype = new _UIMoveManager;
 UIMoveManager.prototype.constructor = UIMoveManager;
 
-var uiMoveManager = new UIMoveManager;
-
 /**
  * Register new moveble object
  *

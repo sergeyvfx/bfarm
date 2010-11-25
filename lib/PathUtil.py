@@ -45,3 +45,33 @@ def isPathInside(path, parent):
         return  False
 
     return True
+
+
+def getObjectPath(obj, path):
+    """
+    Translate path and return attr
+    """
+
+    if len(path) == 0:
+        return obj
+
+    i = path.find('/')
+    rest = ''
+    if i >= 0:
+        field = path[:i]
+        rest = path[i + 1:]
+    else:
+        field = path
+
+    if field.startswith('_'):
+        return None
+
+    try:
+        nobj = getattr(obj, field)
+    except AttributeError:
+        return None
+
+    if nobj is not None:
+        return getObjectPath(nobj, rest)
+
+    return None

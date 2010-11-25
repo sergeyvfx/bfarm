@@ -327,5 +327,3 @@ function UIPopupManager ()
 
 UIPopupManager.prototype = new _UIPopupManager;
 UIPopupManager.prototype.constructor = UIPopupManager;
-
-var uiPopupManager = new UIPopupManager;

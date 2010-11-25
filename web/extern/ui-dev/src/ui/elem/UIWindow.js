@@ -71,7 +71,7 @@ function _UIWindow ()
           /*
            * TODO: Fix this to add support of full url
            */
-          var src = 'pics/ui/elem/' + image + '.gif';
+          var src = UI_PREFIX + 'pics/elem/' + image + '.gif';
 
           var img = createElement ('IMG');
           img.src = src;

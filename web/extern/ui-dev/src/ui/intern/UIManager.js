@@ -175,5 +175,3 @@ function UIManager ()
 
 UIManager.prototype = new _UIManager;
 UIManager.prototype.constructor = UIManager;
-
-var uiManager = new UIManager ();

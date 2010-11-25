@@ -76,5 +76,3 @@ function UICreator ()
 
 UICreator.prototype = new _UICreator;
 UICreator.prototype.constructor = UICreator;
-
-var uiCreator = new UICreator ();
