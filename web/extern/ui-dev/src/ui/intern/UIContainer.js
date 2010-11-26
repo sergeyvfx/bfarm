@@ -125,12 +125,12 @@ function _UIContainer ()
 
          if (this.widgetField)
            {
-             c = uiCreator.create (c[this.widgetField]);
+             c = c[this.widgetField];
+           }
 
-             if (!c)
-               {
-                 continue;
-               }
+         if (!c)
+           {
+             continue;
            }
 
          if (typeof c.postEmbedTweaks == 'function')
@@ -138,6 +138,39 @@ function _UIContainer ()
              c.postEmbedTweaks ();
            }
        }
+    };
+
+  this.lookupWidget = function (name)
+    {
+      if (this.name == name)
+        {
+          return this;
+        }
+
+      for (var i = 0; i < this.length(); ++i)
+        {
+           var c = this.get (i);
+
+           if (this.widgetField)
+             {
+               c = c[this.widgetField];
+             }
+
+           if (!c.lookupWidget)
+             {
+               alert(c);
+               continue;
+             }
+
+           var w = c.lookupWidget (name);
+
+           if (w)
+             {
+               return w;
+             }
+        }
+
+      return null;
     };
 }
 

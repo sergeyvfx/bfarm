@@ -28,6 +28,16 @@ function _UIGrid ()
             {
               cell.style.padding = getSpacingStr (style['padding']);
             }
+
+          if (!isUnknown (style['width']))
+            {
+              cell.style.width = uiUtil.sizeToStyle (style['width']);
+            }
+
+          if (!isUnknown (style['height']))
+            {
+              cell.style.height = uiUtil.sizeToStyle (style['height']);
+            }
         }
       else
         {
@@ -182,7 +192,7 @@ function UIGrid (opts)
   this.padding = defVal (opts['padding'], 0);
 
   /* Cell-specified styles */
-  this.cellStyles = null;
+  this.cellStyles = defVal (opts['cellStyles'], null);
 }
 
 UIGrid.prototype = new _UIGrid;

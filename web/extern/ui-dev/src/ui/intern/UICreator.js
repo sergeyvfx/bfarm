@@ -37,6 +37,12 @@ function _UICreator ()
           for (var i = 0, n = json['childs'].length; i < n; ++i)
             {
               var c = json['childs'][i];
+
+              if (widget.widgetField)
+                {
+                  c[widget.widgetField] = this.create (c[widget.widgetField]);
+                }
+
               widget.add (this.create (c));
             }
         }
