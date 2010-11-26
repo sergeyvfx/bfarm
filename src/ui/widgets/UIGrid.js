@@ -182,7 +182,7 @@ function UIGrid (opts)
   this.padding = defVal (opts['padding'], 0);
 
   /* Cell-specified styles */
-  this.cellStyles = null;
+  this.cellStyles = defVal (opts['cellStyles'], null);
 }
 
 UIGrid.prototype = new _UIGrid;
