@@ -3,7 +3,6 @@
  */
 
 var uiManager = new UIManager ();
-var uiUtil = new UIUtil ();
 var uiWindowManager = new UIWindowManager();
 var uiMainZIndex = new UIZIndex ();
 var uiCreator = new UICreator ();

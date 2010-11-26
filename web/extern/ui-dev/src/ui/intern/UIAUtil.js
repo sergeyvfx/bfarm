@@ -168,3 +168,5 @@ function UIUtil ()
 
 UIUtil.prototype = new _UIUtil;
 UIUtil.prototype.constructor = UIUtil;
+
+var uiUtil = new UIUtil ();
