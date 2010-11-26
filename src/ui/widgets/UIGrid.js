@@ -28,6 +28,16 @@ function _UIGrid ()
             {
               cell.style.padding = getSpacingStr (style['padding']);
             }
+
+          if (!isUnknown (style['width']))
+            {
+              cell.style.width = uiUtil.sizeToStyle (style['width']);
+            }
+
+          if (!isUnknown (style['height']))
+            {
+              cell.style.height = uiUtil.sizeToStyle (style['height']);
+            }
         }
       else
         {
