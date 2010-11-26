@@ -117,7 +117,7 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         if self.path.startswith('/ajax'):
             AjaxHandler.execute(self)
-        if self.path.startswith('/pack'):
+        elif self.path.startswith('/pack'):
             PackHandler.execute(self)
         else:
             FileHandler.execute(self)

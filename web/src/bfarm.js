@@ -1,31 +1,13 @@
-function fillJobsCb(data) {
-  var jobsList = $('#jobsList');
-
-  for(var i = 0; i < data.length; i++) {
-    jobsList.find('tbody')
-        .append($('<tr>')
-                   .addClass(i % 2 ? 'l' : '')
-                   .append($('<td>')
-                            .text(data[i].uuid)
-                          )
-                   .append($('<td>')
-                            .text(data[i].title)
-                          )
-                   .append($('<td>')
-                            .text(data[i].type)
-                          )
-                   .append($('<td>')
-                            .text(data[i].fname)
-                          )
-               )
-  }
-}
+/*!
+ * bfarm renderfarm 0.1pre web interface
+ *
+ * Copyright 2010, Sergey Sharybin
+ * Licensed under the GPL Version 2 license.
+ *
+ */
 
 function main() {
-  var jobsList = $('#jobsList');
-
-  if (jobsList.length)
-    $.getJSON('/ajax/get/jobs', fillJobsCb);
+  jobs.fillPage();
 }
 
 $(document).ready(main)

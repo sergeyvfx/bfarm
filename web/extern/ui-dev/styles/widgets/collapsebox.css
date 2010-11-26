@@ -5,10 +5,12 @@ DIV.UICollapseBox {
   border-radius: 6px;
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
+
+  background-color: #F6F6F6;
 }
 
 DIV.UICollapseBoxHeader {
-  background-color: #aaa;
+  background: #aaa url(../../pics/collapse_header.gif) 0 0 repeat-x;
   padding: 0 2px;
 
   -moz-border-radius: 6px 6px 0 0;
@@ -36,7 +38,7 @@ TABLE.UICollapseBoxHeaderRowBlockHolder {
 TD.UICollapseBoxHeaderHolder {
   text-align: left;
   vertical-align: middle;
-  padding: 0 0 0 6px;
+  padding: 2px 0 2px 6px;
 }
 
 TD.UICollapseBoxHeaderFirstHolder {
@@ -45,6 +47,7 @@ TD.UICollapseBoxHeaderFirstHolder {
 
 TD.UICollapseBoxCollapseButtonHolder {
   width: 16px;
+  padding-left: 2px;
 }
 
 IMG.UICollapseBoxCollapseButton {

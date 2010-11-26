@@ -15,6 +15,7 @@
     <script type="text/javascript" src="/pack/jquery.js"></script>
     <script type="text/javascript" src="/pack/ui-dev.js"></script>
     <script type="text/javascript" src="/src/bfarm.js"></script>
+    <script type="text/javascript" src="/src/jobs.js"></script>
   </head>
   <body>
     <div class="header">
@@ -37,45 +38,14 @@
     </div>
 
     <div class="mainHolder">
-      <h3>Jobs:</h3>
-      <table class="wide data" id="jobsList">
+      <table class="wide spacing">
         <tr>
-          <th>UUID</th>
-          <th>Title</th>
-          <th>Type</th>
-          <th>File</th>
+          <td><div id="jobsList"></div></td>
+        </tr>
+        <tr>
+          <td id="jobRegister"></td>
         </tr>
       </table>
-
-      <h3>Register job:</h3>
-      <form action=".?action=registerJob" method="POST" enctype="multipart/form-data">
-        <table class="spacing">
-          <tr>
-            <td width="120">Type</td>
-            <td>
-              <select name="type">
-                <option value="anim">Animation</option>
-                <option value="still">Still</option>
-              </select>
-            </td>
-          </tr>
-          <tr>
-            <td width="80">Frame range</td>
-            <td>
-              <input name="start-frame" value="1"> - <input name="end-frame" value="1">
-            </td>
-          </tr>
-          <tr>
-            <td width="80">File</td>
-            <td>
-              <input name="blenfile" type="file">
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2" align="center"><button type="submit">Register job</button></td>
-          </tr>
-        </table>
-      </form>
     </div>
 
     <div class="footer"></div>
