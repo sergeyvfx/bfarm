@@ -19,7 +19,14 @@ function _UIButton ()
       var innerHTML = '';
       if (this.image)
         {
-          innerHTML += '<img src="' + this.image + '" class="UIButtonImage">';
+          var className = 'UIButtonImage';
+
+          if (!this.title.length)
+            {
+              className += ' UIButtonTitlelessImage';
+            }
+
+          innerHTML += '<img src="' + this.image + '" class="' + className + '">';
         }
       innerHTML += '<span>' + this.title + '</span>';
 

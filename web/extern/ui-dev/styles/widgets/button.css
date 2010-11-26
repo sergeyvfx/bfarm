@@ -35,6 +35,10 @@ DIV.UIButton IMG.UIButtonImage {
   position: relative;
 }
 
+DIV.UIButton IMG.UIButtonTitlelessImage {
+  margin-right: 0;
+}
+
 DIV.UIButton A {
   text-decoration: none;
   color: #333;
