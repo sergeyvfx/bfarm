@@ -1,6 +1,6 @@
 {
   "class"   : "Grid",
-  "rows"    : 2,
+  "rows"    : 3,
   "cols"    : 1,
   "childs" : [
     {
@@ -37,6 +37,7 @@
         {"class" : "SpinButton"}
       ]
     },
+    {"class": "FileEntry"},
     {
       "class": "Panel",
       "withBorder": false,
