@@ -12,7 +12,8 @@
         {"class" : "Label",
          "text"  : "Название"},
         {"class" : "Entry",
-         "text"  : "Пробный контест"},
+         "text"  : "Пробный контест",
+         "name"  : "contest_name"},
 
         {"class" : "Label",
          "text"  : "Правила проведения"},

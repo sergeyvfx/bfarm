@@ -421,6 +421,26 @@ function _UIWidget ()
           s.css ('height', 'auto');
         }
     };
+
+  this.getName = function ()
+    {
+      return this.name;
+    };
+
+  this.setName = function (name)
+    {
+      this.name = name;
+    };
+
+  this.lookupWidget = function (name)
+    {
+      if (this.name == name)
+        {
+          return this;
+        }
+
+      return null;
+    };
 }
 
 /***
