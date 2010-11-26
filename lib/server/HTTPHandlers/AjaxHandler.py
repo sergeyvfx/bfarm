@@ -51,7 +51,7 @@ def _send_json(httpRequest, obj):
 
     httpRequest.send_response(200)
     httpRequest.send_header("Content-type", "text/plain")
-    httpRequest.send_header("Content-Length", respond)
+    httpRequest.send_header("Content-Length", len(respond))
     httpRequest.end_headers()
 
     httpRequest.wfile.write(respond)
