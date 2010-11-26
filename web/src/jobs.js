@@ -18,6 +18,7 @@ var jobs = new function () {
                                  'animated': true});
 
     var grid = new UIGrid({'cols': 2, 'rows': attrs.length});
+    grid.setCellStyle(0, 0, {'width': 120});
 
     for(var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
