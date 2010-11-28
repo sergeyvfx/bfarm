@@ -179,6 +179,9 @@ function UIButton (opts)
   this.imageElement = null; /* DOM element for image */
 
   this.insensitiveClassName = 'UIButtonInsensitive';
+
+  /* events avaliable for attaching */
+  this.events = this.events.concat (['onClick', 'onPress', 'OnRelease']);
 }
 
 UIButton.prototype = new _UIButton;

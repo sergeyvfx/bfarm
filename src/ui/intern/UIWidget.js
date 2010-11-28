@@ -441,6 +441,46 @@ function _UIWidget ()
 
       return null;
     };
+
+  this.attachEvents = function (events)
+    {
+      for (var name in events)
+        {
+          var evt = events[name];
+          var handler = null;
+          var path = (evt['handler']).split ('.');
+
+          if (indexOf (this.events, name) < 0)
+            {
+              /* event is not allowed for attaching */
+              continue;
+            }
+
+          var cur = window;
+          for (var i = 0; i < path.length; ++i)
+            {
+              if (cur[path[i]])
+                {
+                  cur = cur[path[i]];
+                }
+              else
+                {
+                  cur = null;
+                }
+            }
+          handler = cur != window ? cur : null;
+
+         if (!handler)
+           {
+             continue;
+           }
+
+          this[name] = function (widget, userData) { return function () {
+                  handler (widget, userData, arguments);
+                }
+              } (this, evt.userData);
+        }
+    };
 }
 
 /***
@@ -484,6 +524,14 @@ function UIWidget (opts)
 
   /* Should widget fill whole parent's client area? */
   this.fill   = defVal (opts['fill'], false);
+
+  /* events avaliable for attaching */
+  this.onParentChanged = function () {};
+  this.onVisibleChanged = function () {};
+  this.onSensitiveChanged = function () {};
+  this.onFocus = function () {};
+
+  this.events = ['onParentChanged', 'onVisibleChanged', 'onSensitiveChanged', 'onFocus'];
 }
 
 UIWidget.prototype = new _UIWidget;
