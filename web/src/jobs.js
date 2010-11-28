@@ -36,6 +36,13 @@ var jobs = new function () {
 
   function createJobsCb(data) {
     var jobsList = $('#jobsList');
+
+    if(data.length == 0) {
+      /* XXX: quite hacky */
+      jobsList.parent().css('padding', '0');
+      return;
+    }
+
     var jobsGroup = new UIGroupBox({'title': 'Running jobs'});
     var grid = new UIGrid({'padding': 2,
                            'rows': data.length})
