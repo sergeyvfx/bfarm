@@ -241,12 +241,16 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
         if data is None:
             continue
         if nbytes < 0:
-            # Strip final line terminator
-            part_fp.seek(-1, os.SEEK_END)
-            last = part_fp.read(1)
+            last = pre_last = None
 
-            part_fp.seek(-2, os.SEEK_END)
-            pre_last = part_fp.read(1)
+            # Strip final line terminator
+            if part_fp.tell() >= 1:
+                part_fp.seek(-1, os.SEEK_END)
+                last = part_fp.read(1)
+
+            if part_fp.tell() >= 2:
+                part_fp.seek(-2, os.SEEK_END)
+                pre_last = part_fp.read(1)
 
             trunc = 0
             if pre_last == b"\r" and last == b"\n":

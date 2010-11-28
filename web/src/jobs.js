@@ -11,6 +11,9 @@ var jobs = new function () {
                {'title': 'Type', 'field': 'type'},
                {'title': 'File', 'field': 'fname'}];
 
+  var TYPE_ANIM = 0;
+  var TYPE_STILL = 1;
+
   function createJobBox(job) {
     /* XXX: replace with form template */
     var box = new UICollapseBox({'title': job.title,
@@ -69,5 +72,49 @@ var jobs = new function () {
   this.fillPage = function() {
     createJobs();
     createJobRegisterForm();
+  };
+
+  this.register = new function() {
+    this.onTypeChanged = function (widget, userData, attrs) {
+      var p = widget;
+
+      while (p && p.getName() != 'registerJobPanel')
+        p = p.parent;
+
+      if(p) {
+        var animSettingsPanel = p.lookupWidget ('animSettingsPanel');
+        var stillSettingsPanel = p.lookupWidget ('stillSettingsPanel');
+        var index = widget.getActiveIndex();
+
+        switch(index) {
+          case TYPE_ANIM:
+            animSettingsPanel.setVisible(true);
+            stillSettingsPanel.setVisible(false);
+            break;
+          case TYPE_STILL:
+            animSettingsPanel.setVisible(false);
+            stillSettingsPanel.setVisible(true);
+            break;
+        }
+      }
+    };
+
+    this.submit = function(widget) {
+      var cur = widget.dom;
+      var form = null;
+
+      while (cur) {
+        if (cur.tagName && cur.tagName.toLowerCase() == 'form') {
+          form = cur;
+          break;
+        }
+
+        cur = cur.parentNode;
+      }
+
+      if (form) {
+        form.submit();
+      }
+    };
   };
 };

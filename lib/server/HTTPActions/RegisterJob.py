@@ -37,6 +37,9 @@ def execute(httpRequest):
     Execute job registration action
     """
 
+    if httpRequest.POST.get('type') is None:
+      return
+
     render_server = server.Server().getRenderServer()
     job = {'type': httpRequest.POST['type']}
 
