@@ -47,6 +47,11 @@ function _UICreator ()
             }
         }
 
+      if (json['events'])
+        {
+          widget.attachEvents (json['events']);
+        }
+
       json._uiWidget = widget;
       return widget;
     };

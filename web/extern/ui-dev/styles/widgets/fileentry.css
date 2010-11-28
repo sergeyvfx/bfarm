@@ -1,0 +1,22 @@
+DIV.UIFileEntry {
+}
+
+DIV.UIFileEntry DIV.UIButton {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+INPUT.UIFileEntry {
+  position: absolute;
+  opacity: 0;
+  width: auto;
+  top: -1000px;
+  left: -1000px;
+  z-index: 2;
+}
+
+SPAN.UIFileEntry_label {
+  vertical-align: middle;
+  padding-left: 8px;
+}

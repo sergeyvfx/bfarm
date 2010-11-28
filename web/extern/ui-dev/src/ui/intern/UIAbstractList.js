@@ -150,6 +150,8 @@ function UIAbstractList (opts)
 
   /* Array of DOM nodes for all items */
   this.itemsDom = [];
+
+  this.events = this.events.concat (['onItemSelected', 'onItemClicked']);
 }
 
 UIAbstractList.prototype = new _UIAbstractList;

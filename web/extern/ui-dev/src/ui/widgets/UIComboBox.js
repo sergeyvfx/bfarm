@@ -446,6 +446,8 @@ function UIComboBox (opts)
   this.hideListOnMouseout = defVal (opts['hideListOnMouseout'], true);
 
   this.insensitiveClassName = 'UIComboBoxInsensitive';
+
+  this.events = this.events.concat (['onItemSelected', 'onItemClicked']);
 }
 
 UIComboBox.prototype = new _UIComboBox;

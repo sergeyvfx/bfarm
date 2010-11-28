@@ -328,6 +328,8 @@ function UISpinButton (opts)
 
   /* Maximum value */
   this.max = defVal (opts['max'], 100);
+
+  this.events = this.events.concat (['onValueChanged']);
 }
 
 UISpinButton.FIRST_AFFECT_TIME = 700;

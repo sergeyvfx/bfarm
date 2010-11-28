@@ -246,6 +246,8 @@ function UIViewport (opts)
 
   this.panels = [];
   this.items = [];
+
+  this.events = this.events.concat (['onItemEndMove']);
 }
 
 UIViewport.prototype = new _UIViewport;

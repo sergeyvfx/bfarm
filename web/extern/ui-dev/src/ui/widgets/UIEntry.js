@@ -277,6 +277,8 @@ function UIEntry (opts)
   /* Text, displayed in entry when it's empty */
   this.shadowText = isUnknown (opts['shadowText']) ? '' : opts['shadowText'];
   this.shadowElement = null;
+
+  this.events = this.events.concat (['onChanged']);
 }
 
 UIEntry.prototype = new _UIEntry;

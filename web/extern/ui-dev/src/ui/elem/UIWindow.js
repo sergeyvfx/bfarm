@@ -534,6 +534,9 @@ function UIWindow (opts)
   this.abortClose   = false;
   this.isMaximized  = false;
   this.animateSpeed = 100;
+
+  this.events = this.events.concat (['onShow', 'onHide', 'onRaise', 'onClose', 'onCLosed',
+                                     'onResize', 'onMaximized', 'onRestored', 'onMimimized']);
 }
 
 UIWindow.prototype = new _UIWindow;
