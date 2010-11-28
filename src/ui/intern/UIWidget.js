@@ -77,7 +77,7 @@ function _UIWidget ()
   this.setVisible = function (visible)
     {
       this.visible = visible;
-      this.onVisibleChanged ()
+      this.onVisibleChanged ();
       this.rebuild ();
     };
 
@@ -215,7 +215,9 @@ function _UIWidget ()
     {
       if (!this.visible)
         {
-          return null;
+          this.dom = createElement ('DIV');
+          this.dom.className = 'UIInvisibleWidget';
+          return this.dom;
         }
 
       if (!this.dom)
@@ -268,7 +270,7 @@ function _UIWidget ()
 
       if (oldDOM && oldDOM.parentNode)
         {
-        oldDOM.parentNode.replaceChild (newDOM, oldDOM);
+          oldDOM.parentNode.replaceChild (newDOM, oldDOM);
         }
     };
 
