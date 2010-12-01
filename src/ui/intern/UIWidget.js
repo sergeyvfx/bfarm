@@ -449,28 +449,13 @@ function _UIWidget ()
       for (var name in events)
         {
           var evt = events[name];
-          var handler = null;
-          var path = (evt['handler']).split ('.');
+          var handler = uiUtil.findHandler (evt['handler']);
 
           if (indexOf (this.events, name) < 0)
             {
               /* event is not allowed for attaching */
               continue;
             }
-
-          var cur = window;
-          for (var i = 0; i < path.length; ++i)
-            {
-              if (cur[path[i]])
-                {
-                  cur = cur[path[i]];
-                }
-              else
-                {
-                  cur = null;
-                }
-            }
-          handler = cur != window ? cur : null;
 
          if (!handler)
            {

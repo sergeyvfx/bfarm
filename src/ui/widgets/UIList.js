@@ -78,6 +78,19 @@ function _UIList ()
 
   this.add = function (item)
     {
+      if (typeof item.toString == 'string')
+        {
+          if (item.toString.match (/^field:/))
+            {
+              var field = item.toString.replace (/^field:/, '');
+              item.toString = function (field) { return function () { return this[field]; } } (field);
+            }
+          else
+            {
+              item.toString = uiUtil.findHandler (item.toString);
+            }
+        }
+
       var result = UIAbstractList.prototype.add.call (this, item);
 
       /* binding value could be changed after adding new item */
