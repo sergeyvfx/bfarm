@@ -31,6 +31,8 @@ DIV.UIEntry DIV.UIEntryInputHolder INPUT {
 
   font-size: 8pt;
   font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";
+
+  outline-width: 0;
 }
 
 DIV.UIEntry:hover {
