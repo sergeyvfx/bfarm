@@ -413,17 +413,17 @@ function UIComboBox (opts)
   this.stopEvents = this.stopEvents.concat (['click']);
 
   /* List for displaying items in puplist */
-  this.list = new UIList ({'transparent': true});
+  this.list = new UIList ({'transparent': true, 'binding': opts['binding']});
 
   this.list.onItemSelected = function (comboBox) { return function (itemIndex) {
         comboBox.onListItemSelected (itemIndex);
       }
     } (this);
 
-    this.list.onItemClicked = function (comboBox) { return function (itemIndex) {
-      comboBox.onListItemClicked (itemIndex);
-    }
-  } (this);
+  this.list.onItemClicked = function (comboBox) { return function (itemIndex) {
+        comboBox.onListItemClicked (itemIndex);
+      }
+    } (this);
 
   /* Fill items */
   if (opts['items'])

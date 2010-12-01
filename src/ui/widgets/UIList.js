@@ -64,7 +64,27 @@ function _UIList ()
         }
 
       return result;
-    }
+    };
+
+  /**
+   * Do all what needed after active element changed
+   */
+  this.doItemSelect = function (itemIndex)
+    {
+      var result = UIAbstractList.prototype.doItemSelect.call (this, itemIndex);
+      this.updateBinding (this.getBindingValue ());
+      return result;
+    };
+
+  this.add = function (item)
+    {
+      var result = UIAbstractList.prototype.add.call (this, item);
+
+      /* binding value could be changed after adding new item */
+      this.updateBinding (this.getBindingValue ());
+
+      return result;
+    };
 }
 
 /****
@@ -84,6 +104,8 @@ function UIList (opts)
   this.stopEvents = this.stopEvents.concat (['click']);
 
   this.transparent = opts['transparent'];
+
+  this.updateBinding (this.getBindingValue ());
 }
 
 UIList.prototype = new _UIList;

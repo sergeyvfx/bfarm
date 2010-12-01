@@ -226,6 +226,8 @@ function _UISpinButton ()
         {
           this.onValueChanged (this.value);
         }
+
+      this.updateBinding (this.value);
     };
 
   /****
@@ -330,6 +332,9 @@ function UISpinButton (opts)
   this.max = defVal (opts['max'], 100);
 
   this.events = this.events.concat (['onValueChanged']);
+
+  /* update binding to value, passed to constructor */
+  this.updateBinding (this.value);
 }
 
 UISpinButton.FIRST_AFFECT_TIME = 700;
