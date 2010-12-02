@@ -27,7 +27,8 @@ function _UIText (opts)
       this.inputElement = textArea;
       this.focusDOM = textArea;
 
-      this.attachEvent (textArea, 'keyup', 'keyUpHandler');
+      $(textArea).keyup (wrapMeth (this, 'keyUpHandler'));
+      $(textArea).blur (wrapMeth (this, 'checkChanges'));
 
       textArea.value = this.text;
 
@@ -114,7 +115,7 @@ function _UIText (opts)
           this.textElement.innerHTML = this.text;
         }
 
-      this.onChanged (text);
+      this.doOnChanged (text);
     }
 
   /**
@@ -233,6 +234,11 @@ function _UIText (opts)
 
   this.keyUpHandler = function (event)
     {
+      this.checkChanges ();
+    };
+
+  this.checkChanges = function ()
+    {
       if (!this.validateChanging ())
         {
           this.inputElement.value = this.prevText;
@@ -241,7 +247,7 @@ function _UIText (opts)
         {
           var newText = this.inputElement.value;
           this.text = this.prevText = newText;
-          this.onChanged (newText);
+          this.doOnChanged (newText);
         }
 
       if (this.autoexpand)
@@ -256,7 +262,16 @@ function _UIText (opts)
   this.validateChanging = function ()
     {
       return true;
-    }
+    };
+
+  /**
+   * CORE-side handler of onChanged event
+   */
+  this.doOnChanged = function (newText)
+    {
+      this.onChanged (newText);
+      this.updateBinding (newText);
+    };
 
   /***
    * Event stubs

@@ -44,8 +44,6 @@ function _UIAbstractList ()
     {
       var result = UIContainer.prototype.doBuild.call (this);
 
-      //$(result).click (function () {alert (1)});
-
       return result;
     };
 
@@ -128,7 +126,24 @@ function _UIAbstractList ()
       this.itemsDom = null;
 
       UIContainer.prototype.destroy.call (this);
-    }
+    };
+
+  this.getBindingValue = function ()
+    {
+      var item = this.get (this.active);
+
+      if (item)
+        {
+          if (!isUnknown (item['tag']))
+            {
+              return item['tag'];
+            }
+
+          return item;
+        }
+
+      return '';
+    };
 }
 
 /***

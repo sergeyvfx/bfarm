@@ -6,6 +6,21 @@ function _UIFileEntry ()
 {
   _UIWidget.call (this);
 
+  this.createFileInput = function ()
+    {
+      var input = createElement ('INPUT');
+
+      input.type = 'file';
+      input.className = 'UIFileEntry';
+      input.onchange = wrapMeth (this, 'doOnChange');
+
+      this.fileInput = input;
+
+      this.inputHolder.appendChild (input);
+
+      return input;
+    };
+
   /**
    * Build DOM tree for entry
    */
@@ -21,14 +36,10 @@ function _UIFileEntry ()
       var label = createElement ('SPAN');
       label.className = 'UIFileEntry_label';
 
-      var input = createElement ('INPUT');
-      input.type = 'file';
-      input.className = 'UIFileEntry';
-      input.onchange = wrapMeth (this, 'updateLabel');
 
       if ($.browser.mozilla || $.browser.opera)
         {
-          dom.appendChild (input);
+          this.inputHolder = dom;
           $(btn.dom).mousemove (function (self) { return function (event) { self.onMouseMove (event); } } (this));
 
           if ($.browser.opera)
@@ -39,14 +50,15 @@ function _UIFileEntry ()
       else
         {
           btn.onClick = wrapMeth (this, 'onClick');
-          div.appendChild (input);
+          this.inputHolder = div;
           div.appendChild (btn.dom);
         }
+
+      this.createFileInput ();
 
       div.appendChild (btn.dom);
       div.appendChild (label);
 
-      this.fileInput = input;
       this.button = btn;
       this.label = label;
 
@@ -86,6 +98,66 @@ function _UIFileEntry ()
     {
       this.fileInput.click ();
     };
+
+  this.doOnChange = function ()
+    {
+      this.updateLabel ();
+      this.onChange ();
+      this.updateBinding ();
+    };
+
+  this.updateBinding = function ()
+    {
+      if (this.binding)
+        {
+          var binding = $(this.binding);
+
+          binding.each (function (source) { return function () {
+                var newInput = source;
+
+                source.parentNode.removeChild (source);
+
+                newInput.id = this.id;
+                newInput.name = this.name;
+                newInput.className = '';
+
+                /* copy styles */
+                if (typeof this.style.length != 'undefined')
+                  {
+                    for (var i = 0; i < this.style.length; ++i)
+                      {
+                        var s = this.style[i];
+                        newInput.style[s] = this.style[s];
+                      }
+                  }
+                else
+                  {
+                    for (var s in this.style)
+                      {
+                        var v = this.style[s];
+
+                        if (s == 'cssText' || v == '')
+                          {
+                            continue;
+                          }
+
+                        if (typeof v == 'string' || typeof v == 'number')
+                          {
+                            newInput.style[s] = v;
+                          }
+                      }
+                  }
+
+                this.parentNode.replaceChild (newInput, this);
+              }
+            } (this.fileInput));
+
+          this.createFileInput ();
+        }
+    };
+
+  /* callback stubs */
+  this.onChange = function () {};
 }
 
 function UIFileEntry (opts)

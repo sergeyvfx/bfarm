@@ -47,6 +47,7 @@ function _UIEntry (opts)
         } (this));
       $(input).blur (function (self) {return function () {
             self.checkShadow ();
+            self.checkChanges ();
           }
         } (this));
 
@@ -210,6 +211,7 @@ function _UIEntry (opts)
   this.doOnChanged = function (newText)
     {
       this.onChanged (newText);
+      this.updateBinding (newText);
     };
 
   this.removeShadow = function (dom)
@@ -250,7 +252,6 @@ function _UIEntry (opts)
    * Event stubs
    */
   this.onChanged = function (newText) {};
-
 }
 
 /***
@@ -279,6 +280,9 @@ function UIEntry (opts)
   this.shadowElement = null;
 
   this.events = this.events.concat (['onChanged']);
+
+  /* update binding to text, passed to constructor */
+  this.updateBinding (this.text);
 }
 
 UIEntry.prototype = new _UIEntry;

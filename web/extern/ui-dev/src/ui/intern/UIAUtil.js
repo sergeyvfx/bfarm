@@ -159,6 +159,28 @@ function _UIUtil ()
           return middleClass;
         }
     };
+
+  this.findHandler = function (path)
+    {
+      var path = path.split ('.');
+      var cur = window;
+
+      for (var i = 0; i < path.length; ++i)
+        {
+          if (cur[path[i]])
+            {
+              cur = cur[path[i]];
+            }
+          else
+            {
+              cur = null;
+            }
+        }
+
+      handler = cur != window ? cur : null;
+
+      return handler;
+    };
 }
 
 function UIUtil ()
