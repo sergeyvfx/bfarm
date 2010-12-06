@@ -44,7 +44,16 @@
         </tr>
         <tr>
           <td>
-            <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data"></form>
+            <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data">
+              <div class="formBindings1">
+                <input name="title" id="jobTitle">
+                <input name="type" id="jobType">
+                <input name="start-frame" id="jobStartFrame">
+                <input name="end-frame" id="jobEndFrame">
+                <input name="framenr" id="jobFrameNumber">
+                <input type="file" name="blenfile" id="jobBlenfile">
+              </div>
+            </form>
           </td>
         </tr>
       </table>

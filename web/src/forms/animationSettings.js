@@ -13,7 +13,7 @@
                     "cellStyles": [[{"width": 40}]],
                     "childs": [
                          {"class": "Label", "text": "from"},
-                         {"class": "SpinButton", "min": -32768, "max": 32768}
+                         {"class": "SpinButton", "min": -32768, "max": 32768, "binding": "#jobStartFrame"}
                        ]
                   },
                   {
@@ -22,7 +22,7 @@
                     "cellStyles": [[{"width": 40}]],
                     "childs": [
                         {"class": "Label", "text": "to"},
-                        {"class": "SpinButton", "min": -32768, "max": 32768}
+                        {"class": "SpinButton", "min": -32768, "max": 32768, "binding": "#jobEndFrame"}
                       ]
                   }
                 ]

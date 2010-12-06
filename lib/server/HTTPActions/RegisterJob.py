@@ -43,6 +43,10 @@ def execute(httpRequest):
     render_server = server.Server().getRenderServer()
     job = {'type': httpRequest.POST['type']}
 
+    if httpRequest.POST.get('title'):
+        # XXX: string escape would necessery in the future
+        job['title'] = httpRequest.POST['title']
+
     if httpRequest.parts.get('blenfile'):
         part = httpRequest.parts['blenfile'][0]
         filename = part['filename']

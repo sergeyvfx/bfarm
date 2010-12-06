@@ -11,11 +11,13 @@
       "cellStyles": [[{"width": 150}], [], [{"colspan": 2}], [], [{"colspan": 2}]],
       "childs": [
         {"class": "Label", "text": "Title"},
-        {"class": "Entry"},
+        {"class": "Entry", "binding": "#jobTitle"},
         {"class": "Label", "text": "Type"},
         {"class": "ComboBox",
-         "items": ["Animation", "Still"],
-         "events": {"onItemSelected": {"handler": "jobs.register.onTypeChanged"}}
+         "items": [{"title": "Animation", "tag": "anim", "toString": "field:title"},
+                   {"title": "Still", "tag": "still", "toString": "field:title"}],
+         "events": {"onItemSelected": {"handler": "jobs.register.onTypeChanged"}},
+         "binding": "#jobType"
         },
         {"class": "Panel",
          "withBorder": false,
@@ -32,7 +34,7 @@
                    ]
         },
         {"class": "Label", "text": "File"},
-        {"class": "FileEntry"},
+        {"class": "FileEntry", "binding": "#jobBlenfile"},
         {"class": "Button",
          "title": "Register",
          "image": "/pics/buttons/add.gif",

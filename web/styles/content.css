@@ -176,3 +176,8 @@ TABLE.data TR:hover > TD {
 TABLE.spacing TR TD {
   padding: 4px;
 }
+
+/* forms */
+FORM DIV.formBindings {
+  display: none;
+}

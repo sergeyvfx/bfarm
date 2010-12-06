@@ -3,6 +3,6 @@
  "cellStyles": [[{"width": 150}, {"padding": [0, 0, 0, 4]}]],
  "childs": [
              {"class": "Label", "text": "Frame number"},
-             {"class": "SpinButton"}
+             {"class": "SpinButton", "binding": "#framenr"}
           ]
 }
