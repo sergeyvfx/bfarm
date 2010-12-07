@@ -109,14 +109,15 @@ def parse_header(line):
     return key, pdict
 
 
-def parse_headers(fp):
+def parse_headers(fp, memfile_max):
     """
     Parses only RFC2822 headers from a file pointer.
     """
 
     headers = []
+    memfile_len = 0
     while True:
-        line = fp.readline()
+        line = fp.readline(memfile_max)
 
         if type(line) is str:
             line = bytes(line)
@@ -125,6 +126,11 @@ def parse_headers(fp):
 
         if line in (b'\r\n', b'\n', b''):
             break
+
+        memfile_len += len(line)
+
+        if memfile_len > memfile_max:
+            raise Exception('HTTP header is too long')
 
     hstring = b''.join(headers).decode('iso-8859-1')
 
@@ -173,7 +179,7 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
         data = None
         if terminator:
             # At start of next part.  Read headers first.
-            headers = parse_headers(fp)
+            headers = parse_headers(fp, memfile_max)
             clength = headers.get('content-length')
             if clength:
                 try:
