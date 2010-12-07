@@ -131,31 +131,6 @@ def parse_headers(fp):
     return email.parser.Parser().parsestr(str(hstring))
 
 
-def _read_line(fp, memfile_max):
-    """
-    Read file stream until eoln or max memory would be used
-    """
-
-    result = b''
-    nbytes = memfile_max
-
-    while nbytes > 0:
-        byte = fp.read(1)
-
-        if type(byte) == str:
-            byte = bytes(byte)
-
-        if byte is None or byte == b'':
-            break
-
-        result = result + byte
-
-        if byte == b"\n":
-            break
-
-    return result
-
-
 def _is_termline(line, terminator):
     """
     Check if line is a terminator
@@ -214,7 +189,7 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
         # Read lines until end of part.
         part_fp = TemporaryFile(mode='w+b')
         while 1:
-            line = _read_line(fp, memfile_max)
+            line = fp.readline(memfile_max)
 
             if line == b'':
                 terminator = lastpart  # End outer loop
@@ -230,7 +205,7 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
 
             part_fp.write(line)
             while not line.endswith(b"\n"):
-                line = _read_line(fp, memfile_max)
+                line = fp.readline(memfile_max)
 
                 if line == b'':
                     break
