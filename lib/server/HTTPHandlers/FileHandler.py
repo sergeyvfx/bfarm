@@ -104,6 +104,7 @@ def send_file(httpRequest, fname):
 
             if httpRequest.headers.get('if-modified-since') == mtime:
                 httpRequest.send_response(304, 'Not modified')
+                httpRequest.end_headers()
             else:
                 content_len = str(fs[stat.ST_SIZE])
                 httpRequest.send_response(200)

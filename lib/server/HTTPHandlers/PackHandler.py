@@ -70,6 +70,7 @@ class _PackHandlers(Singleton):
         stamp_str = httpRequest.date_time_string(stamp)
         if httpRequest.headers.get('if-modified-since') == stamp_str:
             httpRequest.send_response(304, 'Not modified')
+            httpRequest.end_headers()
             return
 
         httpRequest.send_response(200)
@@ -109,17 +110,36 @@ class _PackHandlers(Singleton):
         site_root = httpRequest.server.getSiteRoot()
         fpath = os.path.join(site_root, 'extern/ui-dev/')
 
+        stamp = None
+        for root, dirs, files in os.walk(fpath):
+            for f in files:
+                if f.endswith('.css'):
+                    fname = os.path.join(root, f)
+                    fs = os.stat(fname)
+                    if fs[stat.ST_MTIME] > stamp:
+                        stamp = fs[stat.ST_MTIME]
+
+        stamp_str = httpRequest.date_time_string(stamp)
+        if httpRequest.headers.get('if-modified-since') == stamp_str:
+            httpRequest.send_response(304, 'Not modified')
+            httpRequest.end_headers()
+            return
+
         httpRequest.send_response(200)
         httpRequest.send_header('Content-type', 'text/css')
-        httpRequest.end_headers()
+        httpRequest.send_header('Last-Modified', stamp_str)
 
+        data = ''
         for root, dirs, files in os.walk(fpath):
             for f in files:
                 if f.endswith('.css'):
                     fname = os.path.join(root, f)
                     fname = fname.replace(site_root, '')
-                    imp = "@import url(\"{0}\");\n" . format(fname)
-                    httpRequest.wfile.write(imp.encode())
+                    data += "@import url(\"{0}\");\n" . format(fname)
+
+        httpRequest.send_header('Content-Length', len(data))
+        httpRequest.end_headers()
+        httpRequest.wfile.write(data.encode())
 
     def initInstance(self):
         """
