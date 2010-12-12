@@ -29,6 +29,8 @@
 
 import os
 import shutil
+import sys
+import stat
 
 try:
     # Python 3.0 and newer
@@ -53,9 +55,27 @@ class _PackHandlers(Singleton):
 
         site_root = httpRequest.server.getSiteRoot()
         fpath = os.path.join(site_root, fpath[1:])
+        content_len = 0
+
+        stamp = None
+        for root, dirs, files in os.walk(fpath):
+            for f in files:
+                if f.endswith(ext):
+                    fname = os.path.join(root, f)
+                    fs = os.stat(fname)
+                    content_len += fs[stat.ST_SIZE]
+                    if fs[stat.ST_MTIME] > stamp:
+                        stamp = fs[stat.ST_MTIME]
+
+        stamp_str = httpRequest.date_time_string(stamp)
+        if httpRequest.headers.get('if-modified-since') == stamp_str:
+            httpRequest.send_response(304, 'Not modified')
+            return
 
         httpRequest.send_response(200)
         httpRequest.send_header('Content-type', ctype)
+        httpRequest.send_header('Last-Modified', stamp_str)
+        httpRequest.send_header('Content-Length', content_len)
         httpRequest.end_headers()
 
         for root, dirs, files in os.walk(fpath):

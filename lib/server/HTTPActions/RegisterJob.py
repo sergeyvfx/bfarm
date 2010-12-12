@@ -38,7 +38,7 @@ def execute(httpRequest):
     """
 
     if httpRequest.POST.get('type') is None:
-      return
+        return
 
     render_server = server.Server().getRenderServer()
     job = {'type': httpRequest.POST['type']}

@@ -58,9 +58,13 @@ except ImportError:
         def unquote(cls, *args, **kwargs):
             return urllib.unquote(*args, **kwargs)
 
+        def quote(cls, *args, **kwargs):
+            return urllib.quote(*args, **kwargs)
+
         splitquery = classmethod(splitquery)
         parse_qs = classmethod(parse_qs)
         unquote = classmethod(unquote)
+        quote = classmethod(quote)
 
     setattr(urllib, 'parse', parse)
 

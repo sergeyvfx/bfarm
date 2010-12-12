@@ -102,11 +102,15 @@ def send_file(httpRequest, fname):
             fs = os.fstat(handle.fileno())
             mtime = httpRequest.date_time_string(fs[stat.ST_MTIME])
 
-            httpRequest.send_response(200)
-            httpRequest.send_header('Content-type', ctype)
-            httpRequest.send_header('Content-Length', str(fs[stat.ST_SIZE]))
-            httpRequest.send_header('Last-Modified', mtime)
-            httpRequest.end_headers()
+            if httpRequest.headers.get('if-modified-since') == mtime:
+                httpRequest.send_response(304, 'Not modified')
+            else:
+                content_len = str(fs[stat.ST_SIZE])
+                httpRequest.send_response(200)
+                httpRequest.send_header('Content-type', ctype)
+                httpRequest.send_header('Content-Length', content_len)
+                httpRequest.send_header('Last-Modified', mtime)
+                httpRequest.end_headers()
 
             shutil.copyfileobj(handle, httpRequest.wfile)
     except IOError as e:
