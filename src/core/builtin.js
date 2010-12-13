@@ -124,7 +124,7 @@ function wrap (proc, args)
 function wrapMeth (obj, proc, args)
 {
   return function (obj, proc, args) { return function () {
-        obj[proc] (args);
+        return obj[proc] (args);
       };
     } (obj, proc, args);
 }
