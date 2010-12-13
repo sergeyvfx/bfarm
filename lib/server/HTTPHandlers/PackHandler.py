@@ -64,7 +64,7 @@ class _PackHandlers(Singleton):
                     fname = os.path.join(root, f)
                     fs = os.stat(fname)
                     content_len += fs[stat.ST_SIZE]
-                    if fs[stat.ST_MTIME] > stamp:
+                    if stamp is None or  fs[stat.ST_MTIME] > stamp:
                         stamp = fs[stat.ST_MTIME]
 
         stamp_str = httpRequest.date_time_string(stamp)
@@ -116,7 +116,7 @@ class _PackHandlers(Singleton):
                 if f.endswith('.css'):
                     fname = os.path.join(root, f)
                     fs = os.stat(fname)
-                    if fs[stat.ST_MTIME] > stamp:
+                    if stamp is None or fs[stat.ST_MTIME] > stamp:
                         stamp = fs[stat.ST_MTIME]
 
         stamp_str = httpRequest.date_time_string(stamp)
