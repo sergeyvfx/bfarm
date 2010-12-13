@@ -141,25 +141,16 @@ def get_icon(fname):
     return icon
 
 
-def list_directory(httpRequest, path):
+def send_listing(httpRequest, path, listing, parent=None):
     """
-    Helper to produce a directory listing (absent index.html)
+    Send prepared listing to client
     """
-
-    try:
-        list = os.listdir(path)
-    except os.error:
-        httpRequest.send_error(403, 'Prermittion denied')
-        return None
 
     serv = httpRequest.server_version
 
-    list.sort(key=lambda a: a.lower())
     r = []
 
-    prefix = urllib.parse.splitquery(httpRequest.path)[0]
-
-    displaypath = cgi.escape(urllib.parse.unquote(prefix))
+    displaypath = cgi.escape(path)
     r.append('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
     r.append("<html>\n<title>Directory listing for {0}</title>\n" .
         format(displaypath))
@@ -167,33 +158,32 @@ def list_directory(httpRequest, path):
     r.append("<table><tr><th></th><th>Name</th><th>Last modified</th>" +
              "<th>Size</th></tr><tr><th colspan=\"5\"><hr></th></tr>\n")
 
-    parent = os.path.dirname(prefix[:-1])
-    if parent != '':
+    if parent is not None:
         r.append("<tr><td valign=\"top\">" +
                  "<img src=\"/pics/icons/back.gif\" alt=\"[DIR]\"></td>" +
                  "<td><a href=\"{0}\">Parent Directory</a></td>" .
                      format(cgi.escape(parent)) +
                  "<td>&nbsp;</td><td align=\"right\">  - </td></tr>\n")
 
-    for name in list:
-        fullname = os.path.join(path, name)
-        displayname = linkname = name
-        st = os.stat(fullname)
-        size = st[stat.ST_SIZE]
-        unix_time = st[stat.ST_MTIME]
-        mtime = time.strftime("%d-%b-%Y %H:%M", time.localtime(unix_time))
+    for item in listing:
+        name = item['name']
+        fullname = path + '/' + item['name']
+        displayname = linkname = item['name']
+        localtime = time.localtime(item['unix_time'])
+        mtime = time.strftime("%d-%b-%Y %H:%M", localtime)
         icon = get_icon(fullname)
+        size = item['size']
 
         # Append / for directories or @ for symbolic links
-        if os.path.isdir(fullname):
+        if item.get('is_dir'):
             displayname = name + '/'
             linkname = name + '/'
             size = '-'
             icon = 'dir'
 
-        if os.path.islink(fullname):
-            displayname = name + '@'
+        if item.get('is_link'):
             # Note: a link to a directory displays with @ and links with /
+            displayname = name + '@'
 
         r.append(('<tr><td><img src="/pics/icons/{0}.gif"></td>' +
                   '<td><a href="{1}">{2}</a></td><td align="right">{3} </td>' +
@@ -212,6 +202,44 @@ def list_directory(httpRequest, path):
     httpRequest.end_headers()
 
     httpRequest.wfile.write(encoded)
+
+
+def list_directory(httpRequest, path):
+    """
+    Helper to produce a directory listing (absent index.html)
+    """
+
+    try:
+        list = os.listdir(path)
+    except os.error:
+        httpRequest.send_error(403, 'Prermittion denied')
+        return None
+
+    serv = httpRequest.server_version
+
+    list.sort(key=lambda a: a.lower())
+    r = []
+
+    prefix = urllib.parse.splitquery(httpRequest.path)[0]
+    parent = os.path.dirname(prefix[:-1])
+    if parent == '':
+        parent = None
+
+    listing = []
+    for name in list:
+        fullname = os.path.join(path, name)
+
+        st = os.stat(fullname)
+
+        item = {'name': name,
+                'unix_time': st[stat.ST_MTIME],
+                'size': st[stat.ST_SIZE],
+                'is_dir': os.path.isdir(fullname),
+                'is_link': os.path.islink(fullname)}
+
+        listing.append(item)
+
+    send_listing(httpRequest, path, listing, parent)
 
 
 def execute(httpRequest):

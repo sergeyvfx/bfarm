@@ -239,6 +239,13 @@ class RenderJob:
         self._makeDir(self.storage_fpath)
         self._makeDir(out_fpath)
 
+    def getStoragePath(self):
+        """
+        Get path to storage directory
+        """
+
+        return self.storage_fpath
+
     def requestTask(self):
         """
         Request task for render node

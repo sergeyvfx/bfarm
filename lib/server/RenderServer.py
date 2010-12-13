@@ -188,7 +188,7 @@ class RenderServer(SignalThread):
         """
 
         with self.jobs_lock:
-            job = self.jobs_hash[jobUUID]
+            job = self.jobs_hash.get(jobUUID)
 
         return job
 

@@ -81,6 +81,7 @@ from config import Config
 from server.HTTPHandlers import FileHandler
 from server.HTTPHandlers import AjaxHandler
 from server.HTTPHandlers import PackHandler
+from server.HTTPHandlers import RendersHandler
 from server.HTTPActions import RegisterJob
 from server.Multipart import parseMultipart
 import Version
@@ -118,12 +119,21 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         """
 
         self.parse()
+        path = self.path[1:].split('/')
 
-        if self.path.startswith('/ajax'):
-            AjaxHandler.execute(self)
-        elif self.path.startswith('/pack'):
-            PackHandler.execute(self)
-        else:
+        ok = False
+        if len(path):
+            if path[0] == 'ajax':
+                AjaxHandler.execute(self)
+                ok = True
+            elif path[0] == 'pack':
+                PackHandler.execute(self)
+                ok = True
+            elif path[0] == 'renders':
+                RendersHandler.execute(self)
+                ok = True
+
+        if not ok:
             FileHandler.execute(self)
 
     def do_POST(self):

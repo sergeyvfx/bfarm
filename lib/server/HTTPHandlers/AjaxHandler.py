@@ -120,7 +120,8 @@ def execute(httpRequest):
 
     handler = getObjectPath(_Ajaxhandlers(), path)
     if handler is not None:
-        handler(httpRequest)
-        return
+        if hasattr(handler, '__call__'):
+            handler(httpRequest)
+            return
 
     httpRequest.send_error(505, 'Internal serevr error')
