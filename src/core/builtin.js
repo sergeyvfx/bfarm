@@ -237,3 +237,8 @@ function remove(arr, object)
       arr.splice (index, 1);
     }
 }
+
+function htmlspecialchars(value)
+{
+  return $('<div/>').text(value).html();
+}

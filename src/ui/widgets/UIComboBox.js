@@ -12,14 +12,20 @@ function _UIComboBox ()
   this.getTextToDisplay = function ()
     {
       var index = this.list.getActiveIndex ();
-      var prefix = this.title ? this.title + ': ' : '';
+      var prefix = this.title ? htmlspecialchars (this.title) + ': ' : '';
 
       if (index >= 0)
         {
           var item = this.list.get (index);
+
+          if (item.image)
+            {
+              prefix += '<img src="' + htmlspecialchars (item.image) + '">';
+            }
+
           if (!isUnknown (item))
             {
-              return prefix + item.toString ();
+              return prefix + htmlspecialchars (item.toString ());
             }
         }
 
@@ -203,7 +209,8 @@ function _UIComboBox ()
           return;
         }
 
-      this.textHolder.innerHTML = this.getTextToDisplay ();
+      var text = this.getTextToDisplay ();
+      this.textHolder.innerHTML = text;
     }
 
   /**

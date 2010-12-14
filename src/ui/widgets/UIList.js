@@ -20,7 +20,14 @@ function _UIList ()
         }
       else
         {
-          result.innerHTML = '' + child;
+          if (child.image)
+            {
+              var img = createElement ('IMG');
+              img.src = child.image;
+              result.appendChild (img);
+            }
+
+          result.appendChild (createTextNode (child));
         }
 
       this.processItemDOM (itemIndex, result);

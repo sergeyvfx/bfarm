@@ -39,6 +39,11 @@ DIV.UIListListItem {
   cursor: pointer;
 }
 
+DIV.UIListListItem IMG {
+  vertical-align: top;
+  margin-right: 8px;
+}
+
 DIV.UIListActiveListItem,
 DIV.UIListListItem:hover {
   -moz-border-radius: 6px;
