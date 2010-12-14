@@ -315,7 +315,7 @@ function UISpinButton (opts)
   UIEntry.call (this, opts);
 
   /* Current spin button value */
-  this.value = 0;
+  this.value = defVal (opts['value'], 0);
 
   /* Step amount */
   this.step = 1;
