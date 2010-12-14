@@ -30,7 +30,7 @@ function _UIFileEntry ()
 
       div.className = 'UIFileEntry';
 
-      var btn = new UIButton({'title': 'Browse', 'width': 80});
+      var btn = new UIButton({'title': 'Browse', 'width': 80, 'image': 'pics/buttons/browse.gif'});
       dom = btn.build ();
 
       var label = createElement ('SPAN');
