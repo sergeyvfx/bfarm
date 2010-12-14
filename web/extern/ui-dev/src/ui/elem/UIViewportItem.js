@@ -26,6 +26,11 @@ function _UIViewportItem ()
       this.img_d = img;
       item.appendChild (img);
 
+      if ($.browser.msie)
+        {
+          img.ondragstart = function () { return false; };
+        }
+
       /* Caption */
       var cpt = createElement ('DIV');
       cpt.className = 'UIViewportItemCaption';

@@ -77,6 +77,14 @@ DIV.UIComboBoxText {
   padding: 2px 4px 0 4px;
 }
 
+DIV.UIComboBoxText * {
+  vertical-align: top;
+}
+
+DIV.UIComboBoxText IMG {
+  margin-right: 8px;
+}
+
 DIV.UIComboBoxPupList {
   color: #fff;
 }

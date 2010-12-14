@@ -124,7 +124,7 @@ function wrap (proc, args)
 function wrapMeth (obj, proc, args)
 {
   return function (obj, proc, args) { return function () {
-        obj[proc] (args);
+        return obj[proc] (args);
       };
     } (obj, proc, args);
 }
@@ -236,4 +236,9 @@ function remove(arr, object)
     {
       arr.splice (index, 1);
     }
+}
+
+function htmlspecialchars(value)
+{
+  return $('<div/>').text(value).html();
 }

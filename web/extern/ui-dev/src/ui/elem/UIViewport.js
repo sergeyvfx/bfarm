@@ -206,6 +206,8 @@ function _UIViewport ()
     {
       var menu = this.getMenuForItem (item);
 
+      uiPopupManager.hideFromContext (this);
+
       if (menu)
         {
           var p = {'x': point['x'] + 2, 'y': point['y'] + 2}

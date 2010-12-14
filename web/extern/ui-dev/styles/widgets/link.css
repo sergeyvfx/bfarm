@@ -1,0 +1,14 @@
+DIV.UILink A,
+DIV.UILink A:link,
+DIV.UILink A:visited {
+  color: #0000cc;
+}
+
+DIV.UILink A:hover {
+  text-decoration: none;
+}
+
+DIV.UILink IMG {
+  vertical-align: middle;
+  margin-right: 8px;
+}
