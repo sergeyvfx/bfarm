@@ -16,8 +16,6 @@ function _UIFileEntry ()
 
       this.fileInput = input;
 
-      this.inputHolder.appendChild (input);
-
       return input;
     };
 
@@ -36,6 +34,7 @@ function _UIFileEntry ()
       var label = createElement ('SPAN');
       label.className = 'UIFileEntry_label';
 
+      this.createFileInput ();
 
       if ($.browser.mozilla || $.browser.opera)
         {
@@ -44,7 +43,7 @@ function _UIFileEntry ()
 
           if ($.browser.opera)
             {
-              input.onmousedown = function (btn) { return function (event) { btn.doOnPress (); stopEvent (event); } } (btn);
+              this.fileInput.onmousedown = function (btn) { return function (event) { btn.doOnPress (); stopEvent (event); } } (btn);
             }
         }
       else
@@ -54,7 +53,7 @@ function _UIFileEntry ()
           div.appendChild (btn.dom);
         }
 
-      this.createFileInput ();
+      this.inputHolder.appendChild (this.fileInput);
 
       div.appendChild (btn.dom);
       div.appendChild (label);
