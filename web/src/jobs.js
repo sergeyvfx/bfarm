@@ -14,14 +14,21 @@ var jobs = new function () {
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
 
+  function browseRenders(job) {
+    window.open('/renders/job-' + job['uuid']);
+  };
+
   function createJobBox(job) {
     /* XXX: replace with form template */
     var box = new UICollapseBox({'title': job.title,
                                  'collapsed': true,
                                  'animated': true});
 
-    var grid = new UIGrid({'cols': 2, 'rows': attrs.length});
+    var grid = new UIGrid({'cols': 2,
+                           'rows': attrs.length + 1,
+                           'padding': 2});
     grid.setCellStyle(0, 0, {'width': 120});
+    grid.setCellStyle(attrs.length, 0, {'colspan': 2});
 
     for(var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
@@ -29,23 +36,22 @@ var jobs = new function () {
       grid.add (new UILabel({'text': job[attr['field']]}));
     }
 
+    grid.add (new UIButton({'title': 'Browse render files',
+                            'image': '/pics/buttons/browse.gif',
+                            'click': function (job) { return function () {
+                                           browseRenders (job);
+                                         };
+                                       } (job)}));
+
     box.add(grid);
 
     return box;
   };
 
-  function createJobsCb(data) {
-    var jobsList = $('#jobsList');
-
-    if(data.length == 0) {
-      /* XXX: quite hacky */
-      jobsList.parent().css('padding', '0');
-      return;
-    }
-
-    var jobsGroup = new UIGroupBox({'title': 'Running jobs'});
+  function createJobsDom(where, title, data, refresh_cb) {
+    var jobsGroup = new UIGroupBox({'title': title});
     var grid = new UIGrid({'padding': 2,
-                           'rows': data.length})
+                           'rows': data.length + 1})
 
     for(var i = 0; i < data.length; i++) {
       var box = createJobBox(data[i]);
@@ -53,16 +59,40 @@ var jobs = new function () {
       grid.add(box);
     }
 
+    grid.add(new UIButton({'title': 'Refresh list',
+                           'image': '/pics/buttons/refresh.gif',
+                           'click': function () { window.setTimeout (refresh_cb, 10); }}));
+
     jobsGroup.add(grid);
-    jobsList.append(jobsGroup.build());
+    where.empty();
+    where.append(jobsGroup.build());
   };
 
-  function createJobs() {
+  function reloadJobs() {
     var jobsList = $('#jobsList');
 
     if (jobsList.length) {
-      $.getJSON('/ajax/get/jobs', createJobsCb);
+      $.getJSON('/ajax/get/jobs',
+                function (data) {
+                    createJobsDom($('#jobsList'), 'Running jobs', data, reloadJobs);
+                });
     }
+  };
+
+  function reloadCompletedJobs() {
+    var completedJobsList = $('#completedJobsList');
+
+    if (completedJobsList.length) {
+      $.getJSON('/ajax/get/completedJobs',
+                function (data) {
+                    createJobsDom($('#completedJobsList'), 'Completed jobs', data, reloadCompletedJobs);
+                });
+    }
+  };
+
+  function createJobs() {
+    reloadJobs ();
+    reloadCompletedJobs ();
   };
 
   function createJobRegisterForm() {

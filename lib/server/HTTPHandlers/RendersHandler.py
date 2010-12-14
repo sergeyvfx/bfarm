@@ -49,9 +49,13 @@ def jobs_listing(httpRequest):
 
     render_server = server.Server().getRenderServer()
     jobs = render_server.getJobs()
+    completed_jobs = render_server.getCompletedJobs()
+
+    all_jobs = jobs + completed_jobs
+    all_jobs.sort(key=lambda a: a.getUUID())
 
     listing = []
-    for job in jobs:
+    for job in all_jobs:
         item = {'name': 'job-' + job.getUUID(),
                 'is_dir': True,
                 'unix_time': job.getTime(),
@@ -78,25 +82,25 @@ def frames_listing(httpRequest, jobName):
 
     path = os.path.join(job.getStoragePath(), 'out')
 
-    try:
-        list = os.listdir(path)
-    except os.error:
-        httpRequest.send_error(403, 'Prermittion denied')
-        return None
+    files = job.getRenderFiles()
 
-    list.sort(key=lambda a: a.lower())
+    files.sort(key=lambda a: a.lower())
 
     listing = []
-    for name in list:
+    for name in files:
         fullname = os.path.join(path, name)
 
-        st = os.stat(fullname)
+        if os.path.isfile(fullname):
+            st = os.stat(fullname)
+            size = st[stat.ST_SIZE]
+            unix_time = st[stat.ST_MTIME]
+        else:
+            size = 0
+            unix_time = 0
 
         item = {'name': name,
-                'unix_time': st[stat.ST_MTIME],
-                'size': st[stat.ST_SIZE],
-                'is_dir': os.path.isdir(fullname),
-                'is_link': os.path.islink(fullname)}
+                'unix_time': unix_time,
+                'size': size}
 
         listing.append(item)
 

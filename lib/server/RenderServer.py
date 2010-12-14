@@ -72,6 +72,9 @@ class RenderServer(SignalThread):
         self.jobs = []
         self.jobs_hash = {}
 
+        # list of fully completed jobs
+        self.completed_jobs = []
+
         self.prepareStorage()
 
     def requestStop(self):
@@ -174,11 +177,21 @@ class RenderServer(SignalThread):
 
     def getJobs(self):
         """
-        Get list of all jobs
+        Get list of all running jobs
         """
 
         with self.jobs_lock:
             jobs = self.jobs[:]
+
+        return jobs
+
+    def getCompletedJobs(self):
+        """
+        Get list of all completed jobs
+        """
+
+        with self.jobs_lock:
+            jobs = self.completed_jobs[:]
 
         return jobs
 
@@ -250,8 +263,9 @@ class RenderServer(SignalThread):
 
         if job.taskComplete(task_nr):
             if job.isCompleted():
-                self.jobs.remove(job)
-                del self.jobs_hash[job.getUUID()]
+                with self.jobs_lock:
+                    self.jobs.remove(job)
+                    self.completed_jobs.append(job)
             return True
         else:
             return False

@@ -83,14 +83,11 @@ class _Ajaxhandlers(Singleton):
 
             _send_json(httpRequest, enc)
 
-        def jobs(self, httpRequest):
+        def _send_jobs(self, httpRequest, jobs):
             """
-            Get list of all jobs
+            Send list of specified jobs
             """
 
-            render_server = server.Server().getRenderServer()
-
-            jobs = render_server.getJobs()
             enc = []
             for job in jobs:
                 enc.append({'uuid': job.getUUID(),
@@ -99,6 +96,24 @@ class _Ajaxhandlers(Singleton):
                             'title': job.getTitle()})
 
             _send_json(httpRequest, enc)
+
+        def jobs(self, httpRequest):
+            """
+            Get list of all running jobs
+            """
+
+            render_server = server.Server().getRenderServer()
+            jobs = render_server.getJobs()
+            self._send_jobs(httpRequest, jobs)
+
+        def completedJobs(self, httpRequest):
+            """
+            Get list of all completed jobs
+            """
+
+            render_server = server.Server().getRenderServer()
+            jobs = render_server.getCompletedJobs()
+            self._send_jobs(httpRequest, jobs)
 
     def initInstance(self):
         """

@@ -14,8 +14,8 @@
         {"class": "Entry", "binding": "#jobTitle"},
         {"class": "Label", "text": "Type"},
         {"class": "ComboBox",
-         "items": [{"title": "Animation", "tag": "anim", "toString": "field:title"},
-                   {"title": "Still", "tag": "still", "toString": "field:title"}],
+         "items": [{"title": "Animation", "tag": "anim", "toString": "field:title", "image": "/pics/buttons/animation.gif"},
+                   {"title": "Still", "tag": "still", "toString": "field:title", "image": "/pics/buttons/image.gif"}],
          "events": {"onItemSelected": {"handler": "jobs.register.onTypeChanged"}},
          "binding": "#jobType"
         },

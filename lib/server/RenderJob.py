@@ -108,6 +108,9 @@ class RenderJob:
 
         RenderJob.total_jobs += 1
 
+        self.render_files = []  # List of fully rendered files
+        self.render_lock = threading.Lock()
+
     def getUUID(self):
         """
         Get UUID of job
@@ -205,6 +208,11 @@ class RenderJob:
         if chunk_nr == -1:
             Logger.log('Job {0}: rendered image {1} fully received' .
                 format(self.uuid, fname))
+
+            # Put file to list of full-rendered images
+            with self.render_lock:
+                self.render_files.append(fname)
+
             return True
 
         fpath = os.path.join(self.storage_fpath, 'out', fname)
@@ -326,3 +334,13 @@ class RenderJob:
         """
 
         return self.title
+
+    def getRenderFiles(self):
+        """
+        Get list of fully rendered files
+        """
+
+        with self.render_lock:
+            result = self.render_files[:]
+
+        return result
