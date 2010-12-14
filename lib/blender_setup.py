@@ -165,9 +165,16 @@ def setupScenes(opts):
         rd.use_overwrite = False
 
         # stamp
+        # all stamps for debug
         rd.use_stamp = opts.use_stamp
         rd.use_stamp_note = True
         rd.use_stamp_render_time = True
+        rd.use_stamp_filename = True
+        rd.use_stamp_date = True
+        rd.use_stamp_scene = True
+        rd.use_stamp_camera = True
+        rd.use_stamp_frame = True
+        rd.use_stamp_time = True
 
         rd.stamp_note_text = 'rev:{0}, node:{1}, ip:{2}, task:{3}' . \
             format(bpy.app.build_revision, opts.node_id,
@@ -219,8 +226,14 @@ def main():
     All initialization stuff here
     """
 
-    i = sys.argv.index('--')
-    argv = sys.argv[i + 1:]
+    try:
+        i = sys.argv.index('--')
+        argv = sys.argv[i + 1:]
+    except ValueError:
+        argv = sys.argv[:]
+
+    # XXX: for in-blender debug only
+    # argv = ['--node-id', '0', '--output-path', '/tmp', '--use-stamp']
 
     (opts, args) = parseOptions(argv)
 
