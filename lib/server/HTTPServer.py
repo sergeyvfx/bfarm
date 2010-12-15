@@ -143,7 +143,7 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.parse()
 
-        if self.GET.get('action') is not None:
+        if 'action' in self.GET:
             action = self.GET['action']
             handler = self._action_handlers.get(action)
             if handler is not None:
@@ -151,7 +151,7 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 if proc is not None:
                     proc(self)
 
-        if self.headers.get('Referer') is not None:
+        if 'Referer' in self.headers:
             self.send_response(301)
             self.send_header('Location', self.headers['Referer'])
             self.end_headers()
@@ -161,9 +161,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         Parse content
         """
 
-        cl = self.headers.get('Content-Length')
-        if cl is not None:
-            self.content_length = int(cl)
+        if 'Content-Length' in self.headers:
+            self.content_length = int(self.headers['Content-Length'])
         else:
             self.content_length = 0
 
@@ -183,14 +182,14 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                                             memfile_max=memfile_max)
 
                 for name in self.parts:
-                    if POST.get('name') is not None:
+                    if 'name' in POST:
                         continue
 
                     all_parts = self.parts[name]
                     for x in range(len(all_parts)):
                         part = all_parts[x]
 
-                        if part.get('filename'):
+                        if 'filename' in part:
                             continue
 
                         fp = part['fp']

@@ -39,17 +39,17 @@ def execute(httpRequest):
 
     output_params = ['file_format', 'resol_x', 'resol_y', 'percentage']
 
-    if httpRequest.POST.get('type') is None:
+    if 'type' not in httpRequest.POST:
         return
 
     render_server = server.Server().getRenderServer()
     job = {'type': httpRequest.POST['type']}
 
-    if httpRequest.POST.get('title'):
+    if 'title' in httpRequest.POST:
         # XXX: string escape would necessery in the future
         job['title'] = httpRequest.POST['title']
 
-    if httpRequest.parts.get('blenfile'):
+    if 'blenfile' in httpRequest.parts:
         part = httpRequest.parts['blenfile'][0]
         filename = part['filename']
         if len(filename):
@@ -62,7 +62,7 @@ def execute(httpRequest):
         job['end-frame'] = int(httpRequest.POST['end-frame'])
 
     for x in output_params:
-        if httpRequest.POST.get(x) is not None:
+        if x in httpRequest.POST:
             val = httpRequest.POST[x]
 
             if x != 'file_format':  # XXX: hacky..
@@ -71,7 +71,7 @@ def execute(httpRequest):
             job[x] = val
 
     # XXX: implement better checking and error reporting
-    if job.get('fname') is None:
+    if 'fname' not in job:
         return
 
     render_server.registerJob(job)

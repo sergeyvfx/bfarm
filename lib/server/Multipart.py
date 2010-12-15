@@ -181,7 +181,7 @@ def parseMultipart(fp, pdict, memfile_max=1024 * 1000, len_max=0):
             # At start of next part.  Read headers first.
             headers = parse_headers(fp, memfile_max)
             clength = headers.get('content-length')
-            if clength:
+            if clength is not None:
                 try:
                     nbytes = int(clength)
                 except ValueError:
