@@ -178,6 +178,6 @@ TABLE.spacing TR TD {
 }
 
 /* forms */
-FORM DIV.formBindings {
+DIV.formBindings {
   display: none;
 }

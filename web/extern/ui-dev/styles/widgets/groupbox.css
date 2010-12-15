@@ -39,3 +39,10 @@ DIV.UINotebookTab DIV.UIGroupBoxHeader {
   background: #ddd;
 }
 
+DIV.UICollapseBox DIV.UIGroupBoxHeader {
+  background: #f6f6f6;
+}
+
+DIV.UIWindow DIV.UIGroupBoxHeader {
+  background: #c2c2c2;
+}

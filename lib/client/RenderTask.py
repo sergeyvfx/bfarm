@@ -118,9 +118,24 @@ class RenderTask(SignalThread):
         # XXX: for debug only
         args.append('--use-stamp')
 
+        if self.options.get('file_format') is not None:
+            args.append('--file-format')
+            args.append(self.options['file_format'])
+
+        if self.options.get('resol_x') is not None:
+            args.append('--resolution-x')
+            args.append(str(self.options['resol_x']))
+
+        if self.options.get('resol_y') is not None:
+            args.append('--resolution-y')
+            args.append(str(self.options['resol_y']))
+
+        if self.options.get('percentage') is not None:
+            args.append('--percentage')
+            args.append(str(self.options['percentage']))
+
         # For correct node IP detection (for stamp)
         args.append('--server-addr')
-
         args.append(proxy_addr[0] + ':' + str(proxy_addr[1]))
 
         return args

@@ -27,7 +27,7 @@ var jobs = new function () {
     var grid = new UIGrid({'cols': 2,
                            'rows': attrs.length + 1,
                            'padding': 2});
-    grid.setCellStyle(0, 0, {'width': 120});
+    grid.setCellStyle(0, 0, {'width': 70});
     grid.setCellStyle(attrs.length, 0, {'colspan': 2});
 
     for(var i = 0; i < attrs.length; i++) {
@@ -48,23 +48,26 @@ var jobs = new function () {
     return box;
   };
 
-  function createJobsDom(where, title, data, refresh_cb) {
+  function createJobsDom(where, title, data) {
+    where.empty();
+
+    if (!data.length) {
+      where.parent().css('padding', '0');
+      return;
+    } else {
+      where.parent().css('padding', '');
+    }
+
     var jobsGroup = new UIGroupBox({'title': title});
     var grid = new UIGrid({'padding': 2,
-                           'rows': data.length + 1})
+                           'rows': data.length})
 
     for(var i = 0; i < data.length; i++) {
       var box = createJobBox(data[i]);
-
       grid.add(box);
     }
 
-    grid.add(new UIButton({'title': 'Refresh list',
-                           'image': '/pics/buttons/refresh.gif',
-                           'click': function () { window.setTimeout (refresh_cb, 10); }}));
-
     jobsGroup.add(grid);
-    where.empty();
     where.append(jobsGroup.build());
   };
 
@@ -74,7 +77,7 @@ var jobs = new function () {
     if (jobsList.length) {
       $.getJSON('/ajax/get/jobs',
                 function (data) {
-                    createJobsDom($('#jobsList'), 'Running jobs', data, reloadJobs);
+                    createJobsDom($('#jobsList'), 'Running jobs', data);
                 });
     }
   };
@@ -85,38 +88,88 @@ var jobs = new function () {
     if (completedJobsList.length) {
       $.getJSON('/ajax/get/completedJobs',
                 function (data) {
-                    createJobsDom($('#completedJobsList'), 'Completed jobs', data, reloadCompletedJobs);
+                    createJobsDom($('#completedJobsList'), 'Completed jobs', data);
                 });
     }
   };
 
-  function createJobs() {
+  function reloadAllJobs() {
     reloadJobs ();
     reloadCompletedJobs ();
   };
 
-  function createJobRegisterForm() {
-    var jobRegister = $('#jobRegister');
+  function createJobs() {
+    reloadAllJobs();
+  };
 
-    if (!jobRegister.length)
-      return;
+  function createJobButtons() {
+    var jobsReload = $('#jobsButtons');
+    if (jobsReload.length) {
+      var grid = new UIGrid({"rows": 1,
+                             "cols": 2,
+                             "cellStyles": [[{"padding": [0, 2, 0, 0]}, {"padding": [0, 0, 0, 2]}]]});
 
-    form = uiCreator.create('url://src/forms/jobsRegisterForm.js');
-    jobRegister.append(form.build());
+      var reloadBtn = new UIButton({"title": "Reload jobs",
+                                    'image': '/pics/buttons/refresh.gif',
+                                    "click": reloadAllJobs});
+      grid.add(reloadBtn);
+
+      var registerBtn = new UIButton({"title": "Register job",
+                                      'image': '/pics/buttons/add.gif',
+                                      "click": jobs.register.show});
+      grid.add(registerBtn);
+
+      jobsReload.append(grid.build());
+    }
   };
 
   /* fill page with jobs information blocks */
   this.fillPage = function() {
     createJobs();
-    createJobRegisterForm();
+    createJobButtons();
   };
 
   this.register = new function() {
+    this.show = function () {
+      if (jobs.registerWnd)
+        return;
+
+      var width = 550, height = 280;
+
+      /* not very nice... */
+      var left = ($(window).width() - width) / 2;
+      var top = ($(window).height() - height) / 2 + $(window).scrollTop();
+
+      var wnd = new UIWindow({'title': 'Register job',
+                              'name': 'registerJobWnd',
+                              'width': width,
+                              'height': height,
+                              'left': left,
+                              'top': top,
+                              'resizable': false,
+                              'buttons': ['CLOSE']});
+      wnd.onClose = function() { jobs.registerWnd = null; };
+
+      var form = uiCreator.create('url://src/forms/jobsRegisterForm.js');
+      wnd.add(form);
+      wnd.show();
+
+      jobs.registerWnd = wnd;
+    };
+
+    this.hide = function () {
+      if (jobs.registerWnd) {
+        jobs.registerWnd.close ();
+        jobs.registerWnd = null;
+      }
+    };
+
     this.onTypeChanged = function (widget, userData, attrs) {
       var p = widget;
 
-      while (p && p.getName() != 'registerJobPanel')
+      while (p && p.getName() != 'registerJobWnd') {
         p = p.parent;
+      }
 
       if(p) {
         var animSettingsPanel = p.lookupWidget ('animSettingsPanel');
@@ -138,16 +191,7 @@ var jobs = new function () {
 
     this.submit = function(widget) {
       var cur = widget.dom;
-      var form = null;
-
-      while (cur) {
-        if (cur.tagName && cur.tagName.toLowerCase() == 'form') {
-          form = cur;
-          break;
-        }
-
-        cur = cur.parentNode;
-      }
+      var form = $('#jobRegister')[0];
 
       if (form) {
         form.submit();

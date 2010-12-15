@@ -106,10 +106,16 @@ class RenderJob:
         if self.title is None:
             self.title = 'Untitled'
 
-        RenderJob.total_jobs += 1
-
         self.render_files = []  # List of fully rendered files
         self.render_lock = threading.Lock()
+
+        # Output parameters
+        self.file_format = options.get('file_format')
+        self.resol_x = options.get('resol_x')
+        self.resol_y = options.get('resol_y')
+        self.percentage = options.get('percentage')
+
+        RenderJob.total_jobs += 1
 
     def getUUID(self):
         """
@@ -276,7 +282,12 @@ class RenderJob:
                                'task':    x,
                                'ntasks':  self.ntasks,
                                'type':    self.job_type,
-                               'fname':   self.fname}
+                               'fname':   self.fname,
+                               'file_format': self.file_format,
+                               'resol_x': self.resol_x,
+                               'resol_y': self.resol_y,
+                               'percentage': self.percentage
+                               }
 
                     # Job-type specified options
                     if self.job_type == 'anim':
@@ -286,7 +297,13 @@ class RenderJob:
                         # XXX: ...
                         pass
 
-                    return options
+                    # To avoid passing None
+                    new_options = {}
+                    for x in options:
+                        if options[x] is not None:
+                            new_options[x] = options[x]
+
+                    return new_options
 
             return None
 

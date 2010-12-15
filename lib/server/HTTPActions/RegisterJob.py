@@ -37,6 +37,8 @@ def execute(httpRequest):
     Execute job registration action
     """
 
+    output_params = ['file_format', 'resol_x', 'resol_y', 'percentage']
+
     if httpRequest.POST.get('type') is None:
         return
 
@@ -58,6 +60,15 @@ def execute(httpRequest):
     if job['type'] == 'anim':
         job['start-frame'] = int(httpRequest.POST['start-frame'])
         job['end-frame'] = int(httpRequest.POST['end-frame'])
+
+    for x in output_params:
+        if httpRequest.POST.get(x) is not None:
+            val = httpRequest.POST[x]
+
+            if x != 'file_format':  # XXX: hacky..
+                val = int(val)
+
+            job[x] = val
 
     # XXX: implement better checking and error reporting
     if job.get('fname') is None:
