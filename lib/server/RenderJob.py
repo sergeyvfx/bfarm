@@ -82,7 +82,7 @@ class RenderJob:
                 self.blend_name = self.fname[7:]
                 self.blend_path = os.path.join(self.storage_fpath,
                                                self.blend_name)
-                if options.get('fp'):
+                if 'fp' in options:
                     self.saveBlend(options['fp'])
                     self.blendRequired = False
                 else:
@@ -103,7 +103,7 @@ class RenderJob:
         self.task_lock = threading.Lock()
 
         self.title = options.get('title')
-        if self.title is None:
+        if self.title is None or self.title == '':
             self.title = 'Untitled'
 
         self.render_files = []  # List of fully rendered files

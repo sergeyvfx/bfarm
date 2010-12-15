@@ -118,19 +118,19 @@ class RenderTask(SignalThread):
         # XXX: for debug only
         args.append('--use-stamp')
 
-        if self.options.get('file_format') is not None:
+        if 'file_format' in self.options:
             args.append('--file-format')
             args.append(self.options['file_format'])
 
-        if self.options.get('resol_x') is not None:
+        if 'resol_x' in self.options:
             args.append('--resolution-x')
             args.append(str(self.options['resol_x']))
 
-        if self.options.get('resol_y') is not None:
+        if 'resol_y' in self.options:
             args.append('--resolution-y')
             args.append(str(self.options['resol_y']))
 
-        if self.options.get('percentage') is not None:
+        if 'percentage' in self.options:
             args.append('--percentage')
             args.append(str(self.options['percentage']))
 
