@@ -528,7 +528,7 @@ function UIWindow (opts)
     };
   } (this));
 
-  this.buttons = ['MINIMIZE', 'MAXIMIZE', 'CLOSE'];
+  this.buttons = defVal(opts['buttons'], ['MINIMIZE', 'MAXIMIZE', 'CLOSE']);
 
   /* Internal use */
   this.abortClose   = false;
