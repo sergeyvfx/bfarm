@@ -20,6 +20,9 @@ function _UIWindowManager ()
           this.background.className = 'UIModalWindowBackground';
           this.background.onclick = function (event) { stopEvent(event || window.event); }
           document.body.appendChild (this.background);
+
+          $(this.background).css ('opacity', 0);
+          $(this.background).animate ({opacity: 0.3}, 200);
         }
 
       var oldIndex = this.background.style.zIndex;
@@ -60,7 +63,7 @@ function _UIWindowManager ()
         }
       else
         {
-          removeNode (this.background);
+          $(this.background).animate ({opacity: 0}, 200, function () { removeNode (this) });
           this.background = null;
         }
     };
@@ -77,6 +80,7 @@ function _UIWindowManager ()
         {
           /* window had been minimized */
           window.dom.style.display = '';
+          $(window.dom).animate ({opacity: 1}, 200);
 
           window.onShow ();
           this.onWindowShown (window);
@@ -103,6 +107,10 @@ function _UIWindowManager ()
         }
 
       wndHolder.appendChild (wnd);
+
+      /* animated display */
+      $(wnd).css ('opacity', 0);
+      $(wnd).animate ({opacity: 1}, 200);
 
       if (window.modal)
         {
@@ -182,7 +190,8 @@ function _UIWindowManager ()
    */
   this.hideWindow = function (window)
     {
-      removeNode (window.dom);
+      $(window.dom).animate ({opacity: 0}, 200, function () { removeNode (window.dom); });
+
       window.viewport = null;
 
       window.onHide ();
@@ -293,7 +302,7 @@ function _UIWindowManager ()
   this.minimizeWindow = function (window)
     {
       /* Hide window */
-      window.dom.style.display = 'none';
+      $(window.dom).animate ({opacity: 0}, 200, function () { this.style.display = 'none'; });
 
       window.onMinimized ();
       this.onWindowMinimized (window);
