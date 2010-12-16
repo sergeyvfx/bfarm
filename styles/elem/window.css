@@ -105,6 +105,4 @@ DIV.UIModalWindowBackground {
   right: 0;
   bottom: 0;
   background: #000;
-  opacity: 0.3;
-  filter: alpha(opacity=30);
 }
