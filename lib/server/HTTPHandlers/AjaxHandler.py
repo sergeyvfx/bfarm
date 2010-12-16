@@ -90,10 +90,26 @@ class _Ajaxhandlers(Singleton):
 
             enc = []
             for job in jobs:
-                enc.append({'uuid': job.getUUID(),
-                            'type': job.getType(),
-                            'fname': job.getFileName(),
-                            'title': job.getTitle()})
+                resol = job.getResolution()
+
+                tmp = {'uuid': job.getUUID(),
+                       'type': job.getType(),
+                       'fname': job.getFileName(),
+                       'title': job.getTitle(),
+                       'file_format': job.getFileFormat(),
+                       'resol_x': resol['x'],
+                       'resol_y': resol['y'],
+                       'start_frame': job.getStartFrame(),
+                       'end_frame': job.getEndFrame(),
+                       'time': job.getTime()}
+
+                # Allow only non-none data transfer
+                obj = {}
+                for x in tmp:
+                    if tmp[x] is not None:
+                        obj[x] = tmp[x]
+
+                enc.append(obj)
 
             _send_json(httpRequest, enc)
 

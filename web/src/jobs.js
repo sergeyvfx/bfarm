@@ -8,8 +8,14 @@
 
 var jobs = new function () {
   var attrs = [{'title': 'Identifier', 'field': 'uuid'},
+               {'title': 'Registration time', 'field': 'time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
+               {'title': 'File', 'field': 'fname'},
                {'title': 'Type', 'field': 'type'},
-               {'title': 'File', 'field': 'fname'}];
+               {'title': 'Start frame', 'field': 'start_frame'},
+               {'title': 'End frame', 'field': 'end_frame'},
+               {'title': 'Fie format', 'field': 'file_format'},
+               {'title': 'X-resolution', 'field': 'resol_x'},
+               {'title': 'Y-resolution', 'field': 'resol_y'}];
 
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
@@ -28,13 +34,18 @@ var jobs = new function () {
     var grid = new UIGrid({'cols': 2,
                            'rows': attrs.length + 1,
                            'padding': 2});
-    grid.setCellStyle(0, 0, {'width': 70});
+    grid.setCellStyle(0, 0, {'width': 120});
     grid.setCellStyle(attrs.length, 0, {'colspan': 2});
 
     for(var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
+      var text = job[attr['field']];
+
+      if (attr['filter'])
+        text = attr['filter'] (text);
+
       grid.add (new UILabel({'text': attr['title']}));
-      grid.add (new UILabel({'text': job[attr['field']]}));
+      grid.add (new UILabel({'text': text}));
     }
 
     grid.add (new UIButton({'title': 'Browse render files',

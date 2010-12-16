@@ -360,3 +360,44 @@ class RenderJob:
             result = self.render_files[:]
 
         return result
+
+    def getFileFormat(self):
+        """
+        Get format of file in which renders would be saved
+        """
+
+        return self.file_format
+
+    def getResolution(self):
+        """
+        Get resolution of outout images
+        """
+        return {'x': self.resol_x,
+                'y': self.resol_y}
+
+    def getPercentage(self):
+        """
+        Get percentage of resolution
+        """
+
+        return self.percentage
+
+    def getStartFrame(self):
+        """
+        Get start frame of animation
+        """
+
+        if self.job_type == 'anim':
+            return self.start_frame
+
+        return None
+
+    def getEndFrame(self):
+        """
+        Get end frame of animation
+        """
+
+        if self.job_type == 'anim':
+            return self.end_frame
+
+        return None
