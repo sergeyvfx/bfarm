@@ -10,6 +10,48 @@ function _UIWindowManager ()
   _IContainer.call (this);
 
   /**
+   * Create modal background for specified window
+   */
+  this.createBackground = function (window)
+    {
+      if (!this.background)
+        {
+          this.background = createElement ('DIV');
+          this.background.className = 'UIModalWindowBackground';
+          this.background.onclick = function (event) { stopEvent(event || window.event); }
+          document.body.appendChild (this.background);
+        }
+
+      var index = uiMainZIndex.newIndex ();
+      this.background.style.zIndex = window.dom.style.zIndex;
+      window.dom.style.zIndex = index;
+    };
+
+  this.checkBackground = function ()
+    {
+      var window = null;
+      for (var i = this.usageStack - 1; i >= 0; --i)
+        {
+          var cur = this.usageStack[i];
+          if (cur.isModal ())
+            {
+              window = cur;
+              break;
+            }
+        }
+
+      if (window)
+        {
+          this.createBackground (window);
+        }
+      else
+        {
+          removeNode (this.background);
+          this.background = null;
+        }
+    };
+
+  /**
    * Show specified window
    *
    * @param window - window to be shown
@@ -36,6 +78,8 @@ function _UIWindowManager ()
           viewport = uiMainViewport;
         }
 
+      window.viewport = viewport;
+
       var wnd = window.build ();
       var wndHolder = document.body;
 
@@ -45,7 +89,11 @@ function _UIWindowManager ()
         }
 
       wndHolder.appendChild (wnd);
-      window.viewport = viewport;
+
+      if (window.modal)
+        {
+          this.createBackground (window);
+        }
 
       this.add (window);
 
@@ -147,6 +195,8 @@ function _UIWindowManager ()
 
       this.hideWindow (window);
       this.removeWindow (window);
+
+      this.checkBackground ();
 
       window.onClosed ();
       this.onWindowClosed (window);
@@ -315,6 +365,9 @@ function UIWindowManager ()
   this.usageStack = []; /* ordered by last focus windows */
 
   this.raiseOnFocus = true;
+
+  /* DOM of modal window background */
+  this.background = null;
 }
 
 UIWindowManager.prototype = new _UIWindowManager;

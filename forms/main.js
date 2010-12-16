@@ -3,6 +3,8 @@
   "left":  16,
   "top":   16,
   "title": "Свойства контеста",
+  "modal": true,
+  "position": "center",
 
   "childs": [
     {"class": "Notebook",
