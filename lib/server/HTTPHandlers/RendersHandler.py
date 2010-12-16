@@ -30,6 +30,7 @@
 import os
 import stat
 import shutil
+import errno
 
 try:
     # Python 3.0 and newer
