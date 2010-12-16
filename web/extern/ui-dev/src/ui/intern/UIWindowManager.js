@@ -10,6 +10,65 @@ function _UIWindowManager ()
   _IContainer.call (this);
 
   /**
+   * Create modal background for specified window
+   */
+  this.createBackground = function (window)
+    {
+      if (!this.background)
+        {
+          this.background = createElement ('DIV');
+          this.background.className = 'UIModalWindowBackground';
+          this.background.onclick = function (event) { stopEvent(event || window.event); }
+          document.body.appendChild (this.background);
+
+          $(this.background).css ('opacity', 0);
+          $(this.background).animate ({opacity: 0.3}, 200);
+        }
+
+      var oldIndex = this.background.style.zIndex;
+      if (oldIndex)
+        {
+          uiMainZIndex.removeIndex (oldIndex);
+        }
+
+      ldIndex = window.dom.style.zIndex;
+      if (oldIndex)
+        {
+          uiMainZIndex.removeIndex (oldIndex);
+        }
+
+      var index = uiMainZIndex.newIndex ();
+      this.background.style.zIndex = index;
+
+      index = uiMainZIndex.newIndex ();
+      window.dom.style.zIndex = index;
+    };
+
+  this.checkBackground = function ()
+    {
+      var window = null;
+      for (var i = this.usageStack - 1; i >= 0; --i)
+        {
+          var cur = this.usageStack[i];
+          if (cur.isModal ())
+            {
+              window = cur;
+              break;
+            }
+        }
+
+      if (window)
+        {
+          this.createBackground (window);
+        }
+      else
+        {
+          $(this.background).animate ({opacity: 0}, 200, function () { removeNode (this) });
+          this.background = null;
+        }
+    };
+
+  /**
    * Show specified window
    *
    * @param window - window to be shown
@@ -21,6 +80,7 @@ function _UIWindowManager ()
         {
           /* window had been minimized */
           window.dom.style.display = '';
+          $(window.dom).animate ({opacity: 1}, 200);
 
           window.onShow ();
           this.onWindowShown (window);
@@ -36,6 +96,8 @@ function _UIWindowManager ()
           viewport = uiMainViewport;
         }
 
+      window.viewport = viewport;
+
       var wnd = window.build ();
       var wndHolder = document.body;
 
@@ -45,7 +107,15 @@ function _UIWindowManager ()
         }
 
       wndHolder.appendChild (wnd);
-      window.viewport = viewport;
+
+      /* animated display */
+      $(wnd).css ('opacity', 0);
+      $(wnd).animate ({opacity: 1}, 200);
+
+      if (window.modal)
+        {
+          this.createBackground (window);
+        }
 
       this.add (window);
 
@@ -104,7 +174,7 @@ function _UIWindowManager ()
 
       if (oldIndex)
         {
-          uiMainZIndex.removeIndex ();
+          uiMainZIndex.removeIndex (oldIndex);
         }
 
       window.dom.style.zIndex = index;
@@ -120,7 +190,8 @@ function _UIWindowManager ()
    */
   this.hideWindow = function (window)
     {
-      removeNode (window.dom);
+      $(window.dom).animate ({opacity: 0}, 200, function () { removeNode (window.dom); });
+
       window.viewport = null;
 
       window.onHide ();
@@ -147,6 +218,8 @@ function _UIWindowManager ()
 
       this.hideWindow (window);
       this.removeWindow (window);
+
+      this.checkBackground ();
 
       window.onClosed ();
       this.onWindowClosed (window);
@@ -229,7 +302,7 @@ function _UIWindowManager ()
   this.minimizeWindow = function (window)
     {
       /* Hide window */
-      window.dom.style.display = 'none';
+      $(window.dom).animate ({opacity: 0}, 200, function () { this.style.display = 'none'; });
 
       window.onMinimized ();
       this.onWindowMinimized (window);
@@ -315,6 +388,9 @@ function UIWindowManager ()
   this.usageStack = []; /* ordered by last focus windows */
 
   this.raiseOnFocus = true;
+
+  /* DOM of modal window background */
+  this.background = null;
 }
 
 UIWindowManager.prototype = new _UIWindowManager;

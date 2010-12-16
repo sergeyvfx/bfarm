@@ -286,8 +286,7 @@ class RenderJob:
                                'file_format': self.file_format,
                                'resol_x': self.resol_x,
                                'resol_y': self.resol_y,
-                               'percentage': self.percentage
-                               }
+                               'percentage': self.percentage}
 
                     # Job-type specified options
                     if self.job_type == 'anim':

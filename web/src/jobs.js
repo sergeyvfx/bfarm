@@ -134,18 +134,12 @@ var jobs = new function () {
       if (jobs.registerWnd)
         return;
 
-      var width = 550, height = 280;
-
-      /* not very nice... */
-      var left = ($(window).width() - width) / 2;
-      var top = ($(window).height() - height) / 2 + $(window).scrollTop();
-
       var wnd = new UIWindow({'title': 'Register job',
                               'name': 'registerJobWnd',
-                              'width': width,
-                              'height': height,
-                              'left': left,
-                              'top': top,
+                              'width': 550,
+                              'height': 280,
+                              'modal': true,
+                              'position': 'center',
                               'resizable': false,
                               'buttons': ['CLOSE']});
       wnd.onClose = function() { jobs.registerWnd = null; };
