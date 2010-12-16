@@ -22,8 +22,22 @@ function _UIWindowManager ()
           document.body.appendChild (this.background);
         }
 
+      var oldIndex = this.background.style.zIndex;
+      if (oldIndex)
+        {
+          uiMainZIndex.removeIndex (oldIndex);
+        }
+
+      ldIndex = window.dom.style.zIndex;
+      if (oldIndex)
+        {
+          uiMainZIndex.removeIndex (oldIndex);
+        }
+
       var index = uiMainZIndex.newIndex ();
-      this.background.style.zIndex = window.dom.style.zIndex;
+      this.background.style.zIndex = index;
+
+      index = uiMainZIndex.newIndex ();
       window.dom.style.zIndex = index;
     };
 
@@ -152,7 +166,7 @@ function _UIWindowManager ()
 
       if (oldIndex)
         {
-          uiMainZIndex.removeIndex ();
+          uiMainZIndex.removeIndex (oldIndex);
         }
 
       window.dom.style.zIndex = index;
