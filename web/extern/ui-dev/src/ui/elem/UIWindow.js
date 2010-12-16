@@ -129,13 +129,17 @@ function _UIWindow ()
         } (this, dom.moveBy);
 
       dom.validateMoveDelta = function (delta) {
-        var window = this.uiWidget;
-
-        var p = this.offsetParent;
+        var vp = window;
+        var wnd = this.uiWidget;
         var x = this.offsetLeft;
         var y = this.offsetTop;
         var w = this.offsetWidth;
-        var h = window.titleBg.offsetHeight;
+        var h = wnd.titleBg.offsetHeight;
+
+        if (wnd.viewport)
+          {
+            vp = wnd.viewport.getViewport ();
+          }
 
         /* Horisontal limits */
         if (x + delta['x'] < 0)
@@ -143,9 +147,9 @@ function _UIWindow ()
             delta['x'] = -x;
           }
 
-        if (x + delta['x'] + w > p.clientWidth)
+        if (x + delta['x'] + w > $(vp).width ())
           {
-            delta['x'] = p.clientWidth - x - w;
+            delta['x'] = $(vp).width () - x - w;
           }
 
         /* vertical limits */
@@ -154,9 +158,9 @@ function _UIWindow ()
             delta['y'] = -y;
           }
 
-        if (y + delta['y'] + h > p.clientHeight)
+        if (y + delta['y'] + h > $(vp).height ())
           {
-            delta['y'] = p.clientHeight - y - h;
+            delta['y'] = $(vp).height () - y - h;
           }
 
         return delta;
