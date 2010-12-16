@@ -106,7 +106,7 @@ function _UIWindow ()
             wrapMeth (this, 'onToggleMaximizeClick'));
         }
 
-      if (indexOf (this.buttons, 'MINIMIZE') >= 0)
+      if (indexOf (this.buttons, 'MINIMIZE') >= 0 && !this.isModal ())
         {
           this.buildTitleButton ('window-minimize', 'minimize', 'right', 'UIWindowMinimizeButton',
               wrapMeth (this, 'onMinimizeClick'));
@@ -247,8 +247,32 @@ function _UIWindow ()
       result.appendChild (clientArea);
 
       /* Set window position */
-      result.style.top  = this.top + 'px';
-      result.style.left = this.left + 'px';
+      if (this.position == 'center')
+        {
+          var vp = window;
+
+          if (this.viewport)
+            {
+              this.viewport.getViewport ();
+            }
+
+          if (vp)
+            {
+              result.style.left = $(vp).scrollLeft() + Math.floor(($(vp).width() - this.width) / 2) + 'px';
+              result.style.top  = $(vp).scrollTop() + Math.floor(($(vp).height() - this.height) / 2) + 'px';
+            }
+          else
+            {
+              /* actually, should not happen */
+              result.style.top  = this.top + 'px';
+              result.style.left = this.left + 'px';
+            }
+        }
+      else
+        {
+          result.style.top  = this.top + 'px';
+          result.style.left = this.left + 'px';
+        }
 
       /* Set window dimensions */
       result.style.width  = this.width + 'px';
@@ -465,7 +489,12 @@ function _UIWindow ()
         }
 
       return true;
-    }
+    };
+
+  this.isModal = function ()
+    {
+      return this.modal;
+    };
 
   /* Event stubs */
   this.onShow   = function () {};
@@ -505,7 +534,13 @@ function UIWindow (opts)
   /* Minimal height of window */
   this.minHeight = defVal (opts['minHeight'], 90);
 
-  this.resizable = true;
+  /* Window is modal */
+  this.modal = defVal (opts['modal'], false);
+
+  /* Initial window position */
+  this.position = defVal (opts['position'], 'fixed');
+
+  this.resizable = defVal (opts['resizable'], true);
 
   if (!isUnknown (opts['resizable']))
     {
