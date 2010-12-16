@@ -18,11 +18,12 @@ var jobs = new function () {
     window.open('/renders/job-' + job['uuid']);
   };
 
-  function createJobBox(job) {
+  function createJobBox(job, collapsed) {
     /* XXX: replace with form template */
     var box = new UICollapseBox({'title': job.title,
-                                 'collapsed': true,
-                                 'animated': true});
+                                 'collapsed': collapsed,
+                                 'animated': true,
+                                 'name': 'jobBox_' + job.uuid});
 
     var grid = new UIGrid({'cols': 2,
                            'rows': attrs.length + 1,
@@ -49,6 +50,18 @@ var jobs = new function () {
   };
 
   function createJobsDom(where, title, data) {
+    /* get expanded boxes */
+    var collapsed = {};
+    var boxHolder = where[0].childNodes[0];
+    if (boxHolder) {
+      var p = boxHolder.uiWidget;
+      for(var i = 0; i < data.length; i++) {
+        var box = p.lookupWidget ('jobBox_' + data[i].uuid);
+        if (!box || !box.getCollapsed ()) collapsed[data[i].uuid] = false;
+        else collapsed[data[i].uuid] = true;
+      }
+    }
+
     where.empty();
 
     if (!data.length) {
@@ -63,7 +76,9 @@ var jobs = new function () {
                            'rows': data.length})
 
     for(var i = 0; i < data.length; i++) {
-      var box = createJobBox(data[i]);
+      var c = collapsed[data[i].uuid];
+      if (typeof c == 'undefined') c = true;
+      var box = createJobBox(data[i], c);
       grid.add(box);
     }
 
