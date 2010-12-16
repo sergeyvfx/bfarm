@@ -249,11 +249,17 @@ function _UIWindow ()
       /* Set window position */
       if (this.position == 'center')
         {
-          var vp = this.viewport.getViewport ();
+          var vp = window;
+
+          if (this.viewport)
+            {
+              this.viewport.getViewport ();
+            }
+
           if (vp)
             {
-              result.style.left = Math.floor((vp.clientWidth - this.width) / 2) + 'px';
-              result.style.top  = Math.floor((vp.clientHeight - this.height) / 2) + 'px';
+              result.style.left = $(vp).scrollLeft() + Math.floor(($(vp).width() - this.width) / 2) + 'px';
+              result.style.top  = $(vp).scrollTop() + Math.floor(($(vp).height() - this.height) / 2) + 'px';
             }
           else
             {
