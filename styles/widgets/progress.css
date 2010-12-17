@@ -1,0 +1,40 @@
+DIV.UIProgress {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #c0c0c0 url(../../pics/ui/progress_bg.gif) 0 0 repeat-x;
+
+  height: 18px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+}
+
+DIV.UIProgressBar {
+  border: 1px #666 solid;
+
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  background: #c0c0c0 url(../../pics/ui/progress_fg.gif) 0 0 repeat-x;
+
+  height: 18px;
+  position: absolute;
+  top: -1px;
+  left: -1px;
+}
+
+DIV.UIProgressTitle {
+  height: 18px;
+  position: absolute;
+  top: 1px;
+  left: -1px;
+  width: 100%;
+  text-align: center;
+}
