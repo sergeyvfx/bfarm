@@ -26,7 +26,7 @@ function _UIProgress (opts)
     };
 
   /**
-   * Build DOM tree for entry
+   * Build DOM tree for progress bar
    */
   this.doBuild = function ()
     {
