@@ -38,6 +38,16 @@ function _UIGrid ()
             {
               cell.style.height = uiUtil.sizeToStyle (style['height']);
             }
+
+          if (!isUnknown (style['valign']))
+            {
+              cell.style.verticalAlign = style['valign'];
+            }
+
+          if (!isUnknown (style['align']))
+            {
+              cell.style.verticalAlign = style['align'];
+            }
         }
       else
         {
