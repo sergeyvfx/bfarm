@@ -57,6 +57,10 @@ def execute(httpRequest):
             job['fname'] = fname
             job['fp'] = part['fp']
 
+    if 'use_stamp' in httpRequest.POST and httpRequest.POST:
+        if httpRequest.POST['use_stamp']:
+            job['use_stamp'] = True
+
     if job['type'] == 'anim':
         job['start-frame'] = int(httpRequest.POST['start-frame'])
         job['end-frame'] = int(httpRequest.POST['end-frame'])

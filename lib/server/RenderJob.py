@@ -31,6 +31,8 @@ import time
 import os
 import threading
 import shutil
+import subprocess
+import os
 
 from Hash import md5_for_file
 from config import Config
@@ -68,7 +70,7 @@ class RenderJob:
 
         if self.job_type == 'anim':
             self.start_frame = options['start-frame']
-            self.end_frame = options['start-frame']
+            self.end_frame = options['end-frame']
         else:
             # XXX: ...
             pass
@@ -114,6 +116,10 @@ class RenderJob:
         self.resol_x = options.get('resol_x')
         self.resol_y = options.get('resol_y')
         self.percentage = options.get('percentage')
+
+        self.useStamp = False
+        if 'use_stamp' in options and options['use_stamp']:
+            self.useStamp = True
 
         RenderJob.total_jobs += 1
 
@@ -286,7 +292,8 @@ class RenderJob:
                                'file_format': self.file_format,
                                'resol_x': self.resol_x,
                                'resol_y': self.resol_y,
-                               'percentage': self.percentage}
+                               'percentage': self.percentage,
+                               'use_stamp': self.useStamp}
 
                     # Job-type specified options
                     if self.job_type == 'anim':
@@ -401,3 +408,60 @@ class RenderJob:
             return self.end_frame
 
         return None
+
+    def getTasksCount(self):
+        """
+        Get total count of tasks
+        """
+
+        return self.ntasks
+
+    def getProgress(self):
+        """
+        Get count of completed tasks
+        """
+
+        return self.ntasks - self.tasks_remain
+
+    def getThumbnail(self, fname):
+        """
+        Get thumbnail for frame
+        """
+
+        if fname not in self.render_files:
+            return None
+
+        out_fpath = os.path.join(self.storage_fpath, 'out')
+        thumbs_fpath = os.path.join(self.storage_fpath, 'thumbs')
+
+        thumbname = fname
+        if thumbname.find('.'):
+            thumbname = fname.split('.')[0] + '.jpg'
+        else:
+            thumbname = fname + '.jpg'
+
+        self._makeDir(thumbs_fpath)
+
+        thumbs_fpath = os.path.join(thumbs_fpath, thumbname)
+
+        if os.path.isfile(thumbs_fpath):
+            # thumbnail is already created
+            return thumbs_fpath
+
+        # XXX: Not very cool solution, but there is no image
+        #      processing library for python3.1
+        fname_path = os.path.join(out_fpath, fname)
+        command = ['convert', '-adaptive-resize',
+                   Config.server['thumb_size'], fname_path, thumbs_fpath]
+
+        proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                shell=False)
+        data, err = proc.communicate()
+        rv = proc.wait()
+
+        if not os.path.isfile(thumbs_fpath):
+            # error creating thumbnail
+            return None
+
+        return thumbs_fpath

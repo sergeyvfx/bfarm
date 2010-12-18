@@ -127,7 +127,8 @@ class RenderServer(SignalThread):
             self.nodes.append(node)
             self.nodes_hash[node.getUUID()] = node
 
-        Logger.log('Registered new render node {0}'.format(node.getUUID()))
+        Logger.log('Registered new render node {0} at {1}' . \
+                format(node.getUUID(), node.getIP()))
 
         return node.getUUID()
 

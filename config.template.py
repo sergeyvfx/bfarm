@@ -42,7 +42,9 @@ class Config:
               'chunk_size':           32768,
 
               'review_nodes_timeout': 30,
-              'client_max_age':       90}
+              'client_max_age':       90,
+
+              'thumb_size':           '480x270'}
 
     client = {'server_address':       '127.0.0.1',
               'server_port':          4043,

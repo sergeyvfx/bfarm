@@ -15,7 +15,9 @@ var jobs = new function () {
                {'title': 'End frame', 'field': 'end_frame'},
                {'title': 'Fie format', 'field': 'file_format'},
                {'title': 'X-resolution', 'field': 'resol_x'},
-               {'title': 'Y-resolution', 'field': 'resol_y'}];
+               {'title': 'Y-resolution', 'field': 'resol_y'},
+               {'title': 'Total tasks', 'field': 'ntasks'},
+               {'title': 'Completed tasks', 'field': 'progress'}];
 
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
@@ -32,10 +34,18 @@ var jobs = new function () {
                                  'name': 'jobBox_' + job.uuid});
 
     var grid = new UIGrid({'cols': 2,
-                           'rows': attrs.length + 1,
+                           'rows': 2,
                            'padding': 2});
-    grid.setCellStyle(0, 0, {'width': 120});
-    grid.setCellStyle(attrs.length, 0, {'colspan': 2});
+
+    grid.setCellStyle(0, 0, {'valign': 'top'});
+    grid.setCellStyle(0, 1, {'valign': 'top'});
+    grid.setCellStyle(1, 0, {'colspan': 2});
+
+    var attrGrid = new UIGrid({'cols': 2,
+                               'rows': attrs.length + 1,
+                               'padding': 2});
+    attrGrid.setCellStyle(0, 0, {'width': 120});
+    attrGrid.setCellStyle(attrs.length, 0, {'colspan': 2});
 
     for(var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
@@ -44,9 +54,23 @@ var jobs = new function () {
       if (attr['filter'])
         text = attr['filter'] (text);
 
-      grid.add (new UILabel({'text': attr['title']}));
-      grid.add (new UILabel({'text': text}));
+      attrGrid.add (new UILabel({'text': attr['title']}));
+      attrGrid.add (new UILabel({'text': text}));
     }
+
+    attrGrid.add (new UIProgress({'position': job.progress / job.ntasks,
+                                  'title': 'Progress'}));
+
+    grid.add (attrGrid);
+
+    var frameGrid = new UIGrid({'cells': 1, 'rows': 2, 'padding': [0, 0, 2, 18]});
+    var lastFrame = '/pics/not_avaliable.png';
+    if(job['last_frame'])
+      lastFrame = '/renders/job-' + job['uuid'] + '/' + job['last_frame'] + '?thumbnail=1';
+
+    frameGrid.add (new UILabel({'text': 'Last rendered frame:'}));
+    frameGrid.add (new UIImage({'image': lastFrame}));
+    grid.add (frameGrid);
 
     grid.add (new UIButton({'title': 'Browse render files',
                             'image': '/pics/buttons/browse.gif',
@@ -60,23 +84,26 @@ var jobs = new function () {
     return box;
   };
 
-  function createJobsDom(where, title, data) {
-    /* get expanded boxes */
-    var collapsed = {};
-    var boxHolder = where[0].childNodes[0];
-    if (boxHolder) {
-      var p = boxHolder.uiWidget;
-      for(var i = 0; i < data.length; i++) {
-        var box = p.lookupWidget ('jobBox_' + data[i].uuid);
-        if (!box || !box.getCollapsed ()) collapsed[data[i].uuid] = false;
-        else collapsed[data[i].uuid] = true;
+  function isJobBoxCollapsed(job) {
+    var collapsed = true;
+    $(['#jobsList', '#completedJobsList']).each(function() {
+      var boxHolder = $('' + this)[0].childNodes[0];
+
+      if (boxHolder) {
+        var p = boxHolder.uiWidget;
+        var box = p.lookupWidget ('jobBox_' + job.uuid);
+        if (!box || !box.getCollapsed ()) collapsed = false;
+        else collapsed = true;
       }
-    }
+    });
 
-    where.empty();
+    return collapsed;
+  };
 
+  function createJobsDom(where, title, data, collapsed) {
     if (!data.length) {
       where.parent().css('padding', '0');
+      where.empty();
       return;
     } else {
       where.parent().css('padding', '');
@@ -87,13 +114,13 @@ var jobs = new function () {
                            'rows': data.length})
 
     for(var i = 0; i < data.length; i++) {
-      var c = collapsed[data[i].uuid];
-      if (typeof c == 'undefined') c = true;
-      var box = createJobBox(data[i], c);
+      var box = createJobBox(data[i], isJobBoxCollapsed(data[i]));
       grid.add(box);
     }
 
     jobsGroup.add(grid);
+
+    where.empty();
     where.append(jobsGroup.build());
   };
 
@@ -108,7 +135,7 @@ var jobs = new function () {
     }
   };
 
-  function reloadCompletedJobs() {
+  function reloadCompletedJobs(collapsed) {
     var completedJobsList = $('#completedJobsList');
 
     if (completedJobsList.length) {
@@ -120,8 +147,8 @@ var jobs = new function () {
   };
 
   function reloadAllJobs() {
-    reloadJobs ();
     reloadCompletedJobs ();
+    reloadJobs ();
   };
 
   function createJobs() {

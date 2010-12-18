@@ -118,11 +118,16 @@ def send_frame(httpRequest, jobName, frameName):
     render_server = server.Server().getRenderServer()
     job = render_server.getJob(jobName)
 
-    if job is None:
+    if job is None or frameName not in job.getRenderFiles():
         httpRequest.send_error(404, 'Not found')
         return
 
-    fname = os.path.join(job.getStoragePath(), 'out', frameName)
+    if 'thumbnail' in httpRequest.GET:
+        fname = job.getThumbnail(frameName)
+        if fname is None:
+            fname = '/pics/not_avaliable.png'
+    else:
+        fname = os.path.join(job.getStoragePath(), 'out', frameName)
 
     try:
         with open(fname, 'rb') as handle:

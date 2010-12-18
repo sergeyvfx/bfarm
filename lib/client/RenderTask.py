@@ -115,8 +115,9 @@ class RenderTask(SignalThread):
         args.append('--output-path')
         args.append(self.output_fpath)
 
-        # XXX: for debug only
-        args.append('--use-stamp')
+        if 'use_stamp' in self.options and self.options['use_stamp']:
+            # Useful for debugging
+            args.append('--use-stamp')
 
         if 'file_format' in self.options:
             args.append('--file-format')
