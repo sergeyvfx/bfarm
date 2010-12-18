@@ -67,10 +67,7 @@ function _UIButton ()
 
       if (this.sensitive && this.onClick)
         {
-          window.setTimeout (function (self, event) { return function () {
-                self.onClick (event);
-              }
-            } (this, event), 10);
+          this.onClick (event);
         }
     };
 
