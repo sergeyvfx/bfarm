@@ -18,6 +18,7 @@ function _UIImage (opts)
       img.src = this.image;
 
       div.appendChild (img);
+      div.style.textAlign = this.align;
 
       this.imageDOM = img;
 
@@ -34,6 +35,22 @@ function _UIImage (opts)
       this.image = image;
       this.imageDOM.src = image;
     };
+
+
+  this.getAlign = function ()
+    {
+      return this.align;
+    };
+
+  this.setAlign = function (align)
+    {
+      if (this.dom)
+        {
+          this.dom.style.textAlign = align;
+        }
+
+      this.align = align;
+    };
 }
 
 /***
@@ -47,6 +64,9 @@ function UIImage (opts)
 
   /* image source */
   this.image = defVal (opts['image'], '');
+
+  /* image alignment */
+  this.align = defVal (opts['align'], 'left');
 
   this.imageDOM = null;
 }
