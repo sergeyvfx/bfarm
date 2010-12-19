@@ -74,7 +74,7 @@
                                         }
                                         ]},
                             {"class": "Label", "text": "Percentage"},
-                            {"class": "SpinButton", "min": 1, "max": 100, "binding": "#jobPercentage", "value": "50"}
+                            {"class": "SpinButton", "min": 1, "max": 100, "binding": "#jobPercentage", "value": 50}
                            ]
                 }
                ]
