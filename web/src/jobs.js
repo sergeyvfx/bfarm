@@ -64,12 +64,15 @@ var jobs = new function () {
     grid.add (attrGrid);
 
     var frameGrid = new UIGrid({'cells': 1, 'rows': 2, 'padding': [0, 0, 2, 18]});
-    var lastFrame = '/pics/not_avaliable.png';
+    var lastFrame = null;
     if(job['last_frame'])
       lastFrame = '/renders/job-' + job['uuid'] + '/' + job['last_frame'] + '?thumbnail=1';
 
-    frameGrid.add (new UILabel({'text': 'Last rendered frame:'}));
-    frameGrid.add (new UIImage({'image': lastFrame}));
+    if (lastFrame) {
+      frameGrid.add (new UILabel({'text': 'Last rendered frame:'}));
+      frameGrid.add (new UIImage({'image': lastFrame}));
+    }
+
     grid.add (frameGrid);
 
     grid.add (new UIButton({'title': 'Browse render files',
