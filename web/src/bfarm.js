@@ -1,4 +1,4 @@
-/*!
+/*
  * bfarm renderfarm 0.1pre web interface
  *
  * Copyright 2010, Sergey Sharybin

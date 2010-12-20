@@ -1,0 +1,39 @@
+BODY {
+  font-size: 8pt;
+  font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";
+  background: #f5f5f5;
+}
+
+A, A:link, A:visited {
+  color: #00d;
+  text-decoration: none;
+}
+
+A:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+DIV.list {
+  background-color: #fff;
+  border-top: 1px solid #999;
+  border-bottom: 1px solid #999;
+}
+
+DIV.footer {
+  color: #666;
+  padding: 4px 2px;
+}
+
+TH {
+  text-align: left;
+  padding-right: 14px;
+}
+
+TD {
+  padding: 0 14px 0 0;
+}
+
+TD IMG {
+  vertical-align: middle;
+}

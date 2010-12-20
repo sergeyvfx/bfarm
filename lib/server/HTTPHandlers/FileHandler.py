@@ -151,12 +151,14 @@ def send_listing(httpRequest, path, listing, parent=None):
     r = []
 
     displaypath = cgi.escape(path)
-    r.append('<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">')
-    r.append("<html>\n<title>Directory listing for {0}</title>\n" .
+    r.append('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"' +
+             ' "http://www.w3.org/TR/html4/strict.dtd">')
+    r.append("\n<html>\n<head>\n<title>Directory listing for {0}</title>\n" .
         format(displaypath))
-    r.append("<body>\n<h1>Index of {0}</h1>\n" . format(displaypath))
-    r.append("<table><tr><th></th><th>Name</th><th>Last modified</th>" +
-             "<th>Size</th></tr><tr><th colspan=\"5\"><hr></th></tr>\n")
+    r.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"/styles/listing.css\">\n")
+    r.append("</head>\n<body>\n<h2>Index of {0}</h2>\n" . format(displaypath))
+    r.append("<div class=\"list\"><table><tr><th width=\"16\"></th>" +
+             "<th>Name</th><th>Last modified</th><th>Size</th></tr>\n")
 
     if parent is not None:
         r.append("<tr><td valign=\"top\">" +
@@ -191,8 +193,8 @@ def send_listing(httpRequest, path, listing, parent=None):
             format(icon, urllib.parse.quote(linkname),
                 cgi.escape(displayname), mtime, size))
 
-    r.append("<tr><th colspan=\"5\"><hr></th></tr>\n</table>\n")
-    r.append("<address>{0}</address>\n</body>\n</html>\n" . format(serv))
+    r.append("</table></div>\n" +
+             "<div class=\"footer\">{0}</div>\n</body>\n</html>\n".format(serv))
     enc = sys.getfilesystemencoding()
     encoded = ''.join(r).encode(enc)
 
@@ -239,7 +241,8 @@ def list_directory(httpRequest, path):
 
         listing.append(item)
 
-    send_listing(httpRequest, path, listing, parent)
+    displaypath = urllib.parse.unquote(prefix)
+    send_listing(httpRequest, displaypath, listing, parent)
 
 
 def execute(httpRequest):
