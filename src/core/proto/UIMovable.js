@@ -13,6 +13,11 @@
  */
 Element.prototype.moveBy = function (delta)
 {
+  if (!delta['x'] && !delta['y'])
+    {
+      return;
+    }
+
   var absolute = this.style.position == 'absolute';
 
   if (!absolute)

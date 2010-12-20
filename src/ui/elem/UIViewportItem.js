@@ -60,6 +60,7 @@ function _UIViewportItem ()
       if (this.movable)
         {
           UI_MakeMovable (item);
+          item._moved = false;
           item.onEndMove = wrapMeth (this, 'onEndMove');
 
           item.validateMoveDelta = function (self) { return function (delta) {
@@ -85,6 +86,24 @@ function _UIViewportItem ()
       var w = item.offsetWidth;
       var h = item.offsetHeight;
       var vp = this.parent.getViewport ();
+
+      if (!item._moved)
+        {
+          if (delta['x'] < this.moveThreshold)
+            {
+              delta['x'] = 0;
+            }
+
+          if (delta['y'] < this.moveThreshold)
+            {
+              delta['y'] = 0;
+            }
+
+          if (delta['x'] || delta['y'])
+            {
+              item._moved = true;
+            }
+        }
 
       /* Horisontal limits */
       if (x + delta['x'] < 0)
@@ -122,6 +141,8 @@ function _UIViewportItem ()
       var left = parseInt (item.style.left);
       var top = parseInt (item.style.top);
 
+      item._moved = false;
+
       item._uiSavedPos = null;
 
       this.parent.onItemEndMove (this, {'x': left, 'y': top});
@@ -157,6 +178,16 @@ function _UIViewportItem ()
       item.style.left = left + 'px';
       item.style.top = top + 'px';
     };
+
+  this.getMoveThreshold = function ()
+    {
+      return this.moveThreshold;
+    };
+
+  this.setMoveThreshold = function (threshold)
+    {
+      this.moveThreshold = threshold;
+    };
 }
 
 function UIViewportItem (opts)
@@ -170,6 +201,8 @@ function UIViewportItem (opts)
   this.exec    = opts['exec'];
   this.movable = defVal (opts['movable'], false);
   this.point   = defVal (opts['point'], null);
+
+  this.moveThreshold = defVal (opts['moveThreshold'], 20);
 
   this.caption_d = null;
   this.image_d = null;
