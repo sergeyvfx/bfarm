@@ -70,7 +70,7 @@ function _UIWindowManager ()
         {
           this.createBackground (window);
         }
-      else
+      else if (this.background)
         {
           if (this.background.animated)
             {
