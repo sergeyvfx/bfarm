@@ -141,11 +141,13 @@ function _UIViewportItem ()
       var left = parseInt (item.style.left);
       var top = parseInt (item.style.top);
 
-      item._moved = false;
-
       item._uiSavedPos = null;
 
-      this.parent.onItemEndMove (this, {'x': left, 'y': top});
+      if (item._moved)
+        {
+          item._moved = false;
+          this.parent.onItemEndMove (this, {'x': left, 'y': top});
+        }
     };
 
   this.validatePosition = function ()
