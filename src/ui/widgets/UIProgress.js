@@ -53,6 +53,17 @@ function _UIProgress (opts)
           this.titleDOM = null;
         }
 
+      if (this.height)
+        {
+          bar.style.height = uiUtil.sizeToStyle (this.height);
+
+          if (this.titleDOM)
+            {
+              this.titleDOM.style.fontSize = uiUtil.getItemHeight (bar) - 2 + 'px';
+              this.titleDOM.style.top = 0;
+            }
+        }
+
       this.barDOM = bar;
 
       $(div).disableTextSelect ();
