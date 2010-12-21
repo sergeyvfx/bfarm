@@ -89,17 +89,14 @@ function _UIViewportItem ()
 
       if (!item._moved)
         {
-          if (delta['x'] < this.moveThreshold)
+          var d = Math.sqrt(delta['x']*delta['x'] + delta['y']*delta['y']);
+
+          if (d < this.moveThreshold)
             {
               delta['x'] = 0;
-            }
-
-          if (delta['y'] < this.moveThreshold)
-            {
               delta['y'] = 0;
             }
-
-          if (delta['x'] || delta['y'])
+          else
             {
               item._moved = true;
             }
