@@ -19,7 +19,7 @@ function _UICollapseBox ()
 
       if (where.childNodes.length == 0)
         {
-          holder.className += ' ' + this.headerFIrstItemHolderClassName;
+          holder.className += ' ' + this.headerFirstItemHolderClassName;
         }
 
       where.appendChild (holder);
@@ -35,6 +35,7 @@ function _UICollapseBox ()
   this.beginHeaderRow = function (where, block)
     {
       var table = createElement ('TABLE');
+
       table.className = this.headerRowHolderClassName;
 
       if (block)
@@ -53,13 +54,18 @@ function _UICollapseBox ()
    *
    * @param where - where item holder should be created
    */
-  this.createCustomHeaders = function (where, holder)
+  this.createCustomHeaders = function (where, holder, right)
     {
       var block = false;
 
       for (var i = 0, n = this.headerItems.length; i < n; ++i)
         {
           var it = this.headerItems[i];
+
+          if (right && !it.right || !right && it.right)
+            {
+              continue;
+            }
 
           if (it.block)
             {
@@ -99,7 +105,11 @@ function _UICollapseBox ()
       var header = createElement ('DIV');
       header.className = this.headerClassName;
 
-      var holder = this.beginHeaderRow (header);
+      var holder = this.beginHeaderRow (header, true);
+      var leftHolder = null;
+      var rightHolder = null;
+      var leftTable = null;
+      var rightTable = null;
 
       /* Collapse button */
       var btnHolder = this.createHeaderItemHolder (holder);
@@ -111,14 +121,46 @@ function _UICollapseBox ()
       /* Box title */
       if (this.title)
         {
-          var titleHolder = this.createHeaderItemHolder (holder);
+          var titleHolder = null;
+
+          if (this.titleWidth)
+            {
+              titleHolder = this.createHeaderItemHolder (holder);
+              titleHolder.style.width = uiUtil.sizeToStyle (this.titleWidth);
+            }
+          else
+            {
+              leftHolder = this.createHeaderItemHolder (holder);
+              leftTable = this.beginHeaderRow (leftHolder);
+              titleHolder = this.createHeaderItemHolder (leftTable);
+            }
+
           var title = createElement ('DIV');
           title.className = this.titleHolderClassName;
           title.appendChild (createTextNode (this.title));
           titleHolder.appendChild (title);
         }
 
-      this.createCustomHeaders (header, holder);
+      if (leftHolder == null)
+        {
+          leftHolder = this.createHeaderItemHolder (holder);
+        }
+
+      if (leftTable == null)
+        {
+          leftTable = this.beginHeaderRow (leftHolder);
+        }
+
+      rightHolder = this.createHeaderItemHolder (holder);
+      rightTable = this.beginHeaderRow (rightHolder, false);
+
+      /* XXX: ... */
+      leftHolder.style.padding = '0';
+      rightHolder.style.padding = '0';
+      rightHolder.childNodes[0].style.cssFloat = 'right';
+
+      this.createCustomHeaders (header, leftTable, false);
+      this.createCustomHeaders (header, rightTable, true);
 
       /* Some tweaks */
       $(button).click (wrapMeth (this, 'toggleCollapse'))
@@ -236,10 +278,13 @@ function UICollapseBox (opts)
   this.headerItemHolderClassName = this.classNamePrefix + 'HeaderHolder';
 
   /* Class name for first header item holder */
-  this.headerFIrstItemHolderClassName = this.classNamePrefix + 'HeaderFirstHolder';
+  this.headerFirstItemHolderClassName = this.classNamePrefix + 'HeaderFirstHolder';
 
   /* Box's title */
   this.title = defVal (opts['title'], '');
+
+  /* Box's title width */
+  this.titleWidth = defVal (opts['titleWidth'], 0);
 
   /* DOM node for title */
   this.titleDom = null;

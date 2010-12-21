@@ -160,7 +160,8 @@ function _UIViewport ()
                                       'caption' : caption,
                                       'exec'    : exec,
                                       'movable' : this.itemsMovable,
-                                      'point'   : point});
+                                      'point'   : point,
+                                      'moveThreshold': this.itemsMoveThreshold});
 
       this.items.push (item);
       this.buildItem (item);
@@ -226,6 +227,21 @@ function _UIViewport ()
           this.items[i].validatePosition ();
         }
     };
+
+  this.getItemsMoveThreshold = function ()
+    {
+      return this.itemsMoveThreshold;
+    };
+
+  this.setItemsMoveThreshold = function (threshold)
+    {
+      this.itemsMoveThreshold = threshold;
+
+      for (var i = 0, n = this.items.length; i < n; ++i)
+        {
+          this.items[i].setThreshold (threshold);
+        }
+    };
 }
 
 function UIViewport (opts)
@@ -241,6 +257,7 @@ function UIViewport (opts)
     }
 
   this.itemsMovable = defVal (opts['itemsMovable'], false);
+  this.itemsMoveThreshold = defVal (opts['itemsMoveThreshold'], 20);
 
   this.viewport    = null;
   this.background  = null;

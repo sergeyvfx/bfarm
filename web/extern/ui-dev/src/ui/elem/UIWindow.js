@@ -500,6 +500,16 @@ function _UIWindow ()
       return this.modal;
     };
 
+  this.getAnimated = function ()
+    {
+      return this.animated;
+    };
+
+  this.setAnimated = function (animated)
+    {
+      this.animated = animated;
+    };
+
   /* Event stubs */
   this.onShow   = function () {};
   this.onRaise  = function () {};
@@ -540,6 +550,9 @@ function UIWindow (opts)
 
   /* Window is modal */
   this.modal = defVal (opts['modal'], false);
+
+  /* Use animation for window */
+  this.animated = defVal (opts['animated'], true);
 
   /* Initial window position */
   this.position = defVal (opts['position'], 'fixed');

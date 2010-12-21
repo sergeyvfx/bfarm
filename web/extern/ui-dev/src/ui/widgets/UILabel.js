@@ -62,6 +62,16 @@ function _UILabel (opts)
         {
           where.style.fontWeight = '';
         }
+
+      if (this.color)
+        {
+          where.style.color = this.color;
+        }
+
+      if (this.background)
+        {
+          where.style.background = this.background;
+        }
     };
 }
 
@@ -76,6 +86,12 @@ function UILabel (opts)
 
   /* Text, displayed in label */
   this.text = isUnknown (opts['text']) ? '' : opts['text'];
+
+  /* Foreground color */
+  this.color = defVal (opts['color'], null);
+
+  /* Background color */
+  this.background = defVal (opts['background'], null);
 
   /* Should text be bold */
   this.bold = defVal (opts['bold'], false);
