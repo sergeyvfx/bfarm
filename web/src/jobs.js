@@ -28,10 +28,25 @@ var jobs = new function () {
 
   function createJobBox(job, collapsed) {
     /* XXX: replace with form template */
+
+    var position = job.progress / job.ntasks;
+    var headerItems = [];
+
+    if(position == 1.0) {
+      headerItems.push(new UILabel({'text': 'Completed', 'color': 'green'}));
+    } else {
+      headerItems.push(new UILabel({'text': 'In progress', 'color': 'red'}));
+      headerItems.push(new UIProgress({'position': position,
+                                       'height': 12,
+                                       'width': 160}));
+    }
+
     var box = new UICollapseBox({'title': job.title,
+                                 'titleWidth': '30%',
                                  'collapsed': collapsed,
                                  'animated': true,
-                                 'name': 'jobBox_' + job.uuid});
+                                 'name': 'jobBox_' + job.uuid,
+                                 'headerItems': headerItems});
 
     var grid = new UIGrid({'cols': 2,
                            'rows': 2,
@@ -58,7 +73,7 @@ var jobs = new function () {
       attrGrid.add (new UILabel({'text': text}));
     }
 
-    attrGrid.add (new UIProgress({'position': job.progress / job.ntasks,
+    attrGrid.add (new UIProgress({'position': position,
                                   'title': 'Progress'}));
 
     grid.add (attrGrid);
@@ -95,8 +110,8 @@ var jobs = new function () {
       if (boxHolder) {
         var p = boxHolder.uiWidget;
         var box = p.lookupWidget ('jobBox_' + job.uuid);
-        if (!box || !box.getCollapsed ()) collapsed = false;
-        else collapsed = true;
+        if(box && !box.getCollapsed ())
+          collapsed = false;
       }
     });
 
