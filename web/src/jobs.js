@@ -33,9 +33,13 @@ var jobs = new function () {
     var headerItems = [];
 
     if(position == 1.0) {
-      headerItems.push(new UILabel({'text': 'Completed', 'color': 'green'}));
+      headerItems.push(new UILabel({'text': 'Completed',
+                                    'color': '#007f00',
+                                    'bold': true}));
     } else {
-      headerItems.push(new UILabel({'text': 'In progress', 'color': 'red'}));
+      headerItems.push(new UILabel({'text': 'In progress',
+                                    'color': '#7f0000',
+                                    'bold': true}));
       headerItems.push(new UIProgress({'position': position,
                                        'height': 12,
                                        'width': 160}));
