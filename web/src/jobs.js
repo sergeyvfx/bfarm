@@ -16,6 +16,7 @@ var jobs = new function () {
                {'title': 'Fie format', 'field': 'file_format'},
                {'title': 'X-resolution', 'field': 'resol_x'},
                {'title': 'Y-resolution', 'field': 'resol_y'},
+               {'title': 'Percentage', 'field': 'percentage'},
                {'title': 'Total tasks', 'field': 'ntasks'},
                {'title': 'Completed tasks', 'field': 'progress'}];
 

@@ -99,6 +99,7 @@ class _Ajaxhandlers(Singleton):
                        'file_format': job.getFileFormat(),
                        'resol_x': resol['x'],
                        'resol_y': resol['y'],
+                       'percentage': job.getPercentage(),
                        'start_frame': job.getStartFrame(),
                        'end_frame': job.getEndFrame(),
                        'time': job.getTime(),
