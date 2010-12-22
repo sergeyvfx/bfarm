@@ -119,7 +119,7 @@ class _Ajaxhandlers(Singleton):
 
             _send_json(httpRequest, enc)
 
-        def jobs(self, httpRequest):
+        def runningJobs(self, httpRequest):
             """
             Get list of all running jobs
             """
@@ -135,6 +135,19 @@ class _Ajaxhandlers(Singleton):
 
             render_server = server.Server().getRenderServer()
             jobs = render_server.getCompletedJobs()
+            self._send_jobs(httpRequest, jobs)
+
+        def jobs(self, httpRequest):
+            """
+            Get list of all (runnign and completed) jobs
+            """
+
+            render_server = server.Server().getRenderServer()
+            jobs = render_server.getJobs()
+            jobs += render_server.getCompletedJobs()
+
+            jobs.sort(key=lambda a: a.getUUID())
+
             self._send_jobs(httpRequest, jobs)
 
     def initInstance(self):

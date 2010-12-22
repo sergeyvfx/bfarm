@@ -108,7 +108,7 @@ var jobs = new function () {
 
   function isJobBoxCollapsed(job) {
     var collapsed = true;
-    $(['#jobsList', '#completedJobsList']).each(function() {
+    $(['#jobsList']).each(function() {
       var boxHolder = $('' + this)[0].childNodes[0];
 
       if (boxHolder) {
@@ -122,7 +122,7 @@ var jobs = new function () {
     return collapsed;
   };
 
-  function createJobsDom(where, title, data, collapsed) {
+  function createJobsDom(where, data, collapsed) {
     if (!data.length) {
       where.parent().css('padding', '0');
       where.empty();
@@ -131,19 +131,16 @@ var jobs = new function () {
       where.parent().css('padding', '');
     }
 
-    var jobsGroup = new UIGroupBox({'title': title});
     var grid = new UIGrid({'padding': 2,
                            'rows': data.length})
 
-    for(var i = 0; i < data.length; i++) {
+    for(var i = data.length - 1; i >= 0; i--) {
       var box = createJobBox(data[i], isJobBoxCollapsed(data[i]));
       grid.add(box);
     }
 
-    jobsGroup.add(grid);
-
     where.empty();
-    where.append(jobsGroup.build());
+    where.append(grid.build());
   };
 
   function reloadJobs() {
@@ -152,29 +149,13 @@ var jobs = new function () {
     if (jobsList.length) {
       $.getJSON('/ajax/get/jobs',
                 function (data) {
-                    createJobsDom($('#jobsList'), 'Running jobs', data);
+                    createJobsDom($('#jobsList'), data);
                 });
     }
-  };
-
-  function reloadCompletedJobs(collapsed) {
-    var completedJobsList = $('#completedJobsList');
-
-    if (completedJobsList.length) {
-      $.getJSON('/ajax/get/completedJobs',
-                function (data) {
-                    createJobsDom($('#completedJobsList'), 'Completed jobs', data);
-                });
-    }
-  };
-
-  function reloadAllJobs() {
-    reloadCompletedJobs ();
-    reloadJobs ();
   };
 
   function createJobs() {
-    reloadAllJobs();
+    reloadJobs ();
   };
 
   function createJobButtons() {
@@ -186,7 +167,7 @@ var jobs = new function () {
 
       var reloadBtn = new UIButton({"title": "Reload jobs",
                                     'image': '/pics/buttons/refresh.gif',
-                                    "click": reloadAllJobs});
+                                    "click": reloadJobs});
       grid.add(reloadBtn);
 
       var registerBtn = new UIButton({"title": "Register job",
