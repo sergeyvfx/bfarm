@@ -250,6 +250,14 @@ function _UIWidget ()
                   this.dom.style.height = uiUtil.sizeToStyle (this.height);
                 }
             }
+
+          if (this.customClasses)
+            {
+              for (var i = 0; i < this.customClasses.length; ++i)
+                {
+                  $(this.dom).addClass (this.customClasses[i]);
+                }
+            }
         }
 
       this.attachStoppers ();
@@ -508,6 +516,9 @@ function UIWidget (opts)
 
   this.dom = null;       /* DOM-tree */
   this.focusDOM = null;  /* DOM element for setting focus */
+
+  /* List of custom classNames added to the root DOM element */
+  this.customClasses = defVal (opts['customClasses'], []);
 
   /* List of events, which soudn't been bubbled */
   this.stopEvents = [];
