@@ -173,7 +173,9 @@ var jobs = new function () {
 
       var registerBtn = new UIButton({"title": "Register job",
                                       'image': '/pics/buttons/add.gif',
-                                      "click": jobs.register.show});
+                                      "click": function () {
+                                            window.setTimeout (jobs.register.show, 10);
+                                          }});
       grid.add(registerBtn);
 
       jobsReload.append(grid.build());
