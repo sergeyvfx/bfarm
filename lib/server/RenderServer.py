@@ -137,9 +137,14 @@ class RenderServer(SignalThread):
         Unregister render node
         """
 
-        #
-        # TODO: Add jobs reassign here
-        #
+        with self.jobs_lock:
+            task = node.getTask()
+            if task['jobUUID'] is not None:
+                job = self.jobs_hash.get(task['jobUUID'])
+                task_nr = task['task_nr']
+                Logger.log('Restart task {0} of job {1}' .
+                    format(task_nr, job.getUUID()))
+                job.restartTask(task_nr)
 
         with self.nodes_lock:
             self.nodes.remove(node)
@@ -251,8 +256,12 @@ class RenderServer(SignalThread):
                 task = job.requestTask()
 
                 if task is not None:
+                    task_nr = task['task']
+                    node.assignTask(job.getUUID(), task_nr)
+
                     Logger.log('Job {0} task {1} assigned to node {2}' .
                         format(uuid, task['task'], node.getUUID()))
+
                     return task
 
         return False

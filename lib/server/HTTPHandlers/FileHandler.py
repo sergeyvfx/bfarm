@@ -155,7 +155,8 @@ def send_listing(httpRequest, path, listing, parent=None):
              ' "http://www.w3.org/TR/html4/strict.dtd">')
     r.append("\n<html>\n<head>\n<title>Directory listing for {0}</title>\n" .
         format(displaypath))
-    r.append("<link rel=\"stylesheet\" type=\"text/css\" href=\"/styles/listing.css\">\n")
+    r.append("<link rel=\"stylesheet\" type=\"text/css\" " +
+             "href=\"/styles/listing.css\">\n")
     r.append("</head>\n<body>\n<h2>Index of {0}</h2>\n" . format(displaypath))
     r.append("<div class=\"list\"><table><tr><th width=\"16\"></th>" +
              "<th>Name</th><th>Last modified</th><th>Size</th></tr>\n")
@@ -194,7 +195,8 @@ def send_listing(httpRequest, path, listing, parent=None):
                 cgi.escape(displayname), mtime, size))
 
     r.append("</table></div>\n" +
-             "<div class=\"footer\">{0}</div>\n</body>\n</html>\n".format(serv))
+             "<div class=\"footer\">{0}</div>\n</body>\n</html>\n" .
+             format(serv))
     enc = sys.getfilesystemencoding()
     encoded = ''.join(r).encode(enc)
 

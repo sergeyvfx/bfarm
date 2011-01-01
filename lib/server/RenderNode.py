@@ -50,6 +50,9 @@ class RenderNode:
 
         RenderNode.total_nodes += 1
 
+        self.jobUUID = None
+        self.task_nr = None
+
     def getUUID(self):
         """
         Get UUID of node
@@ -94,3 +97,19 @@ class RenderNode:
         """
 
         return self.ip
+
+    def assignTask(self, jobUUID, task_nr=None):
+        """
+        Assign task to node
+        """
+
+        self.jobUUID = jobUUID
+        self.task_nr = task_nr
+
+    def getTask(self):
+        """
+        Get assigned task
+        """
+
+        return {'jobUUID': self.jobUUID,
+                'task_nr': self.task_nr}

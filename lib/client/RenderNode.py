@@ -56,7 +56,7 @@ class RenderNode(SignalThread):
         self.uuid = None
         self.currentTask = None
 
-        self.taskSender = TaskSender()
+        self.taskSender = TaskSender(self)
 
     def getUUID(self):
         """

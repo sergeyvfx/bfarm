@@ -175,7 +175,8 @@ class XMLRPCHandlers:
 
             return job.getBlendChecksum()
 
-        def putRenderChunk(self, jobUUID, fname, chunk, chunk_nr, client_info):
+        def putRenderChunk(self, nodeUUID, jobUUID, task_nr, fname, chunk,
+                           chunk_nr, client_info):
             """
             Put chunk of rendered file
             """
@@ -187,6 +188,14 @@ class XMLRPCHandlers:
                 return False
 
             render_server = server.Server().getRenderServer()
+
+            node = render_server.getNode(nodeUUID)
+            task = node.getTask()
+
+            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
+                # Active task mistmatch. Happens after jobs after network
+                # lags and jobs reassignment
+                return False
 
             job = render_server.getJob(jobUUID)
             if job is None:
@@ -213,12 +222,23 @@ class XMLRPCHandlers:
 
             return job.putBlendChunk(chunk, chunk_nr)
 
-        def taskComplete(self, jobUUID, task_nr, client_info):
+        def taskComplete(self, nodeUUID, jobUUID, task_nr, client_info):
             """
             Mark task as DONE
             """
 
             render_server = server.Server().getRenderServer()
+
+            node = render_server.getNode(nodeUUID)
+            task = node.getTask()
+
+            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
+                # Active task mistmatch. Happens after jobs after network
+                # lags and jobs reassignment
+                return False
+
+            # There would be no active task for node
+            node.assignTask(None)
 
             job = render_server.getJob(jobUUID)
             if job is None:

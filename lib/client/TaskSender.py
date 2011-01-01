@@ -59,7 +59,7 @@ class TaskSender(SignalThread):
     Sender of ready tasks to server
     """
 
-    def __init__(self):
+    def __init__(self, node):
         """
         Initialize sender
         """
@@ -69,6 +69,8 @@ class TaskSender(SignalThread):
         self.tasks = []
         self.stop_flag = False
         self.task_lock = threading.Lock()
+
+        self.node = node
 
     def sendTask(self, task):
         """
@@ -86,6 +88,8 @@ class TaskSender(SignalThread):
         proxy = client.Client().getProxy()
         chunk_size = Config.client['chunk_size']
         jobUUID = task.getJobUUID()
+        nodeUUID = self.node.getUUID()
+        task_nr = task.getTaskNum()
         output_fname = task.getOutputPath()
 
         for root, dirs, files in os.walk(output_fname):
@@ -98,30 +102,47 @@ class TaskSender(SignalThread):
                 with open(fname_path, 'rb') as handle:
                     chunk = handle.read(chunk_size)
                     chunk_nr = 0
+                    enc_chunk = None
 
-                    try:
-                        while len(chunk) > 0:
+                    while len(chunk) > 0:
+                        ok = False
+
+                        if enc_chunk is None:
                             enc_chunk = xmlrpc.client.Binary(chunk)
-                            proxy.job.putRenderChunk(jobUUID, f,
-                                                     enc_chunk, chunk_nr)
+
+                        try:
+                            res = proxy.job.putRenderChunk(nodeUUID,  jobUUID,
+                                          task_nr, f, enc_chunk, chunk_nr)
+                            ok = True
+
+                        except socket.error as strerror:
+                            Logger.log('Error sending image to server: {0}' .
+                                format(strerror))
+
+                            time.sleep(0.2)
+                        except:
+                            Logger.log('Unexpected error: {0}' .
+                                format(sys.exc_info()[0]))
+                            raise
+
+                        if ok:
+                            if res == False:
+                                # Chunk was rejected. Happens after network
+                                # lags and jobs re-assignment
+
+                                return
+
                             chunk = handle.read(chunk_size)
                             chunk_nr += 1
+                            enc_chunk = None
 
-                        proxy.job.putRenderChunk(jobUUID, f, False, -1)
-                    except socket.error as strerror:
-                        # XXX: implement correct restoring after socket errors
-                        Logger.log('Error sending image to server: {0}' .
-                            format(strerror))
-                        break
-                    except:
-                        Logger.log('Unexpected error: {0}' .
-                            format(sys.exc_info()[0]))
-                        raise
+                    proxy.job.putRenderChunk(nodeUUID, jobUUID, task_nr,
+                                             f, False, -1)
 
                 Logger.log('File {0} sent to job {1} task {2}' .
-                    format(f, task.getJobUUID(), task.getTaskNum()))
+                    format(f, jobUUID, task_nr))
 
-        proxy.job.taskComplete(jobUUID, task.getTaskNum())
+        proxy.job.taskComplete(nodeUUID, jobUUID, task_nr)
 
     def requestStop(self):
         """

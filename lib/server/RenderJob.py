@@ -266,6 +266,14 @@ class RenderJob:
 
         return self.storage_fpath
 
+    def restartTask(self, task_nr):
+        """
+        Restart specified task
+        """
+
+        with self.task_lock:
+            self.tasks[task_nr] = RenderJob.TASK_NONE
+
     def requestTask(self):
         """
         Request task for render node
