@@ -28,6 +28,8 @@
 #
 
 import os
+import time
+import sys
 
 import Logger
 
@@ -90,25 +92,37 @@ class FileEnviron(Environ):
         with open(fname, 'wb') as handle:
             chunk_nr = 0
             while True:
-                chunk = proxy.job.getBlendChunk(nodeUUID, self.jobUUID,
-                                                self.task_nr, chunk_nr)
+                try:
+                    chunk = proxy.job.getBlendChunk(nodeUUID, self.jobUUID,
+                                                    self.task_nr, chunk_nr)
+                    ok = True
+                except socket.error as strerror:
+                    Logger.log('Error receiving .blend file from server: {0}' .
+                        format(strerror))
 
-                if type(chunk) is dict:
-                    if 'FINISHED' in chunk:
-                        return True
-                    elif 'CANCELLED' in chunk:
-                        # Transmission was cancelled by server
-                        # Happens after job reassigning, cancelling
-                        # jobs and so on
-                        Logger.log('File transmission was cancelled by server')
+                    time.sleep(0.2)
+                except:
+                    err = sys.exc_info() [0]
+                    Logger.log('Unexpected error: {0}' . format(err))
+                    raise
 
-                        return False
-                    else:
-                        return False
+                if ok:
+                    if type(chunk) is dict:
+                        if 'FINISHED' in chunk:
+                            return True
+                        elif 'CANCELLED' in chunk:
+                            # Transmission was cancelled by server
+                            # Happens after job reassigning, cancelling
+                            # jobs and so on
+                            Logger.log('File transmission was cancelled by server')
 
-                handle.write(chunk.data)
+                            return False
+                        else:
+                            return False
 
-                chunk_nr += 1
+                    handle.write(chunk.data)
+
+                    chunk_nr += 1
 
         return False
 
