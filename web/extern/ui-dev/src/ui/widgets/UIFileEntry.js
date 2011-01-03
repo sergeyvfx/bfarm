@@ -152,6 +152,7 @@ function _UIFileEntry ()
             } (this.fileInput));
 
           this.createFileInput ();
+          this.inputHolder.appendChild (this.fileInput);
         }
     };
 

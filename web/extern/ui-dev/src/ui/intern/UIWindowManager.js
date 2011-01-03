@@ -339,7 +339,7 @@ function _UIWindowManager ()
         }
       else
         {
-          window.style.display = 'none';
+          window.dom.style.display = 'none';
         }
 
       window.onMinimized ();
