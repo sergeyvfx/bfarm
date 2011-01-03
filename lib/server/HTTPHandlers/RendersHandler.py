@@ -152,6 +152,9 @@ def send_frame(httpRequest, jobName, frameName):
             httpRequest.send_error(404, 'Not found')
         elif e.errno == errno.EACCES:
             httpRequest.send_error(403, 'Forbidden')
+        elif e.errno == errno.EPIPE:
+            # pipe was closed by client, what could we do?
+            pass
         else:
             httpRequest.send_error(505, 'Internal server error')
 

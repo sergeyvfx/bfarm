@@ -32,6 +32,8 @@ import os
 import sys
 import cgi
 import io
+import errno
+
 from tempfile import TemporaryFile
 
 try:
@@ -112,6 +114,37 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         self.parts = {}
 
         http.server.BaseHTTPRequestHandler.__init__(self, *args, **kwargs)
+
+    def wrapper(self, method, *args, **kwargs):
+        """
+        Wrapper for methods which could fail with broken pipe message
+        """
+
+        sup = getattr(http.server.BaseHTTPRequestHandler, method)
+        try:
+            return sup(self, *args, **kwargs)
+        except IOError as e:
+          if e.errno == errno.EPIPE:
+              # pipe was closed by client, what could we do?
+              pass
+          else:
+              raise
+        except:
+            raise
+
+    def finish(self, *args, **kwargs):
+        """
+        Finish request
+        """
+
+        self.wrapper('finish', *args, **kwargs)
+
+    def handle_one_request(self, *args, **kwargs):
+        """
+        Parse and dispatch the request
+        """
+
+        self.wrapper('handle_one_request', *args, **kwargs)
 
     def do_GET(self):
         """
