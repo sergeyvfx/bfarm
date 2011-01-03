@@ -61,6 +61,7 @@ class RenderTask(SignalThread):
         self.pipe = None
 
         self.finishFlag = False
+        self.errorFlag = False
 
         self.environ = spawnNewEnviron(options)
 
@@ -69,9 +70,13 @@ class RenderTask(SignalThread):
         Prepare environment before start rendering
         """
 
-        self.environ.prepare()
+        if not self.environ.prepare():
+            return False
+
         self.fpath = self.environ.getBlend()
         self.output_fpath = self.environ.getOutput()
+
+        return True
 
     def getBlenderBinary(self):
         """
@@ -197,8 +202,15 @@ class RenderTask(SignalThread):
         self.finishFlag = False
 
         try:
-            self.prepareEnv()
-            self.runBlender()
+            if self.prepareEnv():
+                self.runBlender()
+            else:
+                Logger.log('Error preparing storage for task {0} of job {1}' .
+                        format(self.task, self.jobUUID))
+
+                # Error preparing environment, set flag
+                # to prevent sending any result to server
+                self.errorFlag = True
         finally:
             self.finishFlag = True
 
@@ -222,3 +234,10 @@ class RenderTask(SignalThread):
         """
 
         return self.task
+
+    def hasError(self):
+        """
+        Check if any errors occured while rendering
+        """
+
+        return self.errorFlag

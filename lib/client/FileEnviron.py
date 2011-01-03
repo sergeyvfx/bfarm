@@ -72,6 +72,9 @@ class FileEnviron(Environ):
 
         fname = self.getBlend()
         proxy = client.Client().getProxy()
+        node = client.Client().getRenderNode()
+
+        nodeUUID = node.getUUID()
 
         if os.path.isfile(fname):
             if self.isChecksumOk():
@@ -87,14 +90,27 @@ class FileEnviron(Environ):
         with open(fname, 'wb') as handle:
             chunk_nr = 0
             while True:
-                chunk = proxy.job.getBlendChunk(self.jobUUID, chunk_nr)
+                chunk = proxy.job.getBlendChunk(nodeUUID, self.jobUUID,
+                                                self.task_nr, chunk_nr)
 
-                if chunk == False:
-                    break
+                if type(chunk) is dict:
+                    if 'FINISHED' in chunk:
+                        return True
+                    elif 'CANCELLED' in chunk:
+                        # Transmission was cancelled by server
+                        # Happens after job reassigning, cancelling
+                        # jobs and so on
+                        Logger.log('File transmission was cancelled by server')
+
+                        return False
+                    else:
+                        return False
 
                 handle.write(chunk.data)
 
                 chunk_nr += 1
+
+        return False
 
     def prepare(self):
         """
@@ -104,7 +120,7 @@ class FileEnviron(Environ):
         Environ.prepare(self)
 
         # Receive file from server
-        self.receiveFile()
+        return self.receiveFile()
 
     def getBlend(self):
         """

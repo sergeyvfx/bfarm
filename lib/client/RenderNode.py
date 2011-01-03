@@ -173,6 +173,14 @@ class RenderNode(SignalThread):
 
         self.taskSender.sendTask(self.currentTask)
 
+    def sendResult(self):
+        """
+        Send result to server
+        """
+
+        if not self.currentTask.hasError():
+            self.sendRenderedImage()
+
         self.currentTask = None
 
     def run(self):
@@ -207,7 +215,7 @@ class RenderNode(SignalThread):
                     if not self.currentTask.isFinished():
                         self.currentTask.start()
                     else:
-                        self.sendRenderedImage()
+                        self.sendResult()
 
                         # Request next task just after render finish
                         # it should save a bit of time

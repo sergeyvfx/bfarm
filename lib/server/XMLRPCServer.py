@@ -140,24 +140,39 @@ class XMLRPCHandlers:
             render_server = server.Server().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
+            if node is None:
+                return False
 
             return render_server.requestTask(node)
 
-        def getBlendChunk(self, jobUUID, chunk_nr, client_info):
+        def getBlendChunk(self, nodeUUID, jobUUID, task_nr,
+                          chunk_nr, client_info):
             """
             Get chunk of .blend file
             """
 
             render_server = server.Server().getRenderServer()
 
+            node = render_server.getNode(nodeUUID)
+            if node is None:
+                # XXX: value for pre-py3k only
+                return {'CANCELLED': True}
+
+            task = node.getTask()
+            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
+                # XXX: value for pre-py3k only
+                return {'CANCELLED': True}
+
             job = render_server.getJob(jobUUID)
 
             if job is None:
-                return False
+                # XXX: value for pre-py3k only
+                return {'CANCELLED': True}
 
             chunk = job.getBlendChunk(chunk_nr)
             if chunk is None:
-                return False
+                # XXX: value for pre-py3k only
+                return {'FINISHED': True}
 
             return xmlrpc.client.Binary(chunk)
 
@@ -190,6 +205,9 @@ class XMLRPCHandlers:
             render_server = server.Server().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
+            if node is None:
+                return False
+
             task = node.getTask()
 
             if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
@@ -230,6 +248,9 @@ class XMLRPCHandlers:
             render_server = server.Server().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
+            if node is None:
+                return False
+
             task = node.getTask()
 
             if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
