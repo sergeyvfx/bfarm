@@ -161,7 +161,7 @@ function UIAbstractList (opts)
   this.itemActClassName = '';
 
   /* Index of active element */
-  this.active = 0;
+  this.active = defVal(opts['active'], 0);
 
   /* Array of DOM nodes for all items */
   this.itemsDom = [];
