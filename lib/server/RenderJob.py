@@ -116,6 +116,7 @@ class RenderJob:
         self.resol_x = options.get('resol_x')
         self.resol_y = options.get('resol_y')
         self.percentage = options.get('percentage')
+        self.color_mode = options.get('color_mode')
 
         self.useStamp = False
         if 'use_stamp' in options and options['use_stamp']:
@@ -301,7 +302,8 @@ class RenderJob:
                                'resol_x': self.resol_x,
                                'resol_y': self.resol_y,
                                'percentage': self.percentage,
-                               'use_stamp': self.useStamp}
+                               'use_stamp': self.useStamp,
+                               'color_mode': self.color_mode}
 
                     # Job-type specified options
                     if self.job_type == 'anim':

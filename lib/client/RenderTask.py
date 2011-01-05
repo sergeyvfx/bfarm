@@ -140,6 +140,10 @@ class RenderTask(SignalThread):
             args.append('--percentage')
             args.append(str(self.options['percentage']))
 
+        if 'color_mode' in self.options:
+            args.append('--color-mode')
+            args.append(str(self.options['color_mode']))
+
         # For correct node IP detection (for stamp)
         args.append('--server-addr')
         args.append(proxy_addr[0] + ':' + str(proxy_addr[1]))

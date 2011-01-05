@@ -37,7 +37,8 @@ def execute(httpRequest):
     Execute job registration action
     """
 
-    output_params = ['file_format', 'resol_x', 'resol_y', 'percentage']
+    output_params = ['file_format', 'resol_x', 'resol_y', 'percentage',
+                     'color_mode']
 
     if 'type' not in httpRequest.POST:
         return
@@ -69,7 +70,7 @@ def execute(httpRequest):
         if x in httpRequest.POST:
             val = httpRequest.POST[x]
 
-            if x != 'file_format':  # XXX: hacky..
+            if x not in ['file_format', 'color_mode']:
                 val = int(val)
 
             job[x] = val
