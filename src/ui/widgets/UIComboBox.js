@@ -420,7 +420,9 @@ function UIComboBox (opts)
   this.stopEvents = this.stopEvents.concat (['click']);
 
   /* List for displaying items in puplist */
-  this.list = new UIList ({'transparent': true, 'binding': opts['binding']});
+  this.list = new UIList ({'transparent': true,
+                           'binding': opts['binding'],
+                           'active': opts['active']});
 
   this.list.onItemSelected = function (comboBox) { return function (itemIndex) {
         comboBox.onListItemSelected (itemIndex);
