@@ -158,8 +158,7 @@ class XMLRPCHandlers:
                 # XXX: value for pre-py3k only
                 return {'CANCELLED': True}
 
-            task = node.getTask()
-            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
+            if not node.hasTask(jobUUID, task_nr):
                 # XXX: value for pre-py3k only
                 return {'CANCELLED': True}
 
@@ -196,27 +195,40 @@ class XMLRPCHandlers:
             Put chunk of rendered file
             """
 
+            full_file = '{0} (job {1}, task {2})' . \
+                    format(fname, jobUUID, task_nr)
+
             # XXX: should it be something else?
             if fname.find(os.path.sep) >= 0:
-                Logger.log('Attempt to write to invalid file {0}, ip {2}' .
-                    format(fname, client_info['address'][0]))
+                Logger.log('Attempt to write to invalid file {0}, ip {1}' .
+                    format(full_file, client_info['address'][0]))
                 return False
 
             render_server = server.Server().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
             if node is None:
+                Logger.log(('Attempt to write file {0} from un-registered ' +
+                            'node {1} (ip {2})') .
+                    format(full_file, nodeUUID, client_info['address'][0]))
                 return False
 
-            task = node.getTask()
+            if not node.hasTask(jobUUID, task_nr):
+                Logger.log(('Attempt to write file {0} from wrong ' +
+                            'node {1} (ip {2})') .
+                    format(full_file, nodeUUID, client_info['address'][0]))
 
-            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
                 # Active task mistmatch. Happens after jobs after network
                 # lags and jobs reassignment
                 return False
 
             job = render_server.getJob(jobUUID)
             if job is None:
+                Logger.log(('Attempt to write file {0} for wrong ' +
+                            'job {1} from node {2} (ip {3})') .
+                    format(full_file, jobUUID, nodeUUID,
+                           client_info['address'][0]))
+
                 return False
 
             if chunk != False:
@@ -251,15 +263,19 @@ class XMLRPCHandlers:
             if node is None:
                 return False
 
-            task = node.getTask()
-
-            if task['jobUUID'] != jobUUID or task['task_nr'] != task_nr:
+            if not node.hasTask(jobUUID, task_nr):
                 # Active task mistmatch. Happens after jobs after network
                 # lags and jobs reassignment
+
+                Logger.log(('Attempt to copmlete task {0} of job {1}' +
+                            'from wrong node {1} (ip {2})') .
+                    format(task_nr, jobUUID, nodeUUID,
+                           client_info['address'][0]))
+
                 return False
 
-            # There would be no active task for node
-            node.assignTask(None)
+            # Unassign task from node
+            node.unassignTask(jobUUID, task_nr)
 
             job = render_server.getJob(jobUUID)
             if job is None:

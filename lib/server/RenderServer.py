@@ -138,8 +138,8 @@ class RenderServer(SignalThread):
         """
 
         with self.jobs_lock:
-            task = node.getTask()
-            if task['jobUUID'] is not None:
+            tasks = node.getTasks()
+            for task in tasks:
                 job = self.jobs_hash.get(task['jobUUID'])
                 task_nr = task['task_nr']
                 Logger.log('Restart task {0} of job {1}' .

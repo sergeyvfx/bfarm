@@ -28,6 +28,8 @@
 #
 
 import time
+import threading
+
 from config import Config
 
 
@@ -50,8 +52,8 @@ class RenderNode:
 
         RenderNode.total_nodes += 1
 
-        self.jobUUID = None
-        self.task_nr = None
+        self.tasks_lock = threading.Lock()
+        self.tasks = []
 
     def getUUID(self):
         """
@@ -98,18 +100,47 @@ class RenderNode:
 
         return self.ip
 
-    def assignTask(self, jobUUID, task_nr=None):
+    def assignTask(self, jobUUID, task_nr):
         """
         Assign task to node
         """
 
-        self.jobUUID = jobUUID
-        self.task_nr = task_nr
+        with self.tasks_lock:
+            if jobUUID is None:
+                self.tasks = []
+            else:
+                self.tasks.append({'jobUUID': jobUUID,
+                                   'task_nr': task_nr})
 
-    def getTask(self):
+    def unassignTask(self, jobUUID, task_nr):
         """
-        Get assigned task
+        Unassigns task from node
         """
 
-        return {'jobUUID': self.jobUUID,
-                'task_nr': self.task_nr}
+        with self.tasks_lock:
+            for t in self.tasks:
+                if t['jobUUID'] == jobUUID and t['task_nr'] == task_nr:
+                    self.tasks.remove(t)
+                    return
+
+    def hasTask(self, jobUUID, task_nr):
+        """
+        Check if node has assigned task
+        """
+
+        with self.tasks_lock:
+            for t in self.tasks:
+                if t['jobUUID'] == jobUUID and t['task_nr'] == task_nr:
+                    return True
+
+        return False
+
+    def getTasks(self):
+        """
+        Get all assigned task
+        """
+
+        with self.tasks_lock:
+            tasks = self.tasks[:]
+
+        return tasks
