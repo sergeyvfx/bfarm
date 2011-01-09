@@ -329,7 +329,7 @@ class RenderJob:
         """
 
         with self.task_lock:
-            Logger.log('Job {0}: task {0} completed' .
+            Logger.log('Job {0}: task {1} completed' .
                 format(self.uuid, task_nr))
 
             self.tasks[task_nr] = RenderJob.TASK_DONE
