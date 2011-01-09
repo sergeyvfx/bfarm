@@ -81,7 +81,7 @@ class FileEnviron(Environ):
         if os.path.isfile(fname):
             if self.isChecksumOk():
                 # checksum matched -- nothing to do here
-                return
+                return True
             else:
                 Logger.log('Checksum mistmatch, ' +
                     're-receiving file {0} from server' . format(self.fname))
