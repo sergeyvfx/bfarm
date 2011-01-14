@@ -63,3 +63,21 @@ DIV.UIButtonInsensitive:hover {
 DIV.UIButtonInsesitive A {
   color: #666;
 }
+
+/* flat buttons */
+DIV.UIFlatButton {
+  background: #ddd;
+}
+
+DIV.UIFlatButton:hover {
+  background: #e7e7e7;
+}
+
+DIV.UIFlatButtonPressed {
+  background: #bbb !important;
+}
+
+DIV.UIFlatButtonInsensitive {
+  border-color: #666;
+  background: #ccc;
+}

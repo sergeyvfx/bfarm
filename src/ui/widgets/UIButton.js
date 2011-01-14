@@ -16,6 +16,11 @@ function _UIButton ()
       result.className = 'UIButton';
       this.imageElement = null;
 
+      if (this.flat)
+        {
+          result.className += ' UIFlatButton';
+        }
+
       var innerHTML = '';
       if (this.image)
         {
@@ -131,7 +136,15 @@ function _UIButton ()
     {
       if (this.sensitive)
         {
-          this.dom.addClass ('UIButtonPressed');
+          if (this.flat)
+            {
+              this.dom.addClass ('UIFlatButtonPressed');
+            }
+          else
+            {
+              this.dom.addClass ('UIButtonPressed');
+            }
+
           this.onPress ();
         }
     };
@@ -143,7 +156,15 @@ function _UIButton ()
     {
       if (this.sensitive)
         {
-          this.dom.removeClass ('UIButtonPressed');
+          if (this.flat)
+            {
+              this.dom.removeClass ('UIFlatButtonPressed');
+            }
+          else
+            {
+              this.dom.removeClass ('UIButtonPressed');
+            }
+
           this.onRelease ();
         }
     };
@@ -153,7 +174,14 @@ function _UIButton ()
    */
   this.doOnMouseOut = function ()
     {
-      this.dom.removeClass ('UIButtonPressed');
+      if (this.flat)
+        {
+          this.dom.removeClass ('UIFlatButtonPressed');
+        }
+      else
+        {
+          this.dom.removeClass ('UIButtonPressed');
+        }
     };
 }
 
@@ -165,6 +193,9 @@ function UIButton (opts)
 
   /* Title which will be displayed */
   this.title = defVal (opts['title'], '');
+
+  /* Should button be flat? */
+  this.flat = defVal (opts['flat'], false);
 
   /* User's defined click handler */
   if (opts['click'])
@@ -178,7 +209,14 @@ function UIButton (opts)
   this.titleElement = null; /* DOM element for title */
   this.imageElement = null; /* DOM element for image */
 
-  this.insensitiveClassName = 'UIButtonInsensitive';
+  if (this.flat)
+    {
+      this.insensitiveClassName = 'UIFlatButtonInsensitive';
+    }
+  else
+    {
+      this.insensitiveClassName = 'UIButtonInsensitive';
+    }
 
   /* events avaliable for attaching */
   this.events = this.events.concat (['onClick', 'onPress', 'OnRelease']);
