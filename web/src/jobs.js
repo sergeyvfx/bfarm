@@ -9,6 +9,7 @@
 var jobs = new function () {
   var attrs = [{'title': 'Identifier', 'field': 'uuid'},
                {'title': 'Registration time', 'field': 'time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
+               {'title': 'Finish time', 'field': 'finish_time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
                {'title': 'File', 'field': 'fname'},
                {'title': 'Type', 'field': 'type'},
                {'title': 'Start frame', 'field': 'start_frame'},
@@ -65,19 +66,24 @@ var jobs = new function () {
                                'rows': attrs.length + 1,
                                'padding': 2});
     attrGrid.setCellStyle(0, 0, {'width': 120});
-    attrGrid.setCellStyle(attrs.length, 0, {'colspan': 2});
 
+    var index = 0;
     for(var i = 0; i < attrs.length; i++) {
       var attr = attrs[i];
       var text = job[attr['field']];
+
+      if (isUnknown(text))
+        continue;
 
       if (attr['filter'])
         text = attr['filter'] (text);
 
       attrGrid.add (new UILabel({'text': attr['title']}));
       attrGrid.add (new UILabel({'text': text}));
+      index++;
     }
 
+    attrGrid.setCellStyle(index, 0, {'colspan': 2});
     attrGrid.add (new UIProgress({'position': position,
                                   'title': 'Progress'}));
 

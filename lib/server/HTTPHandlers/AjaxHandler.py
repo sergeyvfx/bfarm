@@ -103,6 +103,7 @@ class _Ajaxhandlers(Singleton):
                        'start_frame': job.getStartFrame(),
                        'end_frame': job.getEndFrame(),
                        'time': job.getTime(),
+                       'finish_time': job.getFinishTime(),
                        'progress': job.getProgress(),
                        'ntasks': job.getTasksCount()}
 

@@ -122,6 +122,9 @@ class RenderJob:
         if 'use_stamp' in options and options['use_stamp']:
             self.useStamp = True
 
+        # Time job finish
+        self.finish_time = None
+
         RenderJob.total_jobs += 1
 
     def getUUID(self):
@@ -137,6 +140,13 @@ class RenderJob:
         """
 
         return self.time
+
+    def getFinishTime(self):
+        """
+        Get time of finishing
+        """
+
+        return self.finish_time
 
     def getBlendChunk(self, chunk_nr):
         """
@@ -336,6 +346,7 @@ class RenderJob:
             self.tasks_remain -= 1
 
             if self.tasks_remain == 0:
+                self.finish_time = time.time()
                 Logger.log('Job {0} completed' . format(self.uuid))
 
         return True
