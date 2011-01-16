@@ -106,7 +106,9 @@ class _Ajaxhandlers(Singleton):
                        'finish_time': job.getFinishTime(),
                        'progress': job.getProgress(),
                        'ntasks': job.getTasksCount(),
-                       'priority': job.getPriority()}
+                       'priority': job.getPriority(),
+                       'task_time_max': job.getMaxTaskTime(),
+                       'task_time_avg': job.getAvgTaskTime()}
 
                 renderFiles = job.getRenderFiles()
                 if renderFiles:

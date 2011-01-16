@@ -99,7 +99,9 @@ class RenderJob:
             # XXX: need better detection of still parts
             self.ntasks = 9
 
-        self.tasks = [RenderJob.TASK_NONE] * self.ntasks
+        self.tasks = [{'status': RenderJob.TASK_NONE} \
+                             for x in range(self.ntasks)]
+
         self.tasks_remain = self.ntasks
 
         self.task_lock = threading.Lock()
@@ -129,6 +131,9 @@ class RenderJob:
             self.priority = options['priority']
         else:
             self.priority = 0
+
+        self.task_time_max = None
+        self.task_time_avg = None
 
         RenderJob.total_jobs += 1
 
@@ -288,7 +293,9 @@ class RenderJob:
         """
 
         with self.task_lock:
-            self.tasks[task_nr] = RenderJob.TASK_NONE
+           task = self.tasks[task_nr]
+           task['status'] = RenderJob.TASK_NONE
+           del task['start_time']
 
     def requestTask(self):
         """
@@ -307,8 +314,10 @@ class RenderJob:
                 return None
 
             for x in range(self.ntasks):
-                if self.tasks[x] == RenderJob.TASK_NONE:
-                    self.tasks[x] = RenderJob.TASK_RUNNING
+                if self.tasks[x]['status'] == RenderJob.TASK_NONE:
+                    task = self.tasks[x]
+                    task['status'] = RenderJob.TASK_RUNNING
+                    task['start_time'] = time.time()
 
                     # Common options
                     options = {'jobUUID': self.uuid,
@@ -350,7 +359,23 @@ class RenderJob:
             Logger.log('Job {0}: task {1} completed' .
                 format(self.uuid, task_nr))
 
-            self.tasks[task_nr] = RenderJob.TASK_DONE
+            task = self.tasks[task_nr]
+            task['status'] = RenderJob.TASK_DONE
+            task['finish_time'] = time.time()
+
+            task_time = task['finish_time'] - task['start_time']
+
+            # Calculate some statistics
+            if self.task_time_max is None or self.task_time_max < task_time:
+                self.task_time_max = task_time
+
+            if self.task_time_avg is None:
+                self.task_time_avg = task_time
+            else:
+                n = (self.ntasks - self.tasks_remain)
+                s = self.task_time_avg * n + task_time
+                self.task_time_avg = s / (n + 1)
+
             self.tasks_remain -= 1
 
             if self.tasks_remain == 0:
@@ -508,3 +533,17 @@ class RenderJob:
             return None
 
         return thumbs_fpath
+
+    def getMaxTaskTime(self):
+        """
+        Get maximal task time
+        """
+
+        return self.task_time_max
+
+    def getAvgTaskTime(self):
+        """
+        Get average task time
+        """
+
+        return self.task_time_avg

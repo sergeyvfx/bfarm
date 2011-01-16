@@ -43,6 +43,15 @@ var jobs = new function () {
     return -1;
   };
 
+  function statTime(val) {
+    val = Math.ceil(val);
+
+    var m = Math.floor(val / 60);
+    var s = val % 60;
+
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  };
+
   function createJobBoxHeaderItems(job) {
     var headerItems = [];
 
@@ -69,6 +78,17 @@ var jobs = new function () {
       priorityCb.onItemSelected = function (job) { return function (item) { jobs.setPriority (job.uuid, item.tag); } } (job);
       headerItems.push(priorityCb);
     }
+
+    /* Different statistics */
+    var stat = '';
+    if (!isUnknown(job['task_time_max'])) stat += 'Max: ' + statTime(job['task_time_max']);
+    else stat += 'Max: N/A';
+
+    if (!isUnknown(job['task_time_avg'])) stat += ', Avg: ' + statTime(job['task_time_avg']);
+    else stat += ', Avg: N/A';
+
+    var statLabel = new UILabel({'text': stat})
+    headerItems.push(statLabel);
 
     return headerItems;
   };
