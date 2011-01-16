@@ -295,6 +295,9 @@ class RenderJob:
         Request task for render node
         """
 
+        if self.priority == -99:
+            return None
+
         with self.task_lock:
             if self.blendRequired and not self.blendReceived:
                 # .blend file is needed and hasn't been received yet

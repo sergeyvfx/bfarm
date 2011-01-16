@@ -21,9 +21,10 @@ var jobs = new function () {
                {'title': 'Total tasks', 'field': 'ntasks'},
                {'title': 'Completed tasks', 'field': 'progress'}];
 
-  var priorities = [{'title': 'Low',    'tag': -1, 'toString': 'field:title'},
-                    {'title': 'Normal', 'tag':  0, 'toString': 'field:title'},
-                    {'title': 'High',   'tag':  1, 'toString': 'field:title'}];
+  var priorities = [{'title': 'Suspended', 'tag': -99, 'toString': 'field:title'},
+                    {'title': 'Low',       'tag':  -1, 'toString': 'field:title'},
+                    {'title': 'Normal',    'tag':   0, 'toString': 'field:title'},
+                    {'title': 'High',      'tag':   1, 'toString': 'field:title'}];
 
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
@@ -62,7 +63,7 @@ var jobs = new function () {
       var priorityCb = new UIComboBox({'title': 'Priority',
                                        'items': priorities,
                                        'active': jobPriorityIndex(job),
-                                       'width': 120});
+                                       'width': 130});
       var headerItem = $('<DIV>') . addClass('headerItem');
       priorityCb.onItemSelected = function (job) { return function (item) { jobs.setPriority (job.uuid, item.tag); } } (job);
       headerItem.append(priorityCb.build());
