@@ -18,13 +18,13 @@ function _UIComboBox ()
         {
           var item = this.list.get (index);
 
-          if (item.image)
-            {
-              prefix += '<img src="' + htmlspecialchars (item.image) + '">';
-            }
-
           if (!isUnknown (item))
             {
+              if (item.image)
+                {
+                  prefix += '<img src="' + htmlspecialchars (item.image) + '">';
+                }
+
               return prefix + htmlspecialchars (item.toString ());
             }
         }
