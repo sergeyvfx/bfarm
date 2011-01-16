@@ -46,10 +46,11 @@ var jobs = new function () {
   function statTime(val) {
     val = Math.ceil(val);
 
-    var m = Math.floor(val / 60);
+    var h = Math.floor(val / 60 / 60);
+    var m = Math.floor(val / 60) % 60;
     var s = val % 60;
 
-    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+    return h + ':' + (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
   };
 
   function createJobBoxHeaderItems(job) {
