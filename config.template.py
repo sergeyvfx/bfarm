@@ -29,9 +29,9 @@
 
 
 class Config:
-    role = 'server'
+    role = 'master'
 
-    server = {'address':              '0.0.0.0',
+    master = {'address':              '0.0.0.0',
               'port':                 4043,
 
               'http_address':         '0.0.0.0',
@@ -42,14 +42,14 @@ class Config:
               'chunk_size':           32768,
 
               'review_nodes_timeout': 30,
-              'client_max_age':       90,
+              'slave_max_age':        90,
 
               'thumb_size':           '480x270'}
 
-    client = {'server_address':       '127.0.0.1',
-              'server_port':          4043,
-              'job_request_interval': 5,
-              'blender-binary':       '/home/nazgul/lib/blender2.5/blender',
-              'touch_interval':       5,
-              'storage_path':         'storage',
-              'chunk_size':           32768}
+    slave = {'master_address':       '127.0.0.1',
+             'master_port':          4043,
+             'job_request_interval': 5,
+             'blender-binary':       '/home/nazgul/lib/blender2.5/blender',
+             'touch_interval':       5,
+             'storage_path':         'storage',
+             'chunk_size':           32768}

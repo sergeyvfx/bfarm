@@ -46,7 +46,7 @@ except ImportError:
 
     setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
 
-import server
+import master
 import Logger
 
 from SignalThread import SignalThread
@@ -70,7 +70,7 @@ class XMLRPCHandlers:
             Register rendering node
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             return render_server.registerNode(client_info)
 
@@ -79,7 +79,7 @@ class XMLRPCHandlers:
             Register rendering node
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
 
@@ -93,7 +93,7 @@ class XMLRPCHandlers:
             Register rendering node
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
 
@@ -115,7 +115,7 @@ class XMLRPCHandlers:
             Register new job
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             return render_server.registerJob(options)
 
@@ -124,7 +124,7 @@ class XMLRPCHandlers:
             Unregister job
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             job = render_server.getJob(jobUUID)
             if job is None:
@@ -137,7 +137,7 @@ class XMLRPCHandlers:
             Request task for rendering node
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
             if node is None:
@@ -151,7 +151,7 @@ class XMLRPCHandlers:
             Get chunk of .blend file
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
             if node is None:
@@ -180,7 +180,7 @@ class XMLRPCHandlers:
             Get checksum of .blend file
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             job = render_server.getJob(jobUUID)
 
@@ -204,7 +204,7 @@ class XMLRPCHandlers:
                     format(full_file, client_info['address'][0]))
                 return False
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
             if node is None:
@@ -241,7 +241,7 @@ class XMLRPCHandlers:
             Get chunk of .blend file
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             job = render_server.getJob(jobUUID)
             if job is None:
@@ -257,7 +257,7 @@ class XMLRPCHandlers:
             Mark task as DONE
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             node = render_server.getNode(nodeUUID)
             if node is None:
@@ -296,7 +296,7 @@ class XMLRPCHandlers:
         Stop serve
         """
 
-        render_server = server.Server().getRenderServer()
+        render_server = naster.Master().getRenderServer()
 
         render_server.requestStop()
 

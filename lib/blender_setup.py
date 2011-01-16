@@ -42,9 +42,9 @@ def get_ip(opts):
     Quite silly function to get node IP address
     """
 
-    if opts.server_addr is not None:
+    if opts.master_addr is not None:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        host, port = opts.server_addr.split(':')
+        host, port = opts.master_addr.split(':')
         s.connect((host, int(port)))
         ip = s.getsockname() [0]
         s.close()
@@ -69,7 +69,7 @@ def parseOptions(argv=None):
     # System
     op.add_option('--node-id', dest='node_id', default=None)
     op.add_option('--task-id', dest='task_id', default=None)
-    op.add_option('--server-addr', dest='server_addr', default=None)
+    op.add_option('--master-addr', dest='master_addr', default=None)
 
     # Output parameters
     op.add_option('-o', '--output-path', dest='output_path', default=None)

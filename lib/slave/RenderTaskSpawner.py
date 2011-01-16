@@ -27,13 +27,36 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-from client.FileEnviron import FileEnviron
+# XXX: for debug only
+if __name__ == '__main__':
+    import os
+    import sys
+
+    abs_file = os.path.abspath(__file__)
+    cwd = abs_file
+    for i in range(2):
+        cwd = os.path.dirname(cwd)
+    sys.path.append(cwd)
+    cwd = os.path.dirname(cwd)
+    sys.path.append(cwd)
+
+from slave.StillRenderTask import StillRenderTask
+from slave.AnimRenderTask import AnimRenderTask
 
 
-def spawnNewEnviron(options):
+def spawnNewTask(options):
     """
-    Spawn new environment object depends on passed options
+    Spawn new task object depending on options
     """
 
-    if options['fname'].startswith('file://'):
-        return FileEnviron(options)
+    # quiet silly determination atm, but KISS :)
+    if options.get('type') == 'still':
+        return StillRenderTask(options)
+    else:
+        return AnimRenderTask(options)
+
+if __name__ == '__main__':
+    options = {'type':  'still',
+               'fname': '/home/nazgul/tmp/test.blend'}
+    task = spawnNewTask(0, None, options)
+    task.run()

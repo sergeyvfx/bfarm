@@ -46,23 +46,23 @@ except ImportError:
 
 from config import Config
 from Singleton import Singleton
-from client.RenderNode import RenderNode
+from slave.RenderNode import RenderNode
 
 
-class Client(Singleton):
+class Slave(Singleton):
     """
-    Render farm node client
+    Render farm salve
     """
 
     def initInstance(self):
         """
-        Initialize client
+        Initialize slave
         """
 
         self.render_node = RenderNode()
 
-        address = Config.client['server_address']
-        port = Config.client['server_port']
+        address = Config.slave['master_address']
+        port = Config.slave['master_port']
         url = 'http://{0}:{1}/'.format(address, port)
 
         self.proxy = xmlrpc.client.ServerProxy(url)
@@ -90,7 +90,7 @@ class Client(Singleton):
 
     def run(self):
         """
-        Run server logic
+        Run slave logic
         """
 
         self.render_node.start()

@@ -80,12 +80,12 @@ except ImportError:
 import Logger
 from SignalThread import SignalThread
 from config import Config
-from server.HTTPHandlers import FileHandler
-from server.HTTPHandlers import AjaxHandler
-from server.HTTPHandlers import PackHandler
-from server.HTTPHandlers import RendersHandler
-from server.HTTPActions import RegisterJob
-from server.Multipart import parseMultipart
+from master.HTTPHandlers import FileHandler
+from master.HTTPHandlers import AjaxHandler
+from master.HTTPHandlers import PackHandler
+from master.HTTPHandlers import RendersHandler
+from master.HTTPActions import RegisterJob
+from master.Multipart import parseMultipart
 import Version
 
 
@@ -98,7 +98,7 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
     server_version = 'bfarm/{0} webserver at {1}:{2}' . \
         format(Version.bfarm_version, socket.gethostname(),
-            Config.server['http_port'])
+            Config.master['http_port'])
 
     _action_handlers = {'registerJob': RegisterJob}
 

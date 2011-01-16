@@ -37,8 +37,8 @@ from time import sleep
 from config import Config
 
 from SignalThread import SignalThread
-from server.RenderNode import RenderNode
-from server.RenderJob import RenderJob
+from master.RenderNode import RenderNode
+from master.RenderJob import RenderJob
 
 
 class RenderServer(SignalThread):
@@ -286,7 +286,7 @@ class RenderServer(SignalThread):
         Prepare common storage directory structure
         """
 
-        fpath = Config.server['storage_path']
+        fpath = Config.master['storage_path']
 
         if not os.path.isdir(fpath):
             try:
@@ -317,7 +317,7 @@ class RenderServer(SignalThread):
         Logger.log('Started main renderfarm thread')
 
         last_review_time = time.time()
-        review_int = Config.server['review_nodes_timeout']
+        review_int = Config.master['review_nodes_timeout']
 
         while not self.stop_flag:
             cur_time = time.time()

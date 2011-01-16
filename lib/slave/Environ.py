@@ -29,7 +29,7 @@
 
 import os
 
-import client
+import slave
 from config import Config
 
 
@@ -43,11 +43,11 @@ class Environ:
         Initialize environment
         """
 
-        node = client.Client().getRenderNode()
+        node = slave.Slave().getRenderNode()
 
         self.jobUUID = options['jobUUID']
         self.task_nr = options['task']
-        self.storage = os.path.join(Config.client['storage_path'],
+        self.storage = os.path.join(Config.slave['storage_path'],
             'node-' + node.uuid, 'job-' + options['jobUUID'])
 
     def prepare(self):

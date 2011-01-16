@@ -37,7 +37,7 @@ try:
 except ImportError:
     import urllib
 
-import server
+import master
 from Singleton import Singleton
 from PathUtil import getObjectPath
 
@@ -72,7 +72,7 @@ class _Ajaxhandlers(Singleton):
             Get list of all nodes
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
 
             nodes = render_server.getNodes()
             enc = []
@@ -127,7 +127,7 @@ class _Ajaxhandlers(Singleton):
             Get list of all running jobs
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
             jobs = render_server.getJobs()
             self._send_jobs(httpRequest, jobs)
 
@@ -136,7 +136,7 @@ class _Ajaxhandlers(Singleton):
             Get list of all completed jobs
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
             jobs = render_server.getCompletedJobs()
             self._send_jobs(httpRequest, jobs)
 
@@ -145,7 +145,7 @@ class _Ajaxhandlers(Singleton):
             Get list of all (runnign and completed) jobs
             """
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
             jobs = render_server.getJobs()
             jobs += render_server.getCompletedJobs()
 
@@ -166,7 +166,7 @@ class _Ajaxhandlers(Singleton):
                 _send_json(httpRequest, {'result': 'fail'})
                 return
 
-            render_server = server.Server().getRenderServer()
+            render_server = master.Master().getRenderServer()
             job = render_server.getJob(jobUUID)
 
             answer = {'result': 'ok'}

@@ -32,24 +32,24 @@ import Logger
 
 from config import Config
 from Singleton import Singleton
-from server.RenderServer import RenderServer
-from server.HTTPServer import HTTPServer
-from server.XMLRPCServer import XMLRPCServer
+from master.RenderServer import RenderServer
+from master.HTTPServer import HTTPServer
+from master.XMLRPCServer import XMLRPCServer
 
 
-class Server(Singleton):
+class Master(Singleton):
     def initInstance(self):
         """
-        Initialize server
+        Initialize master
         """
 
         # Set signal handlers
         self.setSignals()
 
         # Create servers
-        xmlrpc_address = (Config.server['address'], Config.server['port'])
-        http_address = (Config.server['http_address'],
-                        Config.server['http_port'])
+        xmlrpc_address = (Config.master['address'], Config.master['port'])
+        http_address = (Config.master['http_address'],
+                        Config.master['http_port'])
 
         self.render_server = RenderServer()
         self.xmlrpc_server = XMLRPCServer(xmlrpc_address)
@@ -74,7 +74,7 @@ class Server(Singleton):
 
     def run(self):
         """
-        Run server logic
+        Run master logic
         """
 
         # Start server threads

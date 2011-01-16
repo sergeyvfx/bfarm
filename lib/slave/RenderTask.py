@@ -32,11 +32,11 @@ import subprocess
 import os
 
 import Logger
-import client
+import slave
 from config import Config
 from SignalThread import SignalThread
 
-from client.EnvironSpawner import spawnNewEnviron
+from slave.EnvironSpawner import spawnNewEnviron
 
 
 class RenderTask(SignalThread):
@@ -83,7 +83,7 @@ class RenderTask(SignalThread):
         Get arguments to pass to blender binary
         """
 
-        return Config.client['blender-binary']
+        return Config.slave['blender-binary']
 
     def getBlenderArguments(self):
         """
@@ -96,9 +96,9 @@ class RenderTask(SignalThread):
                                      'blender_setup.py')
 
         args = []
-        cl = client.Client()
-        proxy_addr = cl.getProxyAddress()
-        node = cl.getRenderNode()
+        sl = slave.Slave()
+        proxy_addr = sl.getProxyAddress()
+        node = sl.getRenderNode()
 
         # File to be rendered
         args.append('--background')
@@ -145,7 +145,7 @@ class RenderTask(SignalThread):
             args.append(str(self.options['color_mode']))
 
         # For correct node IP detection (for stamp)
-        args.append('--server-addr')
+        args.append('--master-addr')
         args.append(proxy_addr[0] + ':' + str(proxy_addr[1]))
 
         return args
@@ -213,7 +213,7 @@ class RenderTask(SignalThread):
                         format(self.task, self.jobUUID))
 
                 # Error preparing environment, set flag
-                # to prevent sending any result to server
+                # to prevent sending any result to master
                 self.errorFlag = True
         finally:
             self.finishFlag = True

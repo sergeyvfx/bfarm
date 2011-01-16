@@ -49,9 +49,9 @@ op.add_option('--role', default=None)
 (opts, args) = op.parse_args()
 
 if opts.role is not None:
-    if opts.role not in ['server', 'client']:
+    if opts.role not in ['master', 'slave']:
         raise Exception('Invalid role specified: {0} ' +
-                        '(expected [server|client])' . format(role))
+                        '(expected [master|slave])' . format(role))
     else:
         role = opts.role
 
@@ -61,11 +61,11 @@ Logger.log(' bfarm version {0} ' . format(Version.bfarm_version), False)
 Logger.log('=' * 23, False)
 Logger.log('', False)
 
-if role == 'server':
-    from server import Server
-    server = Server()
-    server.run()
+if role == 'master':
+    from master import Master
+    master = Master()
+    master.run()
 else:
-    from client import Client
-    client = Client()
-    client.run()
+    from slave import Slave
+    slave = Slave()
+    slave.run()

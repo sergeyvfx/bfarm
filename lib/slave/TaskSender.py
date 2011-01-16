@@ -46,7 +46,7 @@ except ImportError:
 
     setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
 
-import client
+import slave
 import Logger
 
 from config import Config
@@ -56,7 +56,7 @@ from SignalThread import SignalThread
 
 class TaskSender(SignalThread):
     """
-    Sender of ready tasks to server
+    Sender of ready tasks to master
     """
 
     def __init__(self, node):
@@ -74,7 +74,7 @@ class TaskSender(SignalThread):
 
     def sendTask(self, task):
         """
-        Add task to queue to send to server
+        Add task to queue to send to master
         """
 
         with self.task_lock:
@@ -82,11 +82,11 @@ class TaskSender(SignalThread):
 
     def doSendTask(self, task):
         """
-        Send specified task to server
+        Send specified task to master
         """
 
-        proxy = client.Client().getProxy()
-        chunk_size = Config.client['chunk_size']
+        proxy = slave.Slave().getProxy()
+        chunk_size = Config.slave['chunk_size']
         jobUUID = task.getJobUUID()
         nodeUUID = self.node.getUUID()
         task_nr = task.getTaskNum()
@@ -116,7 +116,7 @@ class TaskSender(SignalThread):
                             ok = True
 
                         except socket.error as strerror:
-                            Logger.log('Error sending image to server: {0}' .
+                            Logger.log('Error sending image to master: {0}' .
                                 format(strerror))
 
                             time.sleep(0.2)
@@ -146,7 +146,7 @@ class TaskSender(SignalThread):
 
     def requestStop(self):
         """
-        Stop server
+        Stop sender
         """
 
         self.stop_flag = True

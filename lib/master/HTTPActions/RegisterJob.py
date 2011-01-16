@@ -29,7 +29,7 @@
 
 import os
 
-import server
+import master
 
 
 def execute(httpRequest):
@@ -43,7 +43,7 @@ def execute(httpRequest):
     if 'type' not in httpRequest.POST:
         return
 
-    render_server = server.Server().getRenderServer()
+    render_server = master.Master().getRenderServer()
     job = {'type': httpRequest.POST['type']}
 
     if 'title' in httpRequest.POST:

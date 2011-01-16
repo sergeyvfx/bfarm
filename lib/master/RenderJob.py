@@ -57,7 +57,7 @@ class RenderJob:
         self.uuid = str(RenderJob.total_jobs)
         self.time = time.time()
 
-        storage = Config.server['storage_path']
+        storage = Config.master['storage_path']
         self.storage_fpath = os.path.join(storage, 'job-' + self.uuid)
 
         # steup storage directory structure
@@ -163,7 +163,7 @@ class RenderJob:
         except OSError:
             return None
 
-        offset = chunk_nr * Config.server['chunk_size']
+        offset = chunk_nr * Config.master['chunk_size']
 
         if offset > statinfo.st_size:
             return None
@@ -173,7 +173,7 @@ class RenderJob:
                 return None
 
             handle.seek(offset)
-            chunk = handle.read(Config.server['chunk_size'])
+            chunk = handle.read(Config.master['chunk_size'])
             handle.close()
 
             return chunk
@@ -492,7 +492,7 @@ class RenderJob:
         #      processing library for python3.1
         fname_path = os.path.join(out_fpath, fname)
         command = ['convert', '-adaptive-resize',
-                   Config.server['thumb_size'], fname_path, thumbs_fpath]
+                   Config.master['thumb_size'], fname_path, thumbs_fpath]
 
         proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,

@@ -43,7 +43,7 @@ try:
 except ImportError:
     import urllib
 
-import server
+import master
 import PathUtil
 
 if not mimetypes.inited:
@@ -63,7 +63,7 @@ def translate_path(path):
     Get file name to get receive
     """
 
-    http_server = server.Server().getHTTPServer()
+    http_server = master.Master().getHTTPServer()
     site_root = http_server.getSiteRoot()
 
     path = urllib.parse.splitquery(path)[0]
@@ -257,7 +257,7 @@ def execute(httpRequest):
     File ocntent or directory listing would be send to client
     """
 
-    http_server = server.Server().getHTTPServer()
+    http_server = master.Master().getHTTPServer()
     site_root = http_server.getSiteRoot()
     path = translate_path(httpRequest.path)
 

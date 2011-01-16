@@ -27,7 +27,7 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
-from client.RenderTask import RenderTask
+from slave.RenderTask import RenderTask
 
 
 class StillRenderTask(RenderTask):

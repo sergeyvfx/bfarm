@@ -34,10 +34,10 @@ import sys
 import Logger
 
 from config import Config
-import client
+import slave
 from SignalThread import SignalThread
-from client.RenderTaskSpawner import spawnNewTask
-from client.TaskSender import TaskSender
+from slave.RenderTaskSpawner import spawnNewTask
+from slave.TaskSender import TaskSender
 
 
 class RenderNode(SignalThread):
@@ -67,31 +67,31 @@ class RenderNode(SignalThread):
 
     def requestStop(self):
         """
-        Stop server
+        Stop node
         """
 
         self.stop_flag = True
 
     def isStopped(self):
         """
-        Check if server shutted down
+        Check if node shutted down
         """
 
         return self.stop_flag
 
     def register(self):
         """
-        Register node at server
+        Register node at master
         """
 
         if self.uuid is not None:
             return
 
-        proxy = client.Client().getProxy()
+        proxy = slave.Slave().getProxy()
 
         try:
             self.uuid = proxy.node.register()
-            Logger.log('Registered at server under uuid {0}' .
+            Logger.log('Registered at master under uuid {0}' .
                 format(self.uuid))
         except socket.error as strerror:
             Logger.log('Error registering self: {0}'. format(strerror))
@@ -101,10 +101,10 @@ class RenderNode(SignalThread):
 
     def unregister(self):
         """
-        Unregister node from renderfarm server
+        Unregister node from renderfarm master
         """
 
-        proxy = client.Client().getProxy()
+        proxy = slave.Slave().getProxy()
 
         try:
             proxy.node.unregister(self.uuid)
@@ -118,7 +118,7 @@ class RenderNode(SignalThread):
 
     def touch(self):
         """
-        Touch server to tell we're still alive
+        Touch master to tell we're still alive
         """
 
         # Ensure we're registered at serevr
@@ -127,19 +127,19 @@ class RenderNode(SignalThread):
         if self.uuid is None:
             return
 
-        proxy = client.Client().getProxy()
+        proxy = slave.Slave().getProxy()
 
         try:
             proxy.node.touch(self.uuid)
         except socket.error as strerror:
-            Logger.log('Error touching server: {0}'. format(strerror))
+            Logger.log('Error touching master: {0}'. format(strerror))
         except:
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
 
     def requestTask(self):
         """
-        Request task from server
+        Request task from master
         """
 
         # Ensure we're registered at serevr
@@ -152,7 +152,7 @@ class RenderNode(SignalThread):
             # Already got task
             return
 
-        proxy = client.Client().getProxy()
+        proxy = slave.Slave().getProxy()
 
         try:
             options = proxy.job.requestTask(self.uuid)
@@ -175,7 +175,7 @@ class RenderNode(SignalThread):
 
     def sendResult(self):
         """
-        Send result to server
+        Send result to master
         """
 
         if not self.currentTask.hasError():
@@ -195,8 +195,8 @@ class RenderNode(SignalThread):
         last_touch_time = last_request_time = time.time()
         first_time = True
 
-        touch_int = Config.client['touch_interval']
-        req_int = Config.client['job_request_interval']
+        touch_int = Config.slave['touch_interval']
+        req_int = Config.slave['job_request_interval']
 
         while not self.stop_flag:
             cur_time = time.time()
@@ -226,7 +226,7 @@ class RenderNode(SignalThread):
 
             time.sleep(0.2)
 
-        # Wait all tasks to be sent to server
+        # Wait all tasks to be sent to master
         self.taskSender.requestStop()
         self.taskSender.join()
 

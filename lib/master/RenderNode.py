@@ -68,7 +68,7 @@ class RenderNode:
         """
 
         cur = time.time()
-        max_age = Config.server['client_max_age']
+        max_age = Config.master['slave_max_age']
 
         return cur - self.access_time <= max_age
 

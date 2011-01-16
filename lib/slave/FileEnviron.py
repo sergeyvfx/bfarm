@@ -33,10 +33,10 @@ import sys
 
 import Logger
 
-import client
+import slave
 
 from Hash import md5_for_file
-from client.Environ import Environ
+from slave.Environ import Environ
 
 
 class FileEnviron(Environ):
@@ -60,21 +60,21 @@ class FileEnviron(Environ):
         Compare MD5 checksum of received file and file at serevr
         """
 
-        proxy = client.Client().getProxy()
+        proxy = slave.Slave().getProxy()
 
         self_checksum = md5_for_file(self.getBlend())
-        server_checksum = proxy.job.getBlendChecksum(self.jobUUID)
+        master_checksum = proxy.job.getBlendChecksum(self.jobUUID)
 
-        return self_checksum == server_checksum
+        return self_checksum == master_checksum
 
     def receiveFile(self):
         """
-        Receive .blend file from server
+        Receive .blend file from master
         """
 
         fname = self.getBlend()
-        proxy = client.Client().getProxy()
-        node = client.Client().getRenderNode()
+        proxy = slave.Slave().getProxy()
+        node = slave.Slave().getRenderNode()
 
         nodeUUID = node.getUUID()
 
@@ -84,10 +84,10 @@ class FileEnviron(Environ):
                 return True
             else:
                 Logger.log('Checksum mistmatch, ' +
-                    're-receiving file {0} from server' . format(self.fname))
+                    're-receiving file {0} from master' . format(self.fname))
         else:
             # XXX: need better handling
-            Logger.log('Receiving file {0} from server' . format(self.fname))
+            Logger.log('Receiving file {0} from master' . format(self.fname))
 
         with open(fname, 'wb') as handle:
             chunk_nr = 0
@@ -97,7 +97,7 @@ class FileEnviron(Environ):
                                                     self.task_nr, chunk_nr)
                     ok = True
                 except socket.error as strerror:
-                    Logger.log('Error receiving .blend file from server: {0}' .
+                    Logger.log('Error receiving .blend file from master: {0}' .
                         format(strerror))
 
                     time.sleep(0.2)
@@ -111,10 +111,10 @@ class FileEnviron(Environ):
                         if 'FINISHED' in chunk:
                             return True
                         elif 'CANCELLED' in chunk:
-                            # Transmission was cancelled by server
+                            # Transmission was cancelled by master
                             # Happens after job reassigning, cancelling
                             # jobs and so on
-                            Logger.log('File transmission was cancelled by server')
+                            Logger.log('File transmission was cancelled by master')
 
                             return False
                         else:
@@ -133,7 +133,7 @@ class FileEnviron(Environ):
 
         Environ.prepare(self)
 
-        # Receive file from server
+        # Receive file from master
         return self.receiveFile()
 
     def getBlend(self):

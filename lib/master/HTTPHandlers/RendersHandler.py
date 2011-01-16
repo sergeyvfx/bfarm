@@ -39,8 +39,8 @@ try:
 except ImportError:
     import urllib
 
-import server
-from server.HTTPHandlers.FileHandler import send_listing, guess_type
+import master
+from master.HTTPHandlers.FileHandler import send_listing, guess_type
 
 
 def jobs_listing(httpRequest):
@@ -48,7 +48,7 @@ def jobs_listing(httpRequest):
     Send list of jobs
     """
 
-    render_server = server.Server().getRenderServer()
+    render_server = master.Master().getRenderServer()
     jobs = render_server.getJobs()
     completed_jobs = render_server.getCompletedJobs()
 
@@ -74,7 +74,7 @@ def frames_listing(httpRequest, jobName):
 
     jobName = jobName[4:]
 
-    render_server = server.Server().getRenderServer()
+    render_server = master.Master().getRenderServer()
     job = render_server.getJob(jobName)
 
     if job is None:
@@ -115,7 +115,7 @@ def send_frame(httpRequest, jobName, frameName):
 
     jobName = jobName[4:]
 
-    render_server = server.Server().getRenderServer()
+    render_server = master.Master().getRenderServer()
     job = render_server.getJob(jobName)
 
     if job is None or frameName not in job.getRenderFiles():
