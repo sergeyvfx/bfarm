@@ -50,6 +50,8 @@ var jobs = new function () {
       headerItems.push(new UILabel({'text': 'Completed',
                                     'color': '#007f00',
                                     'bold': true}));
+      var headerItem = $('<DIV>') . css('height', '18px');
+      headerItems.push(headerItem[0]);
     } else {
       var position = job.progress / job.ntasks;
 
@@ -63,11 +65,9 @@ var jobs = new function () {
       var priorityCb = new UIComboBox({'title': 'Priority',
                                        'items': priorities,
                                        'active': jobPriorityIndex(job),
-                                       'width': 130});
-      var headerItem = $('<DIV>') . addClass('headerItem');
+                                       'width': 150});
       priorityCb.onItemSelected = function (job) { return function (item) { jobs.setPriority (job.uuid, item.tag); } } (job);
-      headerItem.append(priorityCb.build());
-      headerItems.push(headerItem[0]);
+      headerItems.push(priorityCb);
     }
 
     return headerItems;
