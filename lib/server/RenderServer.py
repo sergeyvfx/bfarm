@@ -219,9 +219,10 @@ class RenderServer(SignalThread):
         job = RenderJob(options)
 
         with self.jobs_lock:
-            # XXX: Add priority handling here
             self.jobs.append(job)
             self.jobs_hash[job.getUUID()] = job
+
+            self._reorderJobs_Unsafe()
 
         Logger.log('Registered new render job {0}' . format(job.getUUID()))
 
@@ -292,6 +293,21 @@ class RenderServer(SignalThread):
                 os.mkdir(fpath)
             except:
                 raise
+
+    def _reorderJobs_Unsafe(self):
+        """
+        Reorder jobs for optimal task requesting (for internal use only)
+        """
+
+        self.jobs.sort(key=lambda a: 32768 - a.getPriority())
+
+    def reorderJobs(self):
+        """
+        Reorder jobs for optimal task requesting
+        """
+
+        with self.jobs_lock:
+            self._reorderJobs_Unsafe()
 
     def run(self):
         """

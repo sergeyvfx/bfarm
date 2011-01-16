@@ -182,3 +182,23 @@ TABLE.spacing > TBODY > TR > TD {
 DIV.formBindings {
   display: none;
 }
+
+/* interface items */
+DIV.headerItem * {
+  font-size: 7pt;
+}
+
+DIV.headerItem DIV.UIComboBox,
+DIV.headerItem DIV.UIComboBoxButton,
+DIV.headerItem DIV.UIComboBoxContainer {
+  height: 12px;
+}
+
+DIV.headerItem DIV.UIComboBoxText {
+  height: 10px;
+  padding: 0 4px;
+}
+
+DIV.headerItem DIV.UIComboBoxButton DIV.UIComboBoxButtonArr {
+  margin-top: 2px;
+}

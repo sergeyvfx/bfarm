@@ -21,6 +21,10 @@ var jobs = new function () {
                {'title': 'Total tasks', 'field': 'ntasks'},
                {'title': 'Completed tasks', 'field': 'progress'}];
 
+  var priorities = [{'title': 'Low',    'tag': -1, 'toString': 'field:title'},
+                    {'title': 'Normal', 'tag':  0, 'toString': 'field:title'},
+                    {'title': 'High',   'tag':  1, 'toString': 'field:title'}];
+
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
 
@@ -28,24 +32,51 @@ var jobs = new function () {
     window.open('/renders/job-' + job['uuid']);
   };
 
-  function createJobBox(job, collapsed) {
-    /* XXX: replace with form template */
+  function jobPriorityIndex(job) {
+    for (var i = 0; i < priorities.length; i++) {
+      if (priorities[i].tag == job.priority) {
+        return i;
+      }
+    }
 
-    var position = job.progress / job.ntasks;
+    return -1;
+  };
+
+  function createJobBoxHeaderItems(job) {
     var headerItems = [];
 
-    if(position == 1.0) {
+    if(job.progress == job.ntasks) {
       headerItems.push(new UILabel({'text': 'Completed',
                                     'color': '#007f00',
                                     'bold': true}));
     } else {
+      var position = job.progress / job.ntasks;
+
       headerItems.push(new UILabel({'text': 'In progress',
                                     'color': '#7f0000',
                                     'bold': true}));
       headerItems.push(new UIProgress({'position': position,
                                        'height': 12,
                                        'width': 160}));
+
+      var priorityCb = new UIComboBox({'title': 'Priority',
+                                       'items': priorities,
+                                       'active': jobPriorityIndex(job),
+                                       'width': 120});
+      var headerItem = $('<DIV>') . addClass('headerItem');
+      priorityCb.onItemSelected = function (job) { return function (item) { jobs.setPriority (job.uuid, item.tag); } } (job);
+      headerItem.append(priorityCb.build());
+      headerItems.push(headerItem[0]);
     }
+
+    return headerItems;
+  };
+
+  function createJobBox(job, collapsed) {
+    /* XXX: replace with form template */
+
+    var position = job.progress / job.ntasks;
+    var headerItems = createJobBoxHeaderItems(job);
 
     var box = new UICollapseBox({'title': job.title,
                                  'titleWidth': '30%',
@@ -256,5 +287,10 @@ var jobs = new function () {
         form.submit();
       }
     };
+  };
+
+  this.setPriority = function (jobUUID, priority) {
+      $.getJSON('/ajax/set/jobPriority?jobUUID=' + escape(jobUUID) + '&priority=' + priority,
+                function (data) {});
   };
 };

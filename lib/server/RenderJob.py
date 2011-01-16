@@ -125,6 +125,11 @@ class RenderJob:
         # Time job finish
         self.finish_time = None
 
+        if 'priority' in options:
+            self.priority = options['priority']
+        else:
+            self.priority = 0
+
         RenderJob.total_jobs += 1
 
     def getUUID(self):
@@ -443,6 +448,20 @@ class RenderJob:
         """
 
         return self.ntasks - self.tasks_remain
+
+    def getPriority(self):
+        """
+        Get priority number
+        """
+
+        return self.priority
+
+    def setPriority(self, priority):
+        """
+        Set priority number
+        """
+
+        self.priority = priority
 
     def getThumbnail(self, fname):
         """

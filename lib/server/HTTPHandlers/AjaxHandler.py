@@ -105,7 +105,8 @@ class _Ajaxhandlers(Singleton):
                        'time': job.getTime(),
                        'finish_time': job.getFinishTime(),
                        'progress': job.getProgress(),
-                       'ntasks': job.getTasksCount()}
+                       'ntasks': job.getTasksCount(),
+                       'priority': job.getPriority()}
 
                 renderFiles = job.getRenderFiles()
                 if renderFiles:
@@ -152,12 +153,38 @@ class _Ajaxhandlers(Singleton):
 
             self._send_jobs(httpRequest, jobs)
 
+    class Set:
+        def jobPriority(self, httpRequest):
+            """
+            Set job's priority
+            """
+
+            try:
+                jobUUID = httpRequest.GET['jobUUID']
+                priority = int(httpRequest.GET['priority'])
+            except:
+                _send_json(httpRequest, {'result': 'fail'})
+                return
+
+            render_server = server.Server().getRenderServer()
+            job = render_server.getJob(jobUUID)
+
+            answer = {'result': 'ok'}
+            if job is None:
+                answer['result'] = 'fail'
+            else:
+                job.setPriority(priority)
+                render_server.reorderJobs()
+
+            _send_json(httpRequest, answer)
+
     def initInstance(self):
         """
         Initialize all ajax handlers
         """
 
         self.get = _Ajaxhandlers.Get()
+        self.set = _Ajaxhandlers.Set()
 
 
 def execute(httpRequest):
