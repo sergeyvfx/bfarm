@@ -80,15 +80,15 @@ DIV.header IMG.logo {
 
 DIV.header SPAN.site {
   position: relative;
-  top: 12px;
-  font-size: 16pt;
+  top: 24px;
+  font-size: 14pt;
   font-weight: bold;
   color: #fff;
+  margin-left: 16px;
 }
 
 DIV.header SPAN.site SPAN.description {
   font-size: 12pt;
-  font-weight: bold;
   color: #ddd;
   position: relative;
 }
