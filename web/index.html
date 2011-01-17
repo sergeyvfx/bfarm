@@ -9,7 +9,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="en">
 
-    <link rel="stylesheet" type="text/css" href="/styles/content.css">
+    <link rel="stylesheet" type="text/css" href="/styles/content.dark.css">
     <link rel="stylesheet" type="text/css" href="/pack/ui-dev.css">
 
     <script type="text/javascript" src="/pack/jquery.js"></script>
@@ -18,54 +18,60 @@
     <script type="text/javascript" src="/src/jobs.js"></script>
   </head>
   <body>
-    <div class="header">
-      <img class="logo" src="/pics/logo.png">
-      <span class="site">
-        <span>bfarm</span>
-        <span class="description">.WebIface</span>
-      </span>
-    </div>
-    <div class="features">
-      <div class="nav">
-        <ul >
-          <li class="act">
-            <a href="/">Home</a>
-          </li>
-        </ul>
-
-        <div class="term"></div>
+    <div class="content">
+      <div class="header">
+        <div>
+          <img class="logo" src="/pics/blender.png">
+        </div>
+        <div class="siteHolder">
+          <span class="site">
+              <span>bfarm</span>
+              <span class="description">.WebIface</span>
+          </span>
+        </div>
       </div>
-    </div>
+      <div class="features">
+        <div class="nav">
+          <ul >
+            <li class="act">
+              <a href="/">Home</a>
+            </li>
+          </ul>
 
-    <div class="mainHolder">
-      <table class="wide spacing">
-        <tr>
-          <td><div id="jobsButtons"></div></td>
-        </tr>
-        <tr>
-          <td><div id="jobsList"></div></td>
-        </tr>
-      </table>
-
-      <div class="formBindings">
-        <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data">
-          <input name="title" id="jobTitle">
-          <input name="type" id="jobType">
-          <input name="start-frame" id="jobStartFrame">
-          <input name="end-frame" id="jobEndFrame">
-          <input name="framenr" id="jobFrameNumber">
-          <input name="file_format" id="jobFileFormat">
-          <input name="resol_x" id="jobResolX">
-          <input name="resol_y" id="jobResolY">
-          <input name="percentage" id="jobPercentage">
-          <input type="file" name="blenfile" id="jobBlenfile">
-          <input name="color_mode" id="jobColorMode">
-        </form>
+          <div class="term"></div>
+        </div>
       </div>
 
-    </div>
+      <div class="mainHolder">
+        <table class="wide spacing">
+          <tr>
+            <td><div id="jobsButtons"></div></td>
+          </tr>
+          <tr>
+            <td><div id="jobsList"></div></td>
+          </tr>
+        </table>
 
-    <div class="footer"></div>
-    <div class="copyright">Copyright &copy; 2010 Sergey Sharybin</div>
+        <div class="formBindings">
+          <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data">
+            <input name="title" id="jobTitle">
+            <input name="type" id="jobType">
+            <input name="start-frame" id="jobStartFrame">
+            <input name="end-frame" id="jobEndFrame">
+            <input name="framenr" id="jobFrameNumber">
+            <input name="file_format" id="jobFileFormat">
+            <input name="resol_x" id="jobResolX">
+            <input name="resol_y" id="jobResolY">
+            <input name="percentage" id="jobPercentage">
+            <input type="file" name="blenfile" id="jobBlenfile">
+            <input name="color_mode" id="jobColorMode">
+          </form>
+        </div>
+
+      </div>
+
+      <div class="footer"></div>
+      <div class="copyright">Copyright &copy; 2010 Sergey Sharybin</div>
+    </div>
   </body>
 </html>

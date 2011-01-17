@@ -3,6 +3,11 @@ BODY {
   font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";
   margin: 0;
   padding: 0;
+  background-color: #000;
+}
+
+DIV.content {
+  margin: auto 40px;
 }
 
 /* Common elements */
@@ -42,39 +47,61 @@ TABLE TR TH {
 
 /* Header and logo */
 DIV.header {
-  border-bottom: 4px #eee solid;
+  background-color: #4a5a65;
+  margin-bottom: 16px;
+
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-border-radius: 0 0 6px 6px;
+  -khtml-border-radius: 0 0 6px 6px;
+
+  height: 50px;
+}
+
+DIV.header > DIV {
+  float: left;
+  height: 50px;
+}
+
+DIV.header DIV.siteHolder {
+  background: #5b6c7a;
+  padding: 0 12px;
 }
 
 DIV.header IMG.logo {
-  margin: 4px;
   vertical-align: middle;
 }
 
 DIV.header SPAN.site {
   position: relative;
-  top: 6px;
+  top: 12px;
   font-size: 16pt;
   font-weight: bold;
+  color: #fff;
 }
 
 DIV.header SPAN.site SPAN.description {
   font-size: 12pt;
   font-weight: bold;
-  color: #666;
+  color: #ddd;
   position: relative;
-  top: -1px;
 }
 
 /* Features bar */
 DIV.features {
   padding-top: 4px;
-  background-color: #ccc;
+  background-color: #444;
+
+  -moz-border-radius: 6px 6px 0 0;
+  border-radius: 6px 6px 0 0;
+  -webkit-border-radius: 6px 6px 0 0;
+  -khtml-border-radius: 6px 6px 0 0;
 }
 
 DIV.features DIV.nav {
   padding: 8px 8px 0 8px;
-  border-bottom: 1px #aaaaa8 solid;
-  background: #ddd url(../pics/ui/tabs-nav.gif) 0 0 repeat-x;
+  border-bottom: 1px #d0d0d0 solid;
+  background: #667 url(../pics/ui/tabs-nav-dark.gif) 0 0 repeat-x;
 }
 
 DIV.features DIV.nav UL LI {
@@ -99,41 +126,42 @@ DIV.features DIV.nav UL LI.act {
   margin-top: 0;
   margin-bottom: 0;
   height: 23px;
-  border-bottom: 1px #f6f6f6 solid;
+  border-bottom: 1px #d0d0d0 solid;
   z-index: 10;
   top: 1px;
   font-weight: bold;
   font-size: 9pt;
-  background-color: #f6f6f6;
+  background-color: #d0d0d0;
   cursor: default;
-}
-
-DIV.features DIV.nav UL LI.act:hover {
-  background-color: #f6f6f6;
 }
 
 /* Page's content */
 DIV.mainHolder {
-  border-color: #f6f6f6;
+  border-color: #d0d0d0;
   border-width: 4px 16px 0 0;
   border-style: solid;
   padding: 4px;
+  background: #bbb;
 }
 
 /* Page footer */
 DIV.footer {
   border-top: 1px #aaaaa8 solid;
-  background: #f0f0f0;
+  background: #3f3f3f;
   height: 32px;
 }
 
 DIV.copyright {
-  border-top: 1px #aaaaa8 solid;
-  background-color: #f6f6f6;
+  border-top: 1px #333 solid;
+  background-color: #444;
   padding: 4px 0;
   text-align: center;
-  border-bottom: 1px #ccc solid;
-  color: #999;
+  color: #ccc;
+
+  -moz-border-radius: 0 0 6px 6px;
+  border-radius: 0 0 6px 6px;
+  -webkit-border-radius: 0 0 6px 6px;
+  -khtml-border-radius: 0 0 6px 6px;
 }
 
 /* Data tables */
