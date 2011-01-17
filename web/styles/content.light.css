@@ -51,6 +51,10 @@ DIV.header > DIV {
   height: 50px;
 }
 
+DIV.header A {
+  text-decoration: none;
+}
+
 DIV.header IMG.logo {
   vertical-align: middle;
 }
