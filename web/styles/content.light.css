@@ -57,6 +57,7 @@ DIV.header A {
 
 DIV.header IMG.logo {
   vertical-align: middle;
+  border: 0;
 }
 
 DIV.header SPAN.site {
