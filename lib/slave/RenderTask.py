@@ -170,23 +170,32 @@ class RenderTask(SignalThread):
 
         command = self.getBlenderCommand()
 
-        proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                shell=False)
-        data, err = proc.communicate()
-        rv = proc.wait()
+        try:
+            proc = subprocess.Popen(args=command,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    shell=False)
+            data, err = proc.communicate()
+            rv = proc.wait()
 
-        Logger.log('Blender finished work with errcode {0}' . format(rv))
+            Logger.log('Blender finished work with errcode {0}' . format(rv))
 
-        self.pipe = {'stdout':   data.decode(),
-                     'stderr':   err.decode(),
-                     'exitcode': rv}
+            self.pipe = {'stdout':   data.decode(),
+                         'stderr':   err.decode(),
+                         'exitcode': rv}
 
-        if len(self.pipe['stderr']) > 0:
-            Logger.log("Error from Blender:\n{0}" .
-                format(self.pipe['stderr']))
+            if len(self.pipe['stderr']) > 0:
+                Logger.log("Error from Blender:\n{0}" .
+                    format(self.pipe['stderr']))
 
-        return rv
+            return rv
+        except OSError as e:
+            Logger.log(('Error while running blender ' +
+                        'on task {0} of job {1}: {2}' ).
+                        format(self.task, self.jobUUID, e))
+
+            return -1
 
     def isFinished(self):
         """
@@ -207,7 +216,9 @@ class RenderTask(SignalThread):
 
         try:
             if self.prepareEnv():
-                self.runBlender()
+                if self.runBlender() != 0:
+                    # Something wird happend while rendering
+                    self.errorFlag = True
             else:
                 Logger.log('Error preparing storage for task {0} of job {1}' .
                         format(self.task, self.jobUUID))

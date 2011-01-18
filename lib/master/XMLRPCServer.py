@@ -145,6 +145,31 @@ class XMLRPCHandlers:
 
             return render_server.requestTask(node)
 
+        def restartTask(self, nodeUUID, jobUUID, task_nr, client_info):
+            """
+            Restart task in queue
+            """
+
+            render_server = master.Master().getRenderServer()
+
+            node = render_server.getNode(nodeUUID)
+            if node is None:
+                return False
+
+            if not node.hasTask(jobUUID, task_nr):
+                return False
+
+            Logger.log('Job {0}: restart task {1} requested from node {2}' .
+                format(jobUUID, task_nr, nodeUUID))
+
+            node.unassignTask(jobUUID, task_nr)
+
+            job = render_server.getJob(jobUUID)
+            job.restartTask(task_nr)
+            job.ignoreNodeForTask(node, task_nr)
+
+            return True
+
         def getBlendChunk(self, nodeUUID, jobUUID, task_nr,
                           chunk_nr, client_info):
             """

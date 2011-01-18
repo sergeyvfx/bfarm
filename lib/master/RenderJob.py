@@ -135,6 +135,13 @@ class RenderJob:
         self.task_time_max = None
         self.task_time_avg = None
 
+        # Scheduling ignorance rules
+        # used to deal with nodes which restores tasks
+        # (mostly happens after troubles, which can't be solved
+        # with re-assigning)
+
+        self.sche_ignorence = {}
+
         RenderJob.total_jobs += 1
 
     def getUUID(self):
@@ -297,7 +304,7 @@ class RenderJob:
            task['status'] = RenderJob.TASK_NONE
            del task['start_time']
 
-    def requestTask(self):
+    def requestTask(self, node):
         """
         Request task for render node
         """
@@ -315,16 +322,21 @@ class RenderJob:
 
             for x in range(self.ntasks):
                 if self.tasks[x]['status'] == RenderJob.TASK_NONE:
+                    # Check if task shouldn't be scheduled to this node
+                    if self.sche_ignorence.get(x) is not None:
+                        if node.getUUID() in self.sche_ignorence[x]:
+                            continue
+
                     task = self.tasks[x]
                     task['status'] = RenderJob.TASK_RUNNING
                     task['start_time'] = time.time()
 
                     # Common options
                     options = {'jobUUID': self.uuid,
-                               'task':    x,
-                               'ntasks':  self.ntasks,
-                               'type':    self.job_type,
-                               'fname':   self.fname,
+                               'task': x,
+                               'ntasks': self.ntasks,
+                               'type': self.job_type,
+                               'fname': self.fname,
                                'file_format': self.file_format,
                                'resol_x': self.resol_x,
                                'resol_y': self.resol_y,
@@ -380,7 +392,7 @@ class RenderJob:
 
             if self.tasks_remain == 0:
                 self.finish_time = time.time()
-                Logger.log('Job {0} completed' . format(self.uuid))
+                Logger.log('Job {0}: completed' . format(self.uuid))
 
         return True
 
@@ -547,3 +559,18 @@ class RenderJob:
         """
 
         return self.task_time_avg
+
+    def ignoreNodeForTask(self, node, task_nr):
+        """
+        Add node to task ignore list
+        """
+
+        if self.sche_ignorence.get(task_nr) is None:
+            self.sche_ignorence[task_nr] = []
+
+        nodeUUID = node.getUUID()
+
+        Logger.log('Job {0}: task {1} would never be scheduled to node {2}' .
+            format(self.uuid, task_nr, nodeUUID))
+
+        self.sche_ignorence[task_nr].append(nodeUUID)

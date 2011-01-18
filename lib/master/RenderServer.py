@@ -254,13 +254,13 @@ class RenderServer(SignalThread):
         with self.jobs_lock:
             for job in self.jobs:
                 uuid = job.getUUID()
-                task = job.requestTask()
+                task = job.requestTask(node)
 
                 if task is not None:
                     task_nr = task['task']
                     node.assignTask(job.getUUID(), task_nr)
 
-                    Logger.log('Job {0} task {1} assigned to node {2}' .
+                    Logger.log('Job {0}: task {1} assigned to node {2}' .
                         format(uuid, task['task'], node.getUUID()))
 
                     return task

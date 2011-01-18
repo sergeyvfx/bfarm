@@ -173,6 +173,24 @@ class RenderNode(SignalThread):
 
         self.taskSender.sendTask(self.currentTask)
 
+    def restoreTask(self):
+        """
+        Restart assigned task on master
+        """
+
+        # Ensure we're registered at serevr
+        self.register()
+
+        jobUUID = self.currentTask.getJobUUID()
+        task_nr = self.currentTask.getTaskNum()
+
+        Logger.log('Error occured while rendering task {0} of job {1}' .
+            format (task_nr, jobUUID))
+
+        proxy = slave.Slave().getProxy()
+
+        proxy.job.restartTask(self.uuid, jobUUID, task_nr)
+
     def sendResult(self):
         """
         Send result to master
@@ -180,6 +198,8 @@ class RenderNode(SignalThread):
 
         if not self.currentTask.hasError():
             self.sendRenderedImage()
+        else:
+            self.restoreTask()
 
         self.currentTask = None
 
