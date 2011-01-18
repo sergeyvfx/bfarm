@@ -300,9 +300,9 @@ class RenderJob:
         """
 
         with self.task_lock:
-           task = self.tasks[task_nr]
-           task['status'] = RenderJob.TASK_NONE
-           del task['start_time']
+            task = self.tasks[task_nr]
+            task['status'] = RenderJob.TASK_NONE
+            del task['start_time']
 
     def requestTask(self, node):
         """

@@ -124,11 +124,11 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         try:
             return sup(self, *args, **kwargs)
         except IOError as e:
-          if e.errno == errno.EPIPE:
-              # pipe was closed by client, what could we do?
-              pass
-          else:
-              raise
+            if e.errno == errno.EPIPE:
+                # pipe was closed by client, what could we do?
+                pass
+            else:
+                raise
         except:
             raise
 

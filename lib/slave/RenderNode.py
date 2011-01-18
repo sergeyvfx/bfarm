@@ -185,7 +185,7 @@ class RenderNode(SignalThread):
         task_nr = self.currentTask.getTaskNum()
 
         Logger.log('Error occured while rendering task {0} of job {1}' .
-            format (task_nr, jobUUID))
+            format(task_nr, jobUUID))
 
         proxy = slave.Slave().getProxy()
 

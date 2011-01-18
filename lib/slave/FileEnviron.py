@@ -114,7 +114,8 @@ class FileEnviron(Environ):
                             # Transmission was cancelled by master
                             # Happens after job reassigning, cancelling
                             # jobs and so on
-                            Logger.log('File transmission was cancelled by master')
+                            Logger.log('File transmission was cancelled ' +
+                                       'by master')
 
                             return False
                         else:

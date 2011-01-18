@@ -192,7 +192,7 @@ class RenderTask(SignalThread):
             return rv
         except OSError as e:
             Logger.log(('Error while running blender ' +
-                        'on task {0} of job {1}: {2}' ).
+                        'on task {0} of job {1}: {2}').
                         format(self.task, self.jobUUID, e))
 
             return -1
