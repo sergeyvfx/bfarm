@@ -394,6 +394,9 @@ class RenderJob:
                 self.finish_time = time.time()
                 Logger.log('Job {0}: completed' . format(self.uuid))
 
+                # memory saver :)
+                self.sche_ignorence = {}
+
         return True
 
     def isCompleted(self):
