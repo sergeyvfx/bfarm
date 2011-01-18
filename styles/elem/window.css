@@ -1,8 +1,13 @@
 DIV.UIWindow {
-  border: 1px #666 solid;
-  background-color: #c2c2c2;
+  border: 1px #809DB9 solid;
+  background-color: #fff;
   position: absolute;
   overflow: hidden;
+
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -khtml-border-radius: 4px;
 }
 
 DIV.UIWindowTitle,
@@ -11,25 +16,32 @@ DIV.UIWindowTitleBg {
   top: 0;
   left: 0;
   right: 0;
-  height: 18px;
-  color: #fff;
+  height: 20px;
+  color: #333;
   text-align: center;
-  font-size: 9pt;
-  font-weight: bold;
+  font-size: 10pt;
   cursor: pointer;
   overflow: hidden;
+  padding-top: 2px;
+
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+  -webkit-border-radius: 4px 4px 0 0;
+  -khtml-border-radius: 4px 4px 0 0;
 }
 
 DIV.UIWindowTitleBg {
-  background: #888888 url(../../pics/ui/elem/window-title.gif) 0 0 repeat-x;
-  border-bottom: 1px #666 solid;
+  background: #c7c7c7 url(../../pics/ui/elem/window-title-d.gif) 0 0 repeat-x;
+  border-bottom: 1px #809DB9 solid;
+}
+
+DIV.UIWindowFocused DIV.UIWindowTitleBg {
+  background: #9dc6ee url(../../pics/ui/elem/window-title.gif) 0 0 repeat-x !important;
 }
 
 DIV.UIWindowTitleBg SPAN {
   position: relative;
-  top: 1px;
-  left: 1px;
-  color: #333;
+  color: #fff;
 }
 
 DIV.UIWindowSizer {
@@ -40,6 +52,11 @@ DIV.UIWindowSizer {
   width: 10px;
   height: 10px;
   cursor: se-resize;
+
+  -moz-border-radius: 0 0 4px 0;
+  border-radius: 0 0 4px;
+  -webkit-border-radius: 0 0 4px 0;
+  -khtml-border-radius: 0 0 4px 0;
 }
 
 DIV.UIWindowClient {
@@ -62,27 +79,22 @@ DIV.UIWindowTitleButtons {
 }
 
 DIV.UIWindowTitleButton {
-  margin-top: 1px;
-  border: 1px #666 solid;
-
-  -moz-border-radius: 6px;
-  border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -khtml-border-radius: 6px;
-
-  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
   text-align: center;
-  padding-top: 1px;
+  padding-top: 5px;
   cursor: pointer;
   color: #333;
 
   overflow: hidden;
-  height: 13px;
-  min-width: 18px;
+  height: 18px;
+  min-width: 20px;
 }
 
-DIV.UIWindowTitleButton:hover {
-  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+DIV.UIWindowFocused DIV.UIWindowTitleButton:hover {
+  background: #56a0e5 url(../../pics/ui/elem/window-button_s.gif) 0 0 repeat-x;
+}
+
+DIV.UIWindowFocused DIV.UIWindowCloseButton:hover {
+  background: #f14b35 url(../../pics/ui/elem/window-button-close_s.gif) 0 0 repeat-x;
 }
 
 DIV.UIWindowTitleButtonLeft {
