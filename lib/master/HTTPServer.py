@@ -33,6 +33,7 @@ import sys
 import cgi
 import io
 import errno
+import base64
 
 from tempfile import TemporaryFile
 
@@ -146,6 +147,43 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.wrapper('handle_one_request', *args, **kwargs)
 
+    def checkAuthorization(self):
+        """
+        Check if authorization passed ok
+        """
+
+        login = Config.master['http_login']
+        passwd = Config.master['http_passwd']
+
+        if not login:
+            # Authorization is disabled through config file
+            return True
+
+        if 'Authorization' in self.headers:
+            auth = self.headers['Authorization'].split()
+            if auth[0].lower() != 'basic':
+                # Only basic authorization is allowed
+                return False
+
+            s = '{0}:{1}' . format(login, passwd)
+            req_auth = base64.encodebytes(s.encode())[:-1].decode()
+
+            if req_auth == auth[1]:
+                return True
+
+        return False
+
+    def sendAuthorization(self):
+       """
+       Send authorization prompt
+       """
+
+       self.send_response(401, 'Authorization Required')
+       self.send_header('WWW-Authenticate', 'Basic realm="Renderfarm login"')
+
+       fname = os.path.join(self.server.getSiteRoot(), 'authfail.html')
+       FileHandler.send_file(self, fname)
+
     def do_GET(self):
         """
         Handle GET requests
@@ -153,6 +191,12 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.parse()
         path = self.path[1:].split('/')
+
+        ok = True
+
+        if not self.checkAuthorization():
+            self.sendAuthorization()
+            return
 
         ok = False
         if len(path):

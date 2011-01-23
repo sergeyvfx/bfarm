@@ -44,7 +44,10 @@ class Config:
               'review_nodes_timeout': 30,
               'slave_max_age':        90,
 
-              'thumb_size':           '480x270'}
+              'thumb_size':           '480x270',
+
+              'http_login':           '',
+              'http_passwd':          ''}
 
     slave = {'master_address':       '127.0.0.1',
              'master_port':          4043,
