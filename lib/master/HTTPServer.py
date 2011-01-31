@@ -174,15 +174,15 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
         return False
 
     def sendAuthorization(self):
-       """
-       Send authorization prompt
-       """
+        """
+        Send authorization prompt
+        """
 
-       self.send_response(401, 'Authorization Required')
-       self.send_header('WWW-Authenticate', 'Basic realm="Renderfarm login"')
+        self.send_response(401, 'Authorization Required')
+        self.send_header('WWW-Authenticate', 'Basic realm="Renderfarm login"')
 
-       fname = os.path.join(self.server.getSiteRoot(), 'authfail.html')
-       FileHandler.send_file(self, fname)
+        fname = os.path.join(self.server.getSiteRoot(), 'authfail.html')
+        FileHandler.send_file(self, fname)
 
     def do_GET(self):
         """
