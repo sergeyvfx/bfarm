@@ -78,6 +78,14 @@ except ImportError:
 
     socketserver = SocketServer
 
+if not hasattr(base64, 'encodebytes'):
+    # Hack for py2.6
+
+    def _encodebytes(s):
+        return str((base64.b64encode(s) + '\n'))
+
+    base64.encodebytes = _encodebytes
+
 import Logger
 from SignalThread import SignalThread
 from config import Config
