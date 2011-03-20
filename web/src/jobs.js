@@ -8,7 +8,7 @@
 
 var jobs = new function () {
   var attrs = [{'title': 'Identifier', 'field': 'uuid'},
-               {'title': 'Registration time', 'field': 'time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
+               {'title': 'Registration time', 'field': 'start_time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
                {'title': 'Finish time', 'field': 'finish_time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
                {'title': 'File', 'field': 'fname'},
                {'title': 'Type', 'field': 'type'},

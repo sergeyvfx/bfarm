@@ -5,3 +5,4 @@ config.py
 .settings
 .project
 .pydevproject
+*.sqlite

@@ -40,6 +40,22 @@ from config import Config
 import Logger
 
 
+class RenderTask:
+    """
+    Render task desfriptor
+    """
+
+    def __init__(self, nr):
+        """
+        Initialize new render task
+        """
+
+        self.nr = nr
+
+        self.status = RenderJob.TASK_NONE
+        self.start_time = None
+        self.end_time = None
+
 class RenderJob:
     """
     Render job descriptor
@@ -55,7 +71,7 @@ class RenderJob:
         """
 
         self.uuid = str(RenderJob.total_jobs)
-        self.time = time.time()
+        self.start_time = time.time()
 
         storage = Config.master['storage_path']
         self.storage_fpath = os.path.join(storage, 'job-' + self.uuid)
@@ -63,8 +79,8 @@ class RenderJob:
         # steup storage directory structure
         self.prepareStorage()
 
-        self.blendRequired = False
-        self.blendReceived = False
+        self.blend_required = False
+        self.blend_received = False
 
         self.job_type = options['type']
 
@@ -86,9 +102,9 @@ class RenderJob:
                                                self.blend_name)
                 if 'fp' in options:
                     self.saveBlend(options['fp'])
-                    self.blendRequired = False
+                    self.blend_required = False
                 else:
-                    self.blendRequired = True
+                    self.blend_required = True
 
         self.ntasks = 0
         if self.job_type == 'anim':
@@ -99,8 +115,7 @@ class RenderJob:
             # XXX: need better detection of still parts
             self.ntasks = 9
 
-        self.tasks = [{'status': RenderJob.TASK_NONE} \
-                             for x in range(self.ntasks)]
+        self.tasks = [RenderTask(x) for x in range(self.ntasks)]
 
         self.tasks_remain = self.ntasks
 
@@ -120,9 +135,9 @@ class RenderJob:
         self.percentage = options.get('percentage')
         self.color_mode = options.get('color_mode')
 
-        self.useStamp = False
+        self.use_stamp = False
         if 'use_stamp' in options and options['use_stamp']:
-            self.useStamp = True
+            self.use_stamp = True
 
         # Time job finish
         self.finish_time = None
@@ -151,12 +166,12 @@ class RenderJob:
 
         return self.uuid
 
-    def getTime(self):
+    def getStartTime(self):
         """
         Get time of registration
         """
 
-        return self.time
+        return self.start_time
 
     def getFinishTime(self):
         """
@@ -231,7 +246,7 @@ class RenderJob:
             if chunk_nr == -1:
                 Logger.log('Job {0}: .blend file {1} fully received' .
                     format(self.uuid, self.blend_name))
-                self.blendReceived = True
+                self.blend_received = True
                 return True
 
         return self._putFileChunk(self.blend_path, chunk, chunk_nr)
@@ -301,8 +316,9 @@ class RenderJob:
 
         with self.task_lock:
             task = self.tasks[task_nr]
-            task['status'] = RenderJob.TASK_NONE
-            del task['start_time']
+            task.status = RenderJob.TASK_NONE
+            task.start_time = None
+            task.finish_time = None
 
     def requestTask(self, node):
         """
@@ -313,27 +329,26 @@ class RenderJob:
             return None
 
         with self.task_lock:
-            if self.blendRequired and not self.blendReceived:
+            if self.blend_required and not self.blend_received:
                 # .blend file is needed and hasn't been received yet
                 return None
 
             if self.tasks_remain == 0:
                 return None
 
-            for x in range(self.ntasks):
-                if self.tasks[x]['status'] == RenderJob.TASK_NONE:
+            for task in self.tasks:
+                if task.status == RenderJob.TASK_NONE:
                     # Check if task shouldn't be scheduled to this node
-                    if self.sche_ignorence.get(x) is not None:
-                        if node.getUUID() in self.sche_ignorence[x]:
+                    if self.sche_ignorence.get(task.nr) is not None:
+                        if node.getUUID() in self.sche_ignorence[task.nr]:
                             continue
 
-                    task = self.tasks[x]
-                    task['status'] = RenderJob.TASK_RUNNING
-                    task['start_time'] = time.time()
+                    task.status = RenderJob.TASK_RUNNING
+                    task.start_time = time.time()
 
                     # Common options
                     options = {'jobUUID': self.uuid,
-                               'task': x,
+                               'task': task.nr,
                                'ntasks': self.ntasks,
                                'type': self.job_type,
                                'fname': self.fname,
@@ -341,7 +356,7 @@ class RenderJob:
                                'resol_x': self.resol_x,
                                'resol_y': self.resol_y,
                                'percentage': self.percentage,
-                               'use_stamp': self.useStamp,
+                               'use_stamp': self.use_stamp,
                                'color_mode': self.color_mode}
 
                     # Job-type specified options
@@ -372,10 +387,10 @@ class RenderJob:
                 format(self.uuid, task_nr))
 
             task = self.tasks[task_nr]
-            task['status'] = RenderJob.TASK_DONE
-            task['finish_time'] = time.time()
+            task.status = RenderJob.TASK_DONE
+            task.finish_time = time.time()
 
-            task_time = task['finish_time'] - task['start_time']
+            task_time = task.finish_time - task.start_time
 
             # Calculate some statistics
             if self.task_time_max is None or self.task_time_max < task_time:
@@ -577,3 +592,19 @@ class RenderJob:
             format(self.uuid, task_nr, nodeUUID))
 
         self.sche_ignorence[task_nr].append(nodeUUID)
+
+    def unwind(self, mapper):
+        """
+        Unwind all structures stored in database
+        """
+
+        self.tasks.sort(key=lambda a: a.nr)
+
+        # XXX: Create some structs which are created in contructor
+        #       but not when loading object from database
+
+        self.task_lock = threading.Lock()
+        self.render_lock = threading.Lock()
+        self.sche_ignorence = {}
+
+        RenderJob.total_jobs = max(int(self.uuid) + 1, RenderJob.total_jobs)

@@ -28,6 +28,7 @@
 #
 
 import signal
+
 import Logger
 
 from config import Config
@@ -35,9 +36,14 @@ from Singleton import Singleton
 from master.RenderServer import RenderServer
 from master.HTTPServer import HTTPServer
 from master.XMLRPCServer import XMLRPCServer
+from master.Mapper import Mapper
 
 
 class Master(Singleton):
+    """
+    BFarm master server
+    """
+
     def initInstance(self):
         """
         Initialize master
@@ -54,6 +60,18 @@ class Master(Singleton):
         self.render_server = RenderServer()
         self.xmlrpc_server = XMLRPCServer(xmlrpc_address)
         self.http_server = HTTPServer(http_address)
+
+        # Create ORM mapper
+        self.mapper = Mapper(Config.master['database_path'])
+
+        self.unwind(self.mapper)
+
+    def unwind(self, mapper):
+        """
+        Unwind all structures stored in database
+        """
+
+        self.render_server.unwind(mapper)
 
     def sigint_handler(self, sig, frame):
         """
@@ -98,6 +116,9 @@ class Master(Singleton):
         self.http_server.requestStop()
         #self.http_server.join()
 
+        # Flush all posible changes to database
+        self.mapper.flush()
+
     def getRenderServer(self):
         """
         Get render server instance
@@ -111,3 +132,10 @@ class Master(Singleton):
         """
 
         return self.http_server
+
+    def getMapper(self):
+        """
+        Get ORM mapper
+        """
+
+        return self.mapper

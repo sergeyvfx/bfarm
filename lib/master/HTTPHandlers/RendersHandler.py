@@ -59,7 +59,7 @@ def jobs_listing(httpRequest):
     for job in all_jobs:
         item = {'name': 'job-' + job.getUUID(),
                 'is_dir': True,
-                'unix_time': job.getTime(),
+                'unix_time': job.getStartTime(),
                 'size': 0}
 
         listing.append(item)

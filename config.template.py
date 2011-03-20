@@ -38,6 +38,7 @@ class Config:
               'http_port':            8080,
 
               'storage_path':         'storage',
+              'database_path':        'sqlite:///bfarm.sqlite',
 
               'chunk_size':           32768,
 

@@ -32,11 +32,12 @@ import os
 import threading
 
 import Logger
+import master
 
 from time import sleep
 from config import Config
-
 from SignalThread import SignalThread
+
 from master.RenderNode import RenderNode
 from master.RenderJob import RenderJob
 
@@ -76,6 +77,13 @@ class RenderServer(SignalThread):
         self.completed_jobs = []
 
         self.prepareStorage()
+
+    def getMapper(self):
+        """
+        Get ORM mapper -- utility function
+        """
+
+        return master.Master().getMapper()
 
     def requestStop(self):
         """
@@ -218,6 +226,9 @@ class RenderServer(SignalThread):
 
         job = RenderJob(options)
 
+        # Register new job in ORM
+        self.getMapper().addObject(job)
+
         with self.jobs_lock:
             self.jobs.append(job)
             self.jobs_hash[job.getUUID()] = job
@@ -260,6 +271,8 @@ class RenderServer(SignalThread):
                     task_nr = task['task']
                     node.assignTask(job.getUUID(), task_nr)
 
+                    self.getMapper().updateObject(job)
+
                     Logger.log('Job {0}: task {1} assigned to node {2}' .
                         format(uuid, task['task'], node.getUUID()))
 
@@ -277,6 +290,9 @@ class RenderServer(SignalThread):
                 with self.jobs_lock:
                     self.jobs.remove(job)
                     self.completed_jobs.append(job)
+
+            self.getMapper().updateObject(job)
+
             return True
         else:
             return False
@@ -329,3 +345,30 @@ class RenderServer(SignalThread):
             sleep(0.2)
 
         Logger.log('Main renderfarm thread was stopped')
+
+    def unwind(self, mapper):
+        """
+        Unwind all structures stored in database
+        """
+
+        jobs = mapper.getAllObjects(RenderJob)
+
+        for job in jobs:
+            uuid = job.getUUID()
+
+            job.unwind(mapper)
+
+            if not job.isCompleted():
+                self.jobs.append(job)
+
+                Logger.log(('Restored active job {0} ({1} of {2} ' +
+                            'tasks completed)') . \
+                                format(uuid,
+                                       job.getProgress(),
+                                       job.getTasksCount()))
+            else:
+                self.completed_jobs.append(job)
+
+                Logger.log('Restored completed job ' + uuid)
+
+            self.jobs_hash[uuid] = job

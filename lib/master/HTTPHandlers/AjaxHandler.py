@@ -102,7 +102,7 @@ class _Ajaxhandlers(Singleton):
                        'percentage': job.getPercentage(),
                        'start_frame': job.getStartFrame(),
                        'end_frame': job.getEndFrame(),
-                       'time': job.getTime(),
+                       'start_time': job.getStartTime(),
                        'finish_time': job.getFinishTime(),
                        'progress': job.getProgress(),
                        'ntasks': job.getTasksCount(),
