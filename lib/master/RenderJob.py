@@ -56,6 +56,7 @@ class RenderTask:
         self.start_time = None
         self.end_time = None
 
+
 class RenderJob:
     """
     Render job descriptor

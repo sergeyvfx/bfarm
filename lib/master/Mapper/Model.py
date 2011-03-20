@@ -78,4 +78,3 @@ renderTaskTable = Table('job_tasks', meta,
     Column('start_time',  Float),
     Column('finish_time',  Float),
     Column('job_id', Integer, ForeignKey('jobs.id')))
-
