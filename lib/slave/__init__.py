@@ -46,6 +46,7 @@ except ImportError:
 
 from config import Config
 from Singleton import Singleton
+from LockingServerProxy import LockingServerProxy
 from slave.RenderNode import RenderNode
 
 
@@ -65,7 +66,7 @@ class Slave(Singleton):
         port = Config.slave['master_port']
         url = 'http://{0}:{1}/'.format(address, port)
 
-        self.proxy = xmlrpc.client.ServerProxy(url)
+        self.proxy = LockingServerProxy(url)
         self.proxy_addr = (address, port)
 
         # Set signal handlers
