@@ -1,0 +1,5 @@
+DIV.UIToggleButtonToggled,
+DIV.UIToggleButtonToggled:hover {
+  background: #638dcf url(../../pics/ui/togglebutton_p.gif) 0 0 repeat-x;
+  color: #fff;
+}
