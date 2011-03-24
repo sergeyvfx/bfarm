@@ -37,9 +37,29 @@ function _UIToggleButton ()
     {
       UIButton.prototype.doOnRelease.call (this);
 
-      this.toggled = !this.toggled;
+      this.setToggled (!this.toggled);
+    };
 
-      this.setToggledStyle ();
+  /**
+   * Get toggled state
+   */
+  this.getToggled = function ()
+    {
+      return this.toggled;
+    };
+
+  /**
+   * Set toggled state
+   */
+  this.setToggled = function (toggled)
+    {
+      this.toggled = toggled;
+      this.updateBinding (this.toggled);
+
+      if (this.dom)
+        {
+          this.setToggledStyle ();
+        }
     };
 }
 
