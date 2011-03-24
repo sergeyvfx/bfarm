@@ -45,6 +45,9 @@ function _UIComboBox ()
 
       if (this.sensitive)
         {
+          $(textDiv).mousedown (wrapMeth (this, 'pushButton'));
+          $(textDiv).mouseup (wrapMeth (this, 'popButton'));
+
           $(textDiv).click (function (self) {return function () {
                 if (self.sensitive)
                   {
@@ -80,6 +83,9 @@ function _UIComboBox ()
 
       container.appendChild (this.buildContainer ());
 
+      $(button).mousedown (wrapMeth (this, 'pushButton'));
+      $(button).mouseup (wrapMeth (this, 'popButton'));
+
       $(button).click (function (self) {return function () {
             if (self.sensitive)
               {
@@ -89,13 +95,36 @@ function _UIComboBox ()
         } (this));
 
       $(result).mouseout (function (self) {return function (event) {
-            self.checkMouseOut (event || window.event);
+            if (self.sensitive)
+              {
+                self.popButton ();
+                self.checkMouseOut (event || window.event);
+              }
           };
         } (this));
 
       $(result).disableTextSelect ();
 
       return result;
+    };
+
+  /**
+   * For nicer shading when mouse is down
+   */
+  this.pushButton = function ()
+    {
+      if (this.sensitive)
+        {
+          $(this.dom).addClass ('UIComboBoxPressed');
+        }
+    };
+
+  this.popButton = function ()
+    {
+      if (this.sensitive)
+        {
+          $(this.dom).removeClass ('UIComboBoxPressed');
+        }
     };
 
   /**
