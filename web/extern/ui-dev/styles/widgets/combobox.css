@@ -24,6 +24,11 @@ DIV.UIComboBoxButton {
   -khtml-border-radius: 0 6px 6px 0;
 }
 
+DIV.UIComboBoxPressed DIV.UIComboBoxButton,
+DIV.UIComboBoxPressed DIV.UIComboBoxContainer {
+  background: #c0c0c0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+}
+
 DIV.UIComboBoxButton DIV.UIComboBoxButtonArr {
   background: transparent url(../../pics/combobtn.gif) 0 0 no-repeat;
   width: 7px;
