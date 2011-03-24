@@ -5,10 +5,14 @@
   "childs" : [
     {
       "class"   : "Grid",
-      "rows"    : 7,
+      "rows"    : 8,
       "cols"    : 2,
       "padding" : 2,
       "childs" : [
+        {"class" : "Label",
+         "text"  : "Toggle"},
+        {"class" : "ToggleButton",
+         "title" : "Toggle"},
         {"class" : "Label",
          "text"  : "Название"},
         {"class" : "Entry",
