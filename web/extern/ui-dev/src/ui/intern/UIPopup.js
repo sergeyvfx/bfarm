@@ -299,7 +299,7 @@ function UIPopupManager ()
       };
     } (this));
 
-  uiManager.addHandler (['mousedown', 'mousedownCancel', 'contextmenuCancel'], function (self) {
+  uiManager.addHandler (['mousedown', 'mousedownCancel'], function (self) {
       return function (userData) {
         self.mousedownHandler (userData);
       };

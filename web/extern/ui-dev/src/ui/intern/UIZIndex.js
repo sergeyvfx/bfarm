@@ -13,7 +13,7 @@ function _UIZIndex ()
    */
   this.getLastIndex = function ()
     {
-      var last = 100;
+      var last = 0;
 
       for (var i = 0, n = this.indexes.length; i < n; ++i)
         {
