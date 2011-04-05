@@ -79,7 +79,8 @@ class _Ajaxhandlers(Singleton):
             for node in nodes:
                 enc.append({'uuid': node.getUUID(),
                             'enabled': node.isEnabled(),
-                            'ip': node.getIP()})
+                            'ip': node.getIP(),
+                            'hostname': node.getHostname()})
 
             _send_json(httpRequest, enc)
 
@@ -156,6 +157,32 @@ class _Ajaxhandlers(Singleton):
             self._send_jobs(httpRequest, jobs)
 
     class Set:
+        def nodeEnabled(self, httpRequest):
+            """
+            Set node enabled flag
+            """
+
+            try:
+                nodeUUID = httpRequest.GET['nodeUUID']
+                enabled = int(httpRequest.GET['enabled'])
+            except:
+                _send_json(httpRequest, {'result': 'fail'})
+                return
+
+            render_server = master.Master().getRenderServer()
+            node = render_server.getNode(nodeUUID)
+
+            answer = {'result': 'ok'}
+            if node is None:
+                answer['result'] = 'fail'
+            else:
+                if enabled == 0:
+                    node.setEnabled(False)
+                else:
+                    node.setEnabled(True)
+
+            _send_json(httpRequest, answer)
+
         def jobPriority(self, httpRequest):
             """
             Set job's priority

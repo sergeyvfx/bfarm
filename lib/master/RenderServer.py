@@ -124,12 +124,12 @@ class RenderServer(SignalThread):
 
         return node
 
-    def registerNode(self, client_info):
+    def registerNode(self, hostname, client_info):
         """
         Register new node
         """
 
-        node = RenderNode(client_info)
+        node = RenderNode(hostname, client_info)
 
         with self.nodes_lock:
             self.nodes.append(node)

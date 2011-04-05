@@ -106,15 +106,19 @@ DIV.features {
 
 DIV.features DIV.nav {
   padding: 8px 8px 0 8px;
-  border-bottom: 1px #d0d0d0 solid;
+  border-bottom: 1px #aaaaa8 solid;
   background: #667 url(../pics/ui/tabs-nav-dark.gif) 0 0 repeat-x;
 }
 
 DIV.features DIV.nav UL LI {
-  margin: 1px 16px 4px 0;
+  margin: 0px 8px 0 0;
   border: 1px #aaaaa8 solid;
-  height: 18px;
+  height: 20px;
   cursor: pointer;
+  background: #ccc;
+  position: relative;
+  z-index: 10;
+  top: 1px;
 }
 
 DIV.features DIV.nav UL LI:hover {
@@ -128,22 +132,16 @@ DIV.features DIV.nav UL LI A {
 }
 
 DIV.features DIV.nav UL LI.act {
-  position: relative;
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 23px;
-  border-bottom: 1px #d0d0d0 solid;
-  z-index: 10;
-  top: 1px;
+  border-bottom: 1px #eee solid;
   font-weight: bold;
   font-size: 9pt;
-  background-color: #d0d0d0;
+  background-color: #eee;
   cursor: default;
 }
 
 /* Page's content */
 DIV.mainHolder {
-  border-color: #d0d0d0;
+  border-color: #eee;
   border-width: 4px 16px 0 0;
   border-style: solid;
   padding: 4px;

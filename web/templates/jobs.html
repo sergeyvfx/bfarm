@@ -1,0 +1,24 @@
+<table class="wide spacing">
+  <tr>
+    <td><div id="jobsButtons"></div></td>
+  </tr>
+  <tr>
+    <td style="padding: 0"><div id="jobsList"></div></td>
+  </tr>
+</table>
+
+<div class="formBindings">
+  <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data">
+    <input name="title" id="jobTitle">
+    <input name="type" id="jobType">
+    <input name="start-frame" id="jobStartFrame">
+    <input name="end-frame" id="jobEndFrame">
+    <input name="framenr" id="jobFrameNumber">
+    <input name="file_format" id="jobFileFormat">
+    <input name="resol_x" id="jobResolX">
+    <input name="resol_y" id="jobResolY">
+    <input name="percentage" id="jobPercentage">
+    <input type="file" name="blenfile" id="jobBlenfile">
+    <input name="color_mode" id="jobColorMode">
+  </form>
+</div>

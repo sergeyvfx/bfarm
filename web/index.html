@@ -16,6 +16,7 @@
     <script type="text/javascript" src="/pack/ui-dev.js"></script>
     <script type="text/javascript" src="/src/bfarm.js"></script>
     <script type="text/javascript" src="/src/jobs.js"></script>
+    <script type="text/javascript" src="/src/nodes.js"></script>
   </head>
   <body>
     <div class="content">
@@ -36,11 +37,15 @@
           </a>
         </div>
       </div>
+
       <div class="features">
         <div class="nav">
-          <ul >
-            <li class="act">
-              <a href="/">Jobs</a>
+          <ul>
+            <li id="page_jobs" class="navPageSwitcher">
+              <a href="#jobs">Jobs</a>
+            </li>
+            <li id="page_nodes" class="navPageSwitcher">
+              <a href="#nodes">Nodes</a>
             </li>
           </ul>
 
@@ -49,31 +54,6 @@
       </div>
 
       <div class="mainHolder">
-        <table class="wide spacing">
-          <tr>
-            <td><div id="jobsButtons"></div></td>
-          </tr>
-          <tr>
-            <td style="padding: 0"><div id="jobsList"></div></td>
-          </tr>
-        </table>
-
-        <div class="formBindings">
-          <form id="jobRegister" action=".?action=registerJob" method="POST" enctype="multipart/form-data">
-            <input name="title" id="jobTitle">
-            <input name="type" id="jobType">
-            <input name="start-frame" id="jobStartFrame">
-            <input name="end-frame" id="jobEndFrame">
-            <input name="framenr" id="jobFrameNumber">
-            <input name="file_format" id="jobFileFormat">
-            <input name="resol_x" id="jobResolX">
-            <input name="resol_y" id="jobResolY">
-            <input name="percentage" id="jobPercentage">
-            <input type="file" name="blenfile" id="jobBlenfile">
-            <input name="color_mode" id="jobColorMode">
-          </form>
-        </div>
-
       </div>
 
       <div class="footer"></div>

@@ -90,7 +90,7 @@ class RenderNode(SignalThread):
         proxy = slave.Slave().getProxy()
 
         try:
-            self.uuid = proxy.node.register()
+            self.uuid = proxy.node.register(socket.gethostname())
             Logger.log('Registered at master under uuid {0}' .
                 format(self.uuid))
         except socket.error as strerror:

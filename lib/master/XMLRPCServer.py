@@ -65,14 +65,14 @@ class XMLRPCHandlers:
 
             pass
 
-        def register(self, client_info):
+        def register(self, hostname, client_info):
             """
             Register rendering node
             """
 
             render_server = master.Master().getRenderServer()
 
-            return render_server.registerNode(client_info)
+            return render_server.registerNode(hostname, client_info)
 
         def unregister(self, nodeUUID, client_info):
             """
