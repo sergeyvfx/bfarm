@@ -90,25 +90,25 @@ function _UIWindow ()
     {
       if (this.menu.length ())
         {
-          this.buildTitleButton ('window-menu', 'Меню', 'left', 'UIWindowMenuButton',
+          this.buildTitleButton ('window-menu', 'menu', 'left', 'UIWindowMenuButton',
               wrapMeth (this, 'onMenuClick'));
         }
 
       if (indexOf (this.buttons, 'CLOSE') >= 0)
         {
-          this.buildTitleButton ('window-close', 'Закрыть', 'right', 'UIWindowCloseButton',
+          this.buildTitleButton ('window-close', 'close', 'right', 'UIWindowCloseButton',
               wrapMeth (this, 'onCloseClick'));
         }
 
       if (indexOf (this.buttons, 'MAXIMIZE') >= 0)
         {
-          this.buildTitleButton ('window-maximize', 'Развернуть/восстановить', 'right', 'UIWindowMaximizeButton',
+          this.buildTitleButton ('window-maximize', 'maximize', 'right', 'UIWindowMaximizeButton',
             wrapMeth (this, 'onToggleMaximizeClick'));
         }
 
       if (indexOf (this.buttons, 'MINIMIZE') >= 0 && !this.isModal ())
         {
-          this.buildTitleButton ('window-minimize', 'Свернуть', 'right', 'UIWindowMinimizeButton',
+          this.buildTitleButton ('window-minimize', 'minimize', 'right', 'UIWindowMinimizeButton',
               wrapMeth (this, 'onMinimizeClick'));
         }
     };

@@ -1,12 +1,12 @@
 DIV.UIButton {
   border: 1px #666 solid;
 
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  -webkit-border-radius: 3px;
-  -khtml-border-radius: 3px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
 
-  background: #c5c3ce url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/ui/button_bg.gif) 0 0 repeat-x;
   text-align: center;
   cursor: pointer;
   color: #333;
@@ -14,20 +14,15 @@ DIV.UIButton {
   overflow: hidden;
   height: 18px;
 
-  padding: 1px 8px 0 8px;
-  display: inline-block;
-  _display: inline;
-  _zoom: 1;
-  margin: 0 4px;
-  min-width: 40px;
+  padding: 1px 4px 0 4px;
 }
 
 DIV.UIButton:hover {
-  background: #cecbc7 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
+  background: #cfcfcf url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
 }
 
 DIV.UIButtonPressed {
-  background: #9393a2 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
+  background: #b0b0b0 url(../../pics/ui/button_p_bg.gif) 0 0 repeat-x !important;
 }
 
 DIV.UIButtonPressed * {
@@ -71,17 +66,15 @@ DIV.UIButtonInsesitive A {
 
 /* flat buttons */
 DIV.UIFlatButton {
-  background: #ededf1;
-  color: #333;
-  border-color: #999;
+  background: #ddd;
 }
 
 DIV.UIFlatButton:hover {
-  background: #dedce3;
+  background: #e7e7e7;
 }
 
 DIV.UIFlatButtonPressed {
-  background: #c4c2cd !important;
+  background: #bbb !important;
 }
 
 DIV.UIFlatButtonInsensitive {

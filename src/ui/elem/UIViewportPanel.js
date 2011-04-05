@@ -35,10 +35,7 @@ function _UIViewportPanel ()
               margin = 0;
             }
 
-          if (isUnknown (item.noCenter) || !item.noCenter)
-            {
-              dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
-            }
+          dom.style.marginTop = (margin + (holderHeight - height) / 2 - 1) + 'px';
         }
 
       var isBlock = item.block;
