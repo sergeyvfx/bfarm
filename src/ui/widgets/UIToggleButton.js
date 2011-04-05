@@ -38,6 +38,7 @@ function _UIToggleButton ()
       UIButton.prototype.doOnRelease.call (this);
 
       this.setToggled (!this.toggled);
+      this.onToggle ();
     };
 
   /**
@@ -61,6 +62,11 @@ function _UIToggleButton ()
           this.setToggledStyle ();
         }
     };
+
+  /**
+   * Events'stubs
+   */
+  this.onToggle   = function () {}
 }
 
 function UIToggleButton (opts)
@@ -70,6 +76,9 @@ function UIToggleButton (opts)
   UIButton.call (this, opts);
 
   this.toggled = defVal(opts['toggled'], false);
+
+  /* events avaliable for attaching */
+  this.events = this.events.concat (['onToggle']);
 }
 
 UIToggleButton.prototype = new _UIToggleButton;
