@@ -1,7 +1,7 @@
 DIV.UIMenu {
   border: 1px #666 solid;
 
-  background: #c2c2c2;
+  background: #EBF5FF;
   color: #333;
 
   padding: 2px;
@@ -10,7 +10,7 @@ DIV.UIMenu {
 DIV.UIMenuItem {
   cursor: pointer;
   padding: 1px 4px;
-  border: 1px #c2c2c2 solid;
+  border: 1px #EBF5FF solid;
 }
 
 DIV.UIMenuItem:hover {
