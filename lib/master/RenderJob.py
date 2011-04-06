@@ -553,11 +553,18 @@ class RenderJob:
         command = ['convert', '-adaptive-resize',
                    Config.master['thumb_size'], fname_path, thumbs_fpath]
 
-        proc = subprocess.Popen(args=command, stdin=subprocess.PIPE,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                shell=False)
-        data, err = proc.communicate()
-        rv = proc.wait()
+        try:
+            proc = subprocess.Popen(args=command,
+                                    stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE,
+                                    stderr=subprocess.PIPE,
+                                    shell=False)
+            data, err = proc.communicate()
+            rv = proc.wait()
+        except:
+            # imagemagick isn't installed, no reason to
+            # cause general panic
+            pass
 
         if not os.path.isfile(thumbs_fpath):
             # error creating thumbnail
