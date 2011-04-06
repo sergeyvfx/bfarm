@@ -55,8 +55,34 @@ class RenderNode(SignalThread):
         self.stop_flag = False
         self.uuid = None
         self.currentTask = None
+        self.host_info = self.collectHostInfo()
 
         self.taskSender = TaskSender(self)
+
+    def collectHostInfo(self):
+        """
+        Collect all host-specific info
+        """
+
+        info = {}
+
+        if Config.slave['send_host_info']:
+            import platform
+            import os
+
+            info['hostname'] = socket.gethostname()
+            info['arch'] = platform.architecture()[0]
+
+            cores = 1
+            if hasattr(os, 'sysconf'):
+                if 'SC_NPROCESSORS_ONLN' in os.sysconf_names:
+                    cores = os.sysconf('SC_NPROCESSORS_ONLN')
+
+            info['cores'] = cores
+            info['platform'] = ' '.join(os.uname()).strip()
+            info['dist'] = ' '.join(platform.dist()).strip()
+
+        return info
 
     def getUUID(self):
         """
@@ -90,7 +116,7 @@ class RenderNode(SignalThread):
         proxy = slave.Slave().getProxy()
 
         try:
-            self.uuid = proxy.node.register(socket.gethostname())
+            self.uuid = proxy.node.register(self.host_info)
             Logger.log('Registered at master under uuid {0}' .
                 format(self.uuid))
         except socket.error as strerror:

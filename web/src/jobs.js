@@ -115,7 +115,6 @@ var jobs = new function () {
     grid.setCellStyle(1, 0, {'colspan': 2});
 
     var attrGrid = new UIGrid({'cols': 2,
-                               'rows': attrs.length + 1,
                                'padding': 2});
     attrGrid.setCellStyle(0, 0, {'width': 120});
 
@@ -138,6 +137,8 @@ var jobs = new function () {
     attrGrid.setCellStyle(index, 0, {'colspan': 2});
     attrGrid.add (new UIProgress({'position': position,
                                   'title': 'Progress'}));
+
+    attrGrid.setRows(index + 1);
 
     grid.add (attrGrid);
 

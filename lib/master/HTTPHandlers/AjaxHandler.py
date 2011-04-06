@@ -80,6 +80,7 @@ class _Ajaxhandlers(Singleton):
                 enc.append({'uuid': node.getUUID(),
                             'enabled': node.isEnabled(),
                             'ip': node.getIP(),
+                            'host_info': node.getHostInfo(),
                             'hostname': node.getHostname()})
 
             _send_json(httpRequest, enc)

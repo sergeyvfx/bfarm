@@ -56,4 +56,5 @@ class Config:
              'blender-binary':       '/home/nazgul/lib/blender2.5/blender',
              'touch_interval':       5,
              'storage_path':         'storage',
-             'chunk_size':           32768}
+             'chunk_size':           32768,
+             'send_host_info':       True}

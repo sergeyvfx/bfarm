@@ -8,7 +8,12 @@
 var nodes = new function () {
   var attrs = [{'title': 'Identifier', 'field': 'uuid'},
                {'title': 'IP address', 'field': 'ip'},
-               {'title': 'Host name', 'field': 'hostname'}]
+               {'title': 'Host name',  'field': 'hostname'}]
+
+  var host_attrs = [{'title': 'Archeticture', 'field': 'arch'},
+                    {'title': 'Cores',        'field': 'cores'},
+                    {'title': 'Platform',     'field': 'platform'},
+                    {'title': 'Distributive', 'field': 'dist'}];
 
   function createNodeBoxHeaderItems(node) {
     var headerItems = [];
@@ -39,25 +44,34 @@ var nodes = new function () {
                                  'headerItems': headerItems});
 
     var attrGrid = new UIGrid({'cols': 2,
-                               'rows': attrs.length + 1,
                                'padding': 2});
     attrGrid.setCellStyle(0, 0, {'width': 120});
 
     var index = 0;
-    for(var i = 0; i < attrs.length; i++) {
-      var attr = attrs[i];
-      var text = node[attr['field']];
+    var all_attrs = [attrs, host_attrs];
+    var data_src = [node, node['host_info']];
 
-      if (isUnknown(text))
-        continue;
+    for (x in all_attrs) {
+      var curr_attrs = all_attrs[x];
+      var data = data_src[x];
 
-      if (attr['filter'])
-        text = attr['filter'] (text);
+      for(var i = 0; i < curr_attrs.length; i++) {
+        var attr = curr_attrs[i];
+        var text = data[attr['field']];
 
-      attrGrid.add (new UILabel({'text': attr['title']}));
-      attrGrid.add (new UILabel({'text': text}));
-      index++;
+        if (isUnknown(text))
+          continue;
+
+        if (attr['filter'])
+          text = attr['filter'] (text);
+
+        attrGrid.add (new UILabel({'text': attr['title']}));
+        attrGrid.add (new UILabel({'text': text}));
+        index++;
+      }
     }
+
+    attrGrid.setRows(index);
 
     box.add(attrGrid);
 

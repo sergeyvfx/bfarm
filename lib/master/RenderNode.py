@@ -40,7 +40,7 @@ class RenderNode:
 
     total_nodes = 0
 
-    def __init__(self, hostname, client_info):
+    def __init__(self, host_info, client_info):
         """
         Initialize node descriptor
         """
@@ -49,7 +49,7 @@ class RenderNode:
         self.ip = client_info['address'][0]
         self.access_time = time.time()
         self.enabled = True
-        self.hostname = hostname
+        self.host_info = host_info
 
         RenderNode.total_nodes += 1
 
@@ -151,4 +151,14 @@ class RenderNode:
         Get hostname of node machine
         """
 
-        return self.hostname
+        if 'hostname' in self.host_info:
+            return self.host_info['hostname']
+
+        return self.ip
+
+    def getHostInfo(self):
+        """
+        Get all host-specific info
+        """
+
+        return self.host_info
