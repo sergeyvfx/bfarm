@@ -117,7 +117,7 @@ DIV.features DIV.nav UL LI {
   cursor: pointer;
   background: #ccc;
   position: relative;
-  z-index: 10;
+  z-index: 1;
   top: 1px;
 }
 
