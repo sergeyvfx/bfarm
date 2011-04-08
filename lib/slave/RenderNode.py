@@ -130,6 +130,10 @@ class RenderNode(SignalThread):
         Unregister node from renderfarm master
         """
 
+        if not self.uuid:
+            # Not registered at server -- no need in unregistering
+            return
+
         proxy = slave.Slave().getProxy()
 
         try:
@@ -169,9 +173,14 @@ class RenderNode(SignalThread):
 
         # Ensure we're registered at serevr
         if not self.check():
-            Logger.log('Connection to server lost, registering again...')
-            self.uuid = None
+            if self.uuid is not None:
+                Logger.log('Connection to server lost, registering again...')
+                self.uuid = None
             self.register()
+
+        if self.uuid is None:
+            # Not registered at server
+            return
 
         proxy = slave.Slave().getProxy()
 
@@ -190,6 +199,10 @@ class RenderNode(SignalThread):
 
         if self.currentTask is not None:
             # Already got task
+            return
+
+        if not self.uuid:
+            # Nowhere to request from
             return
 
         proxy = slave.Slave().getProxy()
