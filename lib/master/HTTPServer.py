@@ -138,6 +138,8 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 pass
             else:
                 raise
+        except socket.error:
+            pass
         except:
             raise
 
