@@ -88,6 +88,16 @@ class XMLRPCHandlers:
 
             return render_server.unregisterNode(node)
 
+        def check(self, nodeUUID, client_info):
+            """
+            Check if node still walid
+            """
+
+            render_server = master.Master().getRenderServer()
+            node = render_server.getNode(nodeUUID)
+
+            return node != None
+
         def touch(self, nodeUUID, client_info):
             """
             Register rendering node

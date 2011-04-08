@@ -142,16 +142,36 @@ class RenderNode(SignalThread):
             Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
             raise
 
+    def check(self):
+        """
+        Check if node still walid
+        """
+
+        if self.uuid is None:
+            return False
+
+        proxy = slave.Slave().getProxy()
+
+        try:
+            return proxy.node.check(self.uuid)
+        except socket.error as strerror:
+            Logger.log('Error checking self: {0}'. format(strerror))
+        except:
+            Logger.log('Unexpected error: {0}' . format(sys.exc_info()[0]))
+            raise
+
+        return False
+
     def touch(self):
         """
         Touch master to tell we're still alive
         """
 
         # Ensure we're registered at serevr
-        self.register()
-
-        if self.uuid is None:
-            return
+        if not self.check():
+            Logger.log('Connection to server lost, registering again...')
+            self.uuid = None
+            self.register()
 
         proxy = slave.Slave().getProxy()
 
@@ -167,12 +187,6 @@ class RenderNode(SignalThread):
         """
         Request task from master
         """
-
-        # Ensure we're registered at serevr
-        self.register()
-
-        if self.uuid is None:
-            return
 
         if self.currentTask is not None:
             # Already got task
@@ -203,9 +217,6 @@ class RenderNode(SignalThread):
         """
         Restart assigned task on master
         """
-
-        # Ensure we're registered at serevr
-        self.register()
 
         jobUUID = self.currentTask.getJobUUID()
         task_nr = self.currentTask.getTaskNum()
