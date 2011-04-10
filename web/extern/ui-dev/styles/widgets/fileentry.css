@@ -1,4 +1,6 @@
 DIV.UIFileEntry {
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 DIV.UIFileEntry DIV.UIButton {
