@@ -5,10 +5,17 @@
   "childs" : [
     {
       "class"   : "Grid",
-      "rows"    : 8,
+      "rows"    : 9,
       "cols"    : 2,
       "padding" : 2,
       "childs" : [
+        {"class" : "Label",
+         "text"  : "Radio"},
+        {"class" : "RadioGroup",
+         "value" : 1,
+         "items" : [{"title": 123, "value": 1},
+                    {"title": 321, "value": 2},
+                    {"title": "qqq", "value": 3}]},
         {"class" : "Label",
          "text"  : "Toggle"},
         {"class" : "ToggleButton",

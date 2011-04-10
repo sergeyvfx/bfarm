@@ -1,0 +1,53 @@
+DIV.UIRadioGroup {
+}
+
+TABLE.UIRadioGroupItemsHolder {
+  table-layout: fixed;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+TD.UIRadioGroupItemHolder {
+  padding: 0;
+}
+
+TD.UIRadioGroupItemHolder DIV.UIButton {
+  -moz-border-radius: 0;
+  border-radius: 0;
+  -webkit-border-radius: 0;
+  -khtml-border-radius: 0;
+
+  border-width: 1px 0 1px 1px;
+
+  background: #686868 url(../../pics/ui/button_r_bg.gif) 0 0 repeat-x;
+  color: #fff;
+}
+
+TD.UIRadioGroupItemHolder DIV.UIToggleButtonToggled {
+  background: #638dcf url(../../pics/ui/togglebutton_p.gif) 0 0 repeat-x;
+}
+
+TD.UIRadioGroupItemFirstHolder DIV.UIButton {
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+}
+
+TD.UIRadioGroupItemLastHolder DIV.UIButton {
+  -moz-border-radius: 0 6px 6px 0;
+  border-radius: 0 6px 6px 0;
+  -webkit-border-radius: 0 6px 6px 0;
+  -khtml-border-radius: 0 6px 6px 0;
+
+  border-width: 1px;
+}
+
+TD.UIRadioGroupItemLonelyHolder DIV.UIButton {
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -khtml-border-radius: 6px;
+
+  border-width: 1px;
+}

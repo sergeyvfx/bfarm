@@ -31,12 +31,22 @@ function _UICreator ()
         }
 
       var widget = new window[className] (json);
+      var childs = null;
 
-      if (typeof widget.add == 'function' && json['childs'])
+      if (json['childs'])
         {
-          for (var i = 0, n = json['childs'].length; i < n; ++i)
+          childs = json['childs'];
+        }
+      else if (json['items'])
+        {
+          childs = json['items'];
+        }
+
+      if (typeof widget.add == 'function' && childs)
+        {
+          for (var i = 0, n = childs.length; i < n; ++i)
             {
-              var c = json['childs'][i];
+              var c = childs[i];
 
               if (widget.widgetField)
                 {
