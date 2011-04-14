@@ -24,7 +24,7 @@ TD.UIRadioGroupItemHolder DIV.UIButton {
 }
 
 TD.UIRadioGroupItemHolder DIV.UIButton:hover {
-  background: #838383 url(../../pics/ui/button_r_h_bg.gif) 0 0 repeat-x;
+  background: #838383 url(../../pics/button_r_h_bg.gif) 0 0 repeat-x;
 }
 
 TD.UIRadioGroupItemHolder DIV.UIToggleButtonToggled {
