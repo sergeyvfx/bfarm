@@ -28,7 +28,7 @@ TD.UIRadioGroupItemHolder DIV.UIButton:hover {
 }
 
 TD.UIRadioGroupItemHolder DIV.UIToggleButtonToggled {
-  background: #638dcf url(../../pics/togglebutton_p.gif) 0 0 repeat-x;
+  background: #638dcf url(../../pics/togglebutton_p.gif) 0 0 repeat-x !important;
 }
 
 TD.UIRadioGroupItemFirstHolder DIV.UIButton {
