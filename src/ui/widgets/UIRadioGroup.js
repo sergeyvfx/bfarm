@@ -115,6 +115,15 @@ function UIRadioGroup (opts)
 
   this.value = defVal (opts['value'], null);
 
+  // XXX: need better integration for other widgets
+  if (opts['items'])
+    {
+      for (var i = 0; i < opts['items'].length; ++i)
+        {
+          this.add (opts['items'][i]);
+        }
+    }
+
   /* internal use -- array of buttons used for variants */
   this.buttons = [];
 }

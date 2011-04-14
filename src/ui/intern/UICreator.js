@@ -33,20 +33,11 @@ function _UICreator ()
       var widget = new window[className] (json);
       var childs = null;
 
-      if (json['childs'])
+      if (typeof widget.add == 'function' && json['childs'])
         {
-          childs = json['childs'];
-        }
-      else if (json['items'])
-        {
-          childs = json['items'];
-        }
-
-      if (typeof widget.add == 'function' && childs)
-        {
-          for (var i = 0, n = childs.length; i < n; ++i)
+          for (var i = 0, n = json['childs'].length; i < n; ++i)
             {
-              var c = childs[i];
+              var c = json['childs'][i];
 
               if (widget.widgetField)
                 {
