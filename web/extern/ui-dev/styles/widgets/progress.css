@@ -6,7 +6,7 @@ DIV.UIProgress {
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 
-  background: #c0c0c0 url(../../pics/ui/progress_bg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/progress_bg.gif) 0 0 repeat-x;
 
   height: 18px;
   position: relative;
@@ -22,7 +22,7 @@ DIV.UIProgressBar {
   -webkit-border-radius: 6px;
   -khtml-border-radius: 6px;
 
-  background: #c0c0c0 url(../../pics/ui/progress_fg.gif) 0 0 repeat-x;
+  background: #c0c0c0 url(../../pics/progress_fg.gif) 0 0 repeat-x;
 
   height: 18px;
   position: absolute;

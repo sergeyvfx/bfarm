@@ -19,12 +19,12 @@ TD.UIRadioGroupItemHolder DIV.UIButton {
 
   border-width: 1px 0 1px 1px;
 
-  background: #686868 url(../../pics/ui/button_r_bg.gif) 0 0 repeat-x;
+  background: #686868 url(../../pics/button_r_bg.gif) 0 0 repeat-x;
   color: #fff;
 }
 
 TD.UIRadioGroupItemHolder DIV.UIToggleButtonToggled {
-  background: #638dcf url(../../pics/ui/togglebutton_p.gif) 0 0 repeat-x;
+  background: #638dcf url(../../pics/togglebutton_p.gif) 0 0 repeat-x;
 }
 
 TD.UIRadioGroupItemFirstHolder DIV.UIButton {
