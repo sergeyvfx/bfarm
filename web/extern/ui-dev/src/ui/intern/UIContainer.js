@@ -158,7 +158,6 @@ function _UIContainer ()
 
            if (!c.lookupWidget)
              {
-               alert(c);
                continue;
              }
 
