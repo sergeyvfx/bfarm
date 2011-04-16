@@ -136,6 +136,8 @@ function UIRadioGroup (opts)
 
   /* internal use -- array of buttons used for variants */
   this.buttons = [];
+
+  this.events = this.events.concat (['onChanged']);
 }
 
 UIRadioGroup.prototype = new _UIRadioGroup;
