@@ -25,6 +25,8 @@ function _UIRadioGroup ()
 
   this.onButtonToggled = function (btn)
     {
+      var oldValue = this.value;
+
       for (var i = 0; i < this.buttons.length; ++i)
         {
           var item = this.get (i);
@@ -41,6 +43,11 @@ function _UIRadioGroup ()
               cur.setToggled (false);
             }
         }
+
+        if (oldValue != this.value)
+          {
+            this.onChanged (this.value);
+          }
     };
 
   this.getHolders = function ()
@@ -105,6 +112,9 @@ function _UIRadioGroup ()
       this.value = value;
       this.rebuild ();
     };
+
+  /* Events' stubs */
+  this.onChanged = function (value) {};
 }
 
 function UIRadioGroup (opts)
@@ -126,6 +136,8 @@ function UIRadioGroup (opts)
 
   /* internal use -- array of buttons used for variants */
   this.buttons = [];
+
+  this.events = this.events.concat (['onChanged']);
 }
 
 UIRadioGroup.prototype = new _UIRadioGroup;
