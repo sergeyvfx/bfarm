@@ -14,7 +14,12 @@ DIV.UIButton {
   overflow: hidden;
   height: 18px;
 
-  padding: 1px 4px 0 4px;
+  padding: 0 4px;
+}
+
+DIV.UIButton > SPAN {
+  position: relative;
+  top: 2px;
 }
 
 DIV.UIButton:hover {
@@ -33,6 +38,7 @@ DIV.UIButton IMG.UIButtonImage {
   vertical-align: middle;
   margin-right: 6px;
   position: relative;
+  top: -1px;
 }
 
 DIV.UIButton IMG.UIButtonTitlelessImage {
