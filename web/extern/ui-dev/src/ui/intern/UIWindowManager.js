@@ -56,7 +56,7 @@ function _UIWindowManager ()
   this.checkBackground = function ()
     {
       var window = null;
-      for (var i = this.usageStack - 1; i >= 0; --i)
+      for (var i = this.usageStack.length - 1; i >= 0; --i)
         {
           var cur = this.usageStack[i];
           if (cur.isModal ())
@@ -272,8 +272,8 @@ function _UIWindowManager ()
       var top = parseInt (window.dom.style.top);
       var left = parseInt (window.dom.style.left);
 
-      var width  = window.dom.offsetWidth;
-      var height = window.dom.offsetHeight;
+      var width  = window.dom.clientWidth;
+      var height = window.dom.clientHeight;
 
       var parent = window.dom.parentNode;
       var parentWidth  = parent.clientWidth;
@@ -292,12 +292,24 @@ function _UIWindowManager ()
                           'top'    : top,
                           'left'   : left};
 
-      /* Animated expand */
-      $(window.dom).animate ({'top'    : 0,
-                              'left'   : 0,
-                              'right'  : 0,
-                              'bottom' : 0}, window.animateSpeed,
-                              wrapMethDelayed (window, 'onMaximized'));
+      if (window.animated)
+        {
+          /* Animated expand */
+          $(window.dom).animate ({'top'    : 0,
+                                  'left'   : 0,
+                                  'right'  : 0,
+                                  'bottom' : 0}, window.animateSpeed,
+                                  wrapMethDelayed (window, 'onMaximized'));
+        }
+      else
+        {
+          window.dom.style.top    = '0px';
+          window.dom.style.left   = '0px';
+          window.dom.style.right  = '0px';
+          window.dom.style.bottom = '0px';
+
+          callOut (window.onMaximized);
+        }
 
       this.onWindowMaximized (window);
     };
@@ -318,11 +330,24 @@ function _UIWindowManager ()
 
       window.isMaximized = false;
 
-      $(window.dom).animate ({'top'    : window.savedDims['top'],
-                              'left'   : window.savedDims['left'],
-                              'width'  : window.savedDims['width'],
-                              'height' : window.savedDims['height']}, window.animateSpeed,
-                              wrapMethDelayed (window, 'onRestored'));
+      if (window.animated)
+        {
+          $(window.dom).animate ({'top'    : window.savedDims['top'],
+                                  'left'   : window.savedDims['left'],
+                                  'width'  : window.savedDims['width'],
+                                  'height' : window.savedDims['height']},
+                                  window.animateSpeed,
+                                  wrapMethDelayed (window, 'onRestored'));
+        }
+      else
+        {
+          window.dom.style.top    = window.savedDims['top'] + 'px';
+          window.dom.style.left   = window.savedDims['left'] + 'px';
+          window.dom.style.width  = window.savedDims['width'] + 'px';
+          window.dom.style.height = window.savedDims['height'] + 'px';
+
+          callOut (window.onRestored);
+        }
 
       this.onWindowRestored (window);
     };

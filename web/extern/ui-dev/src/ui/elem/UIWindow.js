@@ -510,6 +510,50 @@ function _UIWindow ()
       this.animated = animated;
     };
 
+  this.resizeTo = function(width, height, keepCenter)
+    {
+      var anim = {'width'  : width,
+                  'height' : height};
+
+
+      if (keepCenter)
+        {
+          var left = this.dom.offsetLeft;
+          var top = this.dom.offsetTop;
+          var cur_width = this.dom.clientWidth;
+          var cur_height = this.dom.clientHeight;
+
+          anim['left'] = left + (cur_width - width) / 2;
+          anim['top'] = top + (cur_height - height) / 2;
+        }
+
+      if (this.isMaximized)
+        {
+          this.savedDims = anim;
+
+          return;
+        }
+
+      if (this.animated)
+        {
+          $(this.dom).animate (anim, this.animateSpeed,
+                               wrapMethDelayed (this, 'onResize'));
+        }
+      else
+        {
+          if (keepCenter)
+            {
+              this.dom.style.left = anim['left'] + 'px';
+              this.dom.style.top = anim['top'] + 'px';
+            }
+
+          this.dom.style.width = anim['width'] + 'px';
+          this.dom.style.height = anim['height'] + 'px';
+
+          callOut (this.onResize);
+        }
+    };
+
   /* Event stubs */
   this.onShow   = function () {};
   this.onRaise  = function () {};
