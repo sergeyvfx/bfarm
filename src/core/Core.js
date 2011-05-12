@@ -105,7 +105,7 @@ function setEmbedHandlers (node)
       var oldDocCreateElement = document.createElement;
       document.createElement = function (elem)
         {
-          return setEmbedHandlers (oldDocCreateElement (elem));
+          return setEmbedHandlers (oldDocCreateElement.call (this, elem));
         }
     }
   else
