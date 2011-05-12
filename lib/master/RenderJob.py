@@ -40,7 +40,7 @@ from config import Config
 import Logger
 
 
-class RenderTask:
+class RenderTask(object):
     """
     Render task desfriptor
     """
@@ -57,7 +57,7 @@ class RenderTask:
         self.end_time = None
 
 
-class RenderJob:
+class RenderJob(object):
     """
     Render job descriptor
     """

@@ -28,6 +28,7 @@
 #
 
 from slave.FileEnviron import FileEnviron
+from slave.SVNEnviron import SVNEnviron
 
 
 def spawnNewEnviron(options):
@@ -37,3 +38,7 @@ def spawnNewEnviron(options):
 
     if options['fname'].startswith('file://'):
         return FileEnviron(options)
+    elif options['fname'].startswith('svn://'):
+        return SVNEnviron(options)
+
+    return None

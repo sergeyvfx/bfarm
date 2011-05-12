@@ -70,6 +70,9 @@ class RenderTask(SignalThread):
         Prepare environment before start rendering
         """
 
+        if self.environ is None:
+            return False
+
         if not self.environ.prepare():
             return False
 

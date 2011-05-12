@@ -9,7 +9,7 @@ var jobs = new function () {
   var attrs = [{'title': 'Identifier', 'field': 'uuid'},
                {'title': 'Registration time', 'field': 'start_time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
                {'title': 'Finish time', 'field': 'finish_time', 'filter': function (unixtime) { return new Date(parseInt(unixtime)*1000);}},
-               {'title': 'File', 'field': 'fname'},
+               {'title': 'File', 'field': 'fname', 'filter': fnameFilter},
                {'title': 'Type', 'field': 'type'},
                {'title': 'Start frame', 'field': 'start_frame'},
                {'title': 'End frame', 'field': 'end_frame'},
@@ -27,6 +27,36 @@ var jobs = new function () {
 
   var TYPE_ANIM = 0;
   var TYPE_STILL = 1;
+
+  function fnameFilter(fname) {
+    if(fname.match(/^svn\:\/\//)) {
+      var s = fname.replace(/^svn\:\/\//, '');
+      var parts = s.split(':');
+      var repo = '';
+      var file = '';
+      var commit = '';
+
+      for(var i = 0; i < parts.length-1; i++) {
+        if (repo != '')
+          repo += '/';
+
+        repo += parts[i];
+      }
+
+      parts = parts[parts.length - 1].split('@');
+      for(var i = 0; i < parts.length-1; i++) {
+        if (file != '')
+          file += '/';
+
+        file += parts[i];
+      }
+      commit = parts[parts.length - 1];
+
+      return 'SVN repo: ' + repo + '; file: ' + file + '; revision: ' + commit;
+    }
+
+    return fname;
+  };
 
   function browseRenders(job) {
     window.open('/renders/job-' + job['uuid']);
@@ -255,7 +285,7 @@ var jobs = new function () {
       var wnd = new UIWindow({'title': 'Register job',
                               'name': 'registerJobWnd',
                               'width': 550,
-                              'height': 280,
+                              'height': 324,
                               'modal': true,
                               'position': 'center',
                               'resizable': false,
@@ -273,6 +303,31 @@ var jobs = new function () {
       if (jobs.registerWnd) {
         jobs.registerWnd.close ();
         jobs.registerWnd = null;
+      }
+    };
+
+    this.onSourceChanged = function (widget, userData, attrs) {
+      var p = widget;
+      var source = attrs[0];
+
+      while (p && p.getName() != 'registerJobWnd') {
+        p = p.parent;
+      }
+
+      if (p) {
+        var fileSettingsPanel = p.lookupWidget ('fileSettingsPanel');
+        var svnSettingsPanel = p.lookupWidget ('svnSettingsPanel');
+
+        switch(source) {
+          case 'FILE':
+            fileSettingsPanel.setVisible(true);
+            svnSettingsPanel.setVisible(false);
+            break;
+          case 'SVN':
+            fileSettingsPanel.setVisible(false);
+            svnSettingsPanel.setVisible(true);
+            break;
+        }
       }
     };
 

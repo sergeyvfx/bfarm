@@ -10,13 +10,34 @@
     {"class": "GroupBox",
      "title": "Input parameters",
      "childs": [{"class": "Grid",
-                  "rows": 3,
+                  "rows": 4,
                   "cols": 2,
                   "padding": 2,
-                  "cellStyles": [[{"width": 150}], [], [{"colspan": 2}]],
+                  "cellStyles": [[{"width": 150}], [{"colspan": 2, "padding": 0}], [], [{"colspan": 2}]],
                   "childs": [
-                             {"class": "Label", "text": "File"},
-                             {"class": "FileEntry", "binding": "#jobBlenfile"},
+                             {"class": "Label", "text": "Source"},
+                             {"class": "RadioGroup",
+                              "binding": "#jobSource",
+                              "value": "FILE",
+                              "events": {"onChanged": {"handler": "jobs.register.onSourceChanged"}},
+                              "items": [{"title": "File", "value": "FILE"},
+                                        {"title": "SVN repo", "value": "SVN"}
+                                       ]},
+
+                             {"class": "Panel",
+                              "withBorder": false,
+                              "childs": [{"class": "Panel",
+                                          "withBorder": false,
+                                          "name": "fileSettingsPanel",
+                                          "childs": ["url://src/forms/fileSettings.js"]},
+                                         {"class": "Panel",
+                                          "withBorder": false,
+                                          "visible": false,
+                                          "name": "svnSettingsPanel",
+                                          "childs": ["url://src/forms/svnSettings.js"]}
+                                        ]
+                             },
+
                              {"class": "Label", "text": "Render type"},
                              {"class": "ComboBox",
                               "items": [{"title": "Animation", "tag": "anim", "toString": "field:title", "image": "/pics/buttons/animation.gif"},

@@ -50,13 +50,34 @@ def execute(httpRequest):
         # XXX: string escape would necessery in the future
         job['title'] = httpRequest.POST['title']
 
-    if 'blenfile' in httpRequest.parts:
-        part = httpRequest.parts['blenfile'][0]
-        filename = part['filename']
-        if len(filename):
-            fname = 'file://' + os.path.basename(filename)
-            job['fname'] = fname
-            job['fp'] = part['fp']
+    source = None
+    if 'source' not in httpRequest.POST:
+        source = 'FILE'
+    else:
+        source = httpRequest.POST['source']
+
+    if source == 'FILE':
+        if 'blenfile' in httpRequest.parts:
+            part = httpRequest.parts['blenfile'][0]
+            filename = part['filename']
+            if len(filename):
+                fname = 'file://' + os.path.basename(filename)
+                job['fname'] = fname
+                job['fp'] = part['fp']
+    elif source == 'SVN':
+        ok = True
+
+        for x in ['repo', 'revision', 'file']:
+            if 'svn_' + x not in httpRequest.POST:
+                ok = False
+                break
+
+        repo = httpRequest.POST['svn_repo']
+        fname = httpRequest.POST['svn_file']
+        revision = httpRequest.POST['svn_revision']
+
+        if ok:
+            job['fname'] = 'svn://{0}:{1}@{2}' . format(repo, fname, revision)
 
     if 'use_stamp' in httpRequest.POST and httpRequest.POST:
         if httpRequest.POST['use_stamp']:

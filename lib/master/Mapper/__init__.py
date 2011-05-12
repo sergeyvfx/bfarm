@@ -38,7 +38,7 @@ from master.RenderJob import RenderJob, RenderTask
 mapperVersion = 0.1
 
 
-class MapperVersion:
+class MapperVersion(object):
     """
     Mapper version class.
 
