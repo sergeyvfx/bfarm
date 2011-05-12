@@ -285,7 +285,7 @@ var jobs = new function () {
       var wnd = new UIWindow({'title': 'Register job',
                               'name': 'registerJobWnd',
                               'width': 550,
-                              'height': 324,
+                              'height': 304,
                               'modal': true,
                               'position': 'center',
                               'resizable': false,
@@ -322,10 +322,12 @@ var jobs = new function () {
           case 'FILE':
             fileSettingsPanel.setVisible(true);
             svnSettingsPanel.setVisible(false);
+            jobs.registerWnd.resizeTo(jobs.registerWnd.width, 304, true);
             break;
           case 'SVN':
             fileSettingsPanel.setVisible(false);
             svnSettingsPanel.setVisible(true);
+            jobs.registerWnd.resizeTo(jobs.registerWnd.width, 324, true);
             break;
         }
       }

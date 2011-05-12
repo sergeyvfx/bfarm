@@ -56,12 +56,14 @@ class _PackHandlers(Singleton):
         site_root = httpRequest.server.getSiteRoot()
         fpath = os.path.join(site_root, fpath[1:])
         content_len = 0
+        all_files = []
 
         stamp = None
         for root, dirs, files in os.walk(fpath):
             for f in files:
                 if f.endswith(ext):
                     fname = os.path.join(root, f)
+                    all_files.append(fname)
                     fs = os.stat(fname)
                     content_len += fs[stat.ST_SIZE]
                     if stamp is None or  fs[stat.ST_MTIME] > stamp:
@@ -79,12 +81,10 @@ class _PackHandlers(Singleton):
         httpRequest.send_header('Content-Length', content_len)
         httpRequest.end_headers()
 
-        for root, dirs, files in os.walk(fpath):
-            for f in files:
-                if f.endswith(ext):
-                    fname = os.path.join(root, f)
-                    with open(fname, 'rb') as handle:
-                        shutil.copyfileobj(handle, httpRequest.wfile)
+        all_files.sort()
+        for f in all_files:
+            with open(f, 'rb') as handle:
+                shutil.copyfileobj(handle, httpRequest.wfile)
 
     def getUIdevJS(self, httpRequest):
         """
