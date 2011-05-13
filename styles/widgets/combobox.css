@@ -131,6 +131,8 @@ DIV.UIComboboxInputHolder {
   position: relative;
   overflow: hidden;
 
+  cursor: default;
+
   -moz-border-radius: 6px 0 0 6px;
   border-radius: 6px 0 0 6px;
   -webkit-border-radius: 6px 0 0 6px;
