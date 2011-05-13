@@ -56,8 +56,8 @@ DIV.UIComboBoxInsensitive DIV.UIComboBoxButton {
   border-color: #666;
 }
 
-DIV.UIComboboxDropdown DIV.UIComboBoxContainer,
-DIV.UIComboboxDropdown DIV.UIComboBoxButton {
+DIV.UIComboboxPopup DIV.UIComboBoxContainer,
+DIV.UIComboboxPopup DIV.UIComboBoxButton {
   background: #c0c0c0 url(../../pics/ui/button_t_bg.gif) 0 0 repeat-x;
 }
 
@@ -66,8 +66,8 @@ DIV.UIComboBox:hover DIV.UIComboBoxButton {
     background: #c0c0c0 url(../../pics/ui/button_s_bg.gif) 0 0 repeat-x;
 }
 
-DIV.UIComboboxDropdown:hover DIV.UIComboBoxContainer,
-DIV.UIComboboxDropdown:hover DIV.UIComboBoxButton {
+DIV.UIComboboxPopup:hover DIV.UIComboBoxContainer,
+DIV.UIComboboxPopup:hover DIV.UIComboBoxButton {
   background: #c0c0c0 url(../../pics/ui/button_t_s_bg.gif) 0 0 repeat-x;
 }
 

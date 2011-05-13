@@ -2,6 +2,8 @@
  * Copyright (C) 2010 Sergey I. Sharybin
  */
 
+var COMBOBOX_VARIANTS_TIMEOUT = 200;
+
 function _UIComboBox ()
 {
   _UIWidget.call (this);
@@ -56,19 +58,19 @@ function _UIComboBox ()
     };
 
   /**
-   * Get text with stripped auto-filled part
+   * Get text with stripped auto-guessed part
    */
-  this.stripAutoFill = function ()
+  this.stripAutoGuess = function ()
     {
       var input = this.textHolder;
 
-      if (input.autoFilled)
+      if (input.autoGuessed)
         {
           var i = Math.min (input.tmpSelectionStart, input.tmpSelectionEnd);
 
           if (i < 0)
             {
-              i = Math.min (input.tmpSelectionStart, input.tmpSelectionEnd);
+              i = Math.min (input.selectionStart, input.selectionEnd);
             }
 
           return input.value.substring(0, i);
@@ -127,7 +129,7 @@ function _UIComboBox ()
           $(textDiv).click (function (self) {return function () {
                 if (self.sensitive)
                   {
-                    self.doDropDown ();
+                    self.showPopup ();
                   }
               }
             } (this));
@@ -140,7 +142,7 @@ function _UIComboBox ()
    * Search item with text which starts from
    * entered string and append auto-guess part to input field
    */
-  this.doInputAutofill = function ()
+  this.doInputAutoGuess = function ()
     {
       var input = this.textHolder;
       var prefix = input.value.toLowerCase ();
@@ -161,7 +163,7 @@ function _UIComboBox ()
             }
         }
 
-      input.autoFilled = false;
+      input.autoGuessed = false;
 
       /* if item was found.. */
       if (fullText != '')
@@ -171,7 +173,128 @@ function _UIComboBox ()
           input.value = fullText;
           input.selectionStart = prefix.length;
           input.selectionEnd = fullText.length;
-          input.autoFilled = true;
+          input.autoGuessed = true;
+        }
+    };
+
+  /**
+   * Get list of items which would be displayed in auto-guess list
+   */
+  this.getVariantsList = function ()
+    {
+      var input = this.textHolder;
+      var prefix = this.stripAutoGuess ().toLowerCase ();
+      var items = [];
+      var relevant = {};
+
+      for (var i = 0; i < this.list.length(); i++)
+        {
+          var item = this.list.get (i);
+          var text = item.toString ().toLowerCase ();
+          var pos = text.indexOf (prefix);
+
+          if (pos >= 0)
+            {
+              relevant[item] = pos;
+              items.push (item);
+            }
+        }
+
+      if (items.length == 0)
+        {
+          return null;
+        }
+
+      items.sort (function (relevant) { return function (a, b) {
+          return relevant[a] - relevant[b];
+        }; } (relevant));
+
+      var list = null;
+
+      if (this.popupList)
+        {
+          list = this.popupList.list;
+        }
+      else
+        {
+          list = new UIList ({'transparent': true});
+
+          list.onItemSelected = function (comboBox) { return function (itemIndex) {
+                var item = this.get (itemIndex);
+                var index = indexOf (comboBox.getItems (), item);
+                comboBox.list.setActive (item);
+                comboBox.onListItemSelected (index);
+              }
+            } (this);
+
+           list.onItemClicked = function (comboBox) { return function (itemIndex) {
+                var item = this.get (itemIndex);
+                var index = indexOf (comboBox.getItems (), item);
+                comboBox.list.setActive (item);
+                comboBox.onListItemClicked (index);
+             }
+           } (this);
+        }
+
+      list.clear ();
+      for (var i = 0; i < items.length; i++)
+        {
+          list.add (items[i]);
+        }
+
+      return list;
+    };
+
+  /**
+   * Show list of auto-guessed items -- "outer" interface
+   */
+  this.showVariantsList = function ()
+    {
+      if (!this.showVariantsEnabled)
+        {
+          return;
+        }
+
+      if (this.variantsListTimeout)
+        {
+          window.clearTimeout (this.variantsListTimeout);
+        }
+
+      this.variantsListTimeout = window.setTimeout (function (self) {return function ()
+          {
+            self.doShowVariantsList ();
+            self.variantsListTimeout = null;
+          }
+        } (this), COMBOBOX_VARIANTS_TIMEOUT);
+    };
+
+  /**
+   * Show list of auto-guessed items -- "inner" logic
+   */
+  this.doShowVariantsList = function ()
+    {
+      var list = this.getVariantsList ()
+
+      if (list)
+        {
+          var item = this.getItemFromText();
+
+          this.denyTextUpdate ();
+          list.setActive (item);
+          this.allowTextUpdate ();
+
+          if (!this.isPupListShown ())
+            {
+              this.showPopup (list);
+            }
+          else
+            {
+              this.updatePopup ();
+            }
+        }
+      else
+        {
+          this.hidePopup ();
         }
     };
 
@@ -183,42 +306,58 @@ function _UIComboBox ()
       /* Notfing to do with empty text aera */
       if (prefix.length == 0)
         {
-          input.autoFilled = false;
+          input.autoGuessed = false;
           this.updateBindingFromText ();
+          this.hidePopup ();
           return;
         }
 
-      if (input.autoFilled)
+      if (input.autoGuessed)
         {
-          if (event.keyCode == KEY_ESCAPE)  /* Cancel auto-filled text */
+          if (event.keyCode == KEY_ESCAPE)  /* Cancel auto-guessed text */
             {
-              input.value = this.stripAutoFill ();
+              input.value = this.stripAutoGuess ();
+
               this.updateBindingFromText ();
-              stopEvent (event);
-              input.autoFilled = false;
+              input.autoGuessed = false;
 
               input.selectionStart = input.selectionEnd = input.value.length;
               input.focus();
+
+              this.hidePopup ();
+
+              stopEvent (event);
               return;
             }
-          else if (event.keyCode == KEY_RETURN)  /* Accept auto-filled text */
+          else if (event.keyCode == KEY_RETURN)  /* Accept auto-guessed text */
             {
               input.selectionStart = input.selectionEnd = input.value.length;
-              stopEvent (event);
+              input.tmpSelectionStart = input.tmpSelectionEnd = -1;
+
               this.updateBindingFromText ();
+              this.hidePopup ();
+
               stopEvent (event);
               return;
             }
         }
 
-      var fill = input.selectionStart == input.selectionEnd &&
-                 input.selectionStart == prefix.length;
+      input.tmpSelectionStart = input.tmpSelectionEnd = -1;
 
-      fill &= !isSpecialKeyEvent (event);
+      var guess = input.selectionStart == input.selectionEnd &&
+                  input.selectionStart == prefix.length;
 
-      if (fill)
+      guess &= !isSpecialKeyEvent (event);
+
+      if (guess)
         {
-          this.doInputAutofill ();
+          this.doInputAutoGuess ();
+        }
+
+      if (input.tmpAutoValue != this.stripAutoGuess () ||
+          input.tmpValue != input.value)
+        {
+          this.showVariantsList ();
         }
 
       this.updateBindingFromText ();
@@ -236,10 +375,12 @@ function _UIComboBox ()
 
       $(input).blur (function (e) { this.tmpSelectionStart = this.tmpSelectionEnd = -1; });
 
-      $(input).keydown (function (e) {
+      $(input).keydown (function (self) { return function (e) {
             this.tmpSelectionStart = this.selectionStart;
             this.tmpSelectionEnd = this.selectionEnd;
-          });
+            this.tmpAutoValue = self.stripAutoGuess ();
+            this.tmpValue = this.value
+          }} (this));
 
       $(input).keyup (function (self) { return function (e) {
             self.onInputKeyUp (e);
@@ -306,7 +447,7 @@ function _UIComboBox ()
       $(button).click (function (self) {return function () {
             if (self.sensitive)
               {
-                self.doDropDown ();
+                self.showPopup ();
               }
           }
         } (this));
@@ -350,7 +491,7 @@ function _UIComboBox ()
   /**
    * Do showing of drop-down list
    */
-  this.doDropDown = function ()
+  this.showPopup = function (list)
     {
       if (!this.dom)
         {
@@ -359,14 +500,15 @@ function _UIComboBox ()
 
       if (this.isPupListShown ())
         {
-          this.hideDropDown ();
+          this.hidePopup ();
           return;
         };
 
-      var puplist = this.buildPupList ();
+      var puplist = this.buildPupList (list);
       var pos = this.getPupPos ();
 
       this.popupList = puplist;
+      this.popupList.list = list;
 
       uiPopupManager.popup (puplist, {'pos': pos},
           {'onHide': function (self) {return function () {
@@ -380,9 +522,24 @@ function _UIComboBox ()
     };
 
   /**
+   * Update popup content and shadow
+   */
+  this.updatePopup = function ()
+    {
+      this.popupList.list.rebuild ();
+      this.validateShadowSize ();
+    };
+
+  /**
    * Hide drop down list
    */
-  this.hideDropDown = function () {
+  this.hidePopup = function () {
+    if (this.variantsListTimeout)
+      {
+        window.clearTimeout (this.variantsListTimeout);
+        this.variantsListTimeout = null;
+      }
+
     callOut (function (self) {return function () {
           uiPopupManager.hide (self.popupList);
           self.list.destroyDOM ();
@@ -394,20 +551,22 @@ function _UIComboBox ()
   /**
    * Build content for popup list
    */
-  this.buildPupContent = function (where) {
-    where.appendChild (this.list.build ());
+  this.buildPupContent = function (where, list) {
+    where.appendChild (list.build ());
   };
 
   /**
    * Build popup list
    */
-  this.buildPupList = function ()
+  this.buildPupList = function (list)
     {
       var result = createElement ('DIV');
 
       var container = createElement ('DIV');
       var bLayer = createElement ('DIV');
       var dim = this.getPupDim ();
+
+      list = defVal (list, this.list);
 
       result.className = 'UIComboBoxPupList';
       bLayer.className = 'UIComboBoxPupListBLayer';
@@ -418,7 +577,7 @@ function _UIComboBox ()
 
       result.appendChild (bLayer);
       result.appendChild (container);
-      this.buildPupContent (container);
+      this.buildPupContent (container, list);
 
       $(container).mouseout (function (self) {return function (event) {
               self.checkMouseOut (event || window.event);
@@ -500,7 +659,7 @@ function _UIComboBox ()
    */
   this.onListItemClicked = function (itemIndex)
     {
-      this.hideDropDown ();
+      this.hidePopup ();
 
       if (this.editable && this.textHolder)
         {
@@ -531,7 +690,7 @@ function _UIComboBox ()
    */
   this.onPupShow = function ()
     {
-      this.dom.addClass ('UIComboboxDropdown');
+      this.dom.addClass ('UIComboboxPopup');
       this.validateShadowSize ();
     };
 
@@ -540,7 +699,7 @@ function _UIComboBox ()
    */
   this.onPupHide = function ()
     {
-      this.dom.removeClass ('UIComboboxDropdown');
+      this.dom.removeClass ('UIComboboxPopup');
       this.popupList = null;
     };
 
@@ -602,7 +761,7 @@ function _UIComboBox ()
       var reltg = relatedTarget (event);
       if (!nodeInTree (reltg, this.popupList) && !nodeInTree (reltg, this.dom))
         {
-          this.hideDropDown ();
+          this.hidePopup ();
         }
 
     };
@@ -690,7 +849,7 @@ function _UIComboBox ()
     {
       if (this.editable)
         {
-          return this.stripAutoFill ();
+          return this.stripAutoGuess ();
         }
       else
         {
@@ -711,6 +870,14 @@ function _UIComboBox ()
         {
           this.textHolder.innerHTML = htmlspecialchars(text);
         }
+    };
+
+  /**
+   * get list of all items
+   */
+  this.getItems = function ()
+    {
+      return this.list.getContainer ();
     };
 
   /* stubs */
@@ -757,8 +924,14 @@ function UIComboBox (opts)
   /* Could text be edited */
   this.editable = defVal (opts['editable'], false);
 
+  /* Shouw variants when typing */
+  this.showVariantsEnabled = defVal (opts['showVariants'], false);
+
   /* internal use: disable text update when setting active list element */
   this.textUpdateDisabled = false;
+
+  /* internal use: timeout for displaying list of variants */
+  this.variantsListTimeout = null;
 
   /* DOM element, which holds text */
   this.textHolder = null;
