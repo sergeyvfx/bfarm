@@ -22,7 +22,7 @@ function _UIComboBox ()
 
           if (!isUnknown (item))
             {
-              if (item.image)
+              if (item.image && !this.editable)
                 {
                   prefix += '<img src="' + htmlspecialchars (item.image) + '">';
                 }
