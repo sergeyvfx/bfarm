@@ -38,8 +38,9 @@ function _UIDragProvider ()
       var handler = function (self, object) { return function (oldHandler) {
               return function (event) {
                 var evt = event || window.event;
+                var isOldMSIE = $.browser.msie && $.browser.version < 9;
 
-                if( (!$.browser.msie && evt.button != 0) || ($.browser.msie && evt.button != 1) )
+                if( (!isOldMSIE && evt.button != 0) || (isOldMSIE && evt.button != 1) )
                   {
                     return true;
                   }
