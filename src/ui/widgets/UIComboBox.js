@@ -12,7 +12,7 @@ function _UIComboBox ()
   this.getTextToDisplay = function ()
     {
       var index = this.list.getActiveIndex ();
-      var prefix = this.title ? htmlspecialchars (this.title) + ': ' : '';
+      var prefix = (!this.editable && this.title) ? htmlspecialchars (this.title) + ': ' : '';
 
       if (index >= 0)
         {
@@ -33,9 +33,85 @@ function _UIComboBox ()
     };
 
   /**
-   * Build DOM tree for container
+   * Get item which is corresponds to current full text in entry
    */
-  this.buildContainer = function ()
+  this.getItemFromText = function ()
+    {
+      var input = this.textHolder;
+      var inputText = input.value.toLowerCase ();
+
+      /* find correspond item */
+      for (var i = 0; i < this.list.length(); i++)
+        {
+          var item = this.list.get (i);
+          var text = item.toString ().toLowerCase ();
+
+          if (text == inputText)
+            {
+              return item;
+            }
+        }
+
+      return null;
+    };
+
+  /**
+   * Get text with stripped auto-filled part
+   */
+  this.stripAutoFill = function ()
+    {
+      var input = this.textHolder;
+
+      if (input.autoFilled)
+        {
+          var i = Math.min (input.tmpSelectionStart, input.tmpSelectionEnd);
+
+          if (i < 0)
+            {
+              i = Math.min (input.tmpSelectionStart, input.tmpSelectionEnd);
+            }
+
+          return input.value.substring(0, i);
+        }
+      else
+        {
+          return input.value;
+        }
+    };
+
+  /**
+   * Update binding from text in entry
+   */
+  this.updateBindingFromText = function ()
+    {
+      var item = this.getItemFromText ();
+
+      if (item)
+        {
+          /* too crappy */
+          var value = item.toString ();
+
+          if (!isUnknown (item['tag']))
+            {
+              value = item['tag'];
+            }
+
+          this.updateBinding (value);
+        }
+      else
+        {
+          this.denyTextUpdate ();
+          this.list.setActiveIndex (-1);
+          this.allowTextUpdate ();
+
+          this.updateBinding (this.textHolder.value);
+        }
+    };
+
+  /**
+   * Build DOM tree for read-only container
+   */
+  this.buildReadonlyContainer = function ()
     {
       var textDiv = createElement ('DIV');
       textDiv.className = 'UIComboBoxText';
@@ -58,6 +134,147 @@ function _UIComboBox ()
         }
 
       return textDiv;
+    };
+
+  /**
+   * Search item with text which starts from
+   * entered string and append auto-guess part to input field
+   */
+  this.doInputAutofill = function ()
+    {
+      var input = this.textHolder;
+      var prefix = input.value.toLowerCase ();
+      var fullText = '';
+      var fullItem = null;
+
+      /* find correspond item */
+      for (var i = 0; i < this.list.length(); i++)
+        {
+          var item = this.list.get (i);
+          var text = item.toString ().toLowerCase ();
+
+          if (text.indexOf (prefix) == 0)
+            {
+              fullText = text;
+              fullItem = item;
+              break;
+            }
+        }
+
+      input.autoFilled = false;
+
+      /* if item was found.. */
+      if (fullText != '')
+        {
+          this.setActive (fullItem);
+
+          input.value = fullText;
+          input.selectionStart = prefix.length;
+          input.selectionEnd = fullText.length;
+          input.autoFilled = true;
+        }
+    };
+
+  this.onInputKeyUp = function (event)
+    {
+      var input = this.textHolder;
+      var prefix = input.value.toLowerCase ();
+
+      /* Notfing to do with empty text aera */
+      if (prefix.length == 0)
+        {
+          input.autoFilled = false;
+          this.updateBindingFromText ();
+          return;
+        }
+
+      if (input.autoFilled)
+        {
+          if (event.keyCode == KEY_ESCAPE)  /* Cancel auto-filled text */
+            {
+              input.value = this.stripAutoFill ();
+              this.updateBindingFromText ();
+              stopEvent (event);
+              input.autoFilled = false;
+
+              input.selectionStart = input.selectionEnd = input.value.length;
+              input.focus();
+              return;
+            }
+          else if (event.keyCode == KEY_RETURN)  /* Accept auto-filled text */
+            {
+              input.selectionStart = input.selectionEnd = input.value.length;
+              stopEvent (event);
+              this.updateBindingFromText ();
+              stopEvent (event);
+              return;
+            }
+        }
+
+      var fill = input.selectionStart == input.selectionEnd &&
+                 input.selectionStart == prefix.length;
+
+      fill &= !isSpecialKeyEvent (event);
+
+      if (fill)
+        {
+          this.doInputAutofill ();
+        }
+
+      this.updateBindingFromText ();
+    };
+
+  /**
+   * Build DOM tree for editable container
+   */
+  this.buildEditableContainer = function ()
+    {
+      var inputHolder = createElement ('DIV');
+      var input = createElement ('INPUT');
+
+      input.className = 'UIComboboxInput';
+
+      $(input).blur (function (e) { this.tmpSelectionStart = this.tmpSelectionEnd = -1; });
+
+      $(input).keydown (function (e) {
+            this.tmpSelectionStart = this.selectionStart;
+            this.tmpSelectionEnd = this.selectionEnd;
+          });
+
+      $(input).keyup (function (self) { return function (e) {
+            self.onInputKeyUp (e);
+            this.tmpSelectionStart = this.tmpSelectionEnd = -1;
+          }
+        } (this));
+
+      $(input).change (function (self) { return function (e) {
+            self.updateBindingFromText ();
+            this.tmpSelectionStart = this.tmpSelectionEnd = -1;
+          }
+        } (this));
+
+      inputHolder.className = 'UIComboboxInputHolder';
+      inputHolder.appendChild (input);
+
+      this.textHolder = input;
+      this.updateText ();
+
+      return inputHolder;
+    };
+
+  /**
+   * Build DOM tree for container
+   */
+  this.buildContainer = function ()
+    {
+      if (this.editable)
+        {
+          return this.buildEditableContainer ();
+        }
+      else
+        {
+          return this.buildReadonlyContainer ();
+        }
     };
 
   /**
@@ -103,7 +320,10 @@ function _UIComboBox ()
           };
         } (this));
 
-      $(result).disableTextSelect ();
+      if (!this.editable)
+        {
+          $(result).disableTextSelect ();
+        }
 
       return result;
     };
@@ -228,18 +448,36 @@ function _UIComboBox ()
               'height' : 0};
     };
 
+  this.denyTextUpdate = function ()
+    {
+      this.textUpdateDisabled = true;
+    };
+
+  this.allowTextUpdate = function ()
+    {
+      this.textUpdateDisabled = false;
+    };
+
   /**
    * Update text, displayed in combo button
    */
   this.updateText = function ()
     {
-      if (!this.textHolder)
+      if (!this.textHolder || this.textUpdateDisabled)
         {
           return;
         }
 
       var text = this.getTextToDisplay ();
-      this.textHolder.innerHTML = text;
+
+      if (this.editable)
+        {
+          this.textHolder.value = text;
+        }
+      else
+        {
+          this.textHolder.innerHTML = text;
+        }
     }
 
   /**
@@ -248,6 +486,12 @@ function _UIComboBox ()
   this.onListItemSelected = function (itemIndex)
     {
       this.updateText ();
+
+      if (this.editable && this.textHolder)
+        {
+          this.textHolder.focus ();
+        }
+
       this.onItemSelected (this.list.get (itemIndex));
     }
 
@@ -257,6 +501,12 @@ function _UIComboBox ()
   this.onListItemClicked = function (itemIndex)
     {
       this.hideDropDown ();
+
+      if (this.editable && this.textHolder)
+        {
+          this.textHolder.focus ();
+        }
+
       this.onItemClicked (this.list.get (itemIndex));
     };
 
@@ -433,6 +683,36 @@ function _UIComboBox ()
       this.rebuildList ();
     };
 
+  /**
+   * Get text displayed in container
+   */
+  this.getText = function ()
+    {
+      if (this.editable)
+        {
+          return this.stripAutoFill ();
+        }
+      else
+        {
+          return this.textHolder.innerHTML;
+        }
+    };
+
+  /**
+   * Set text displayed in container
+   */
+  this.setText = function (text)
+    {
+      if (this.editable)
+        {
+          this.textHolder.value = text;
+        }
+      else
+        {
+          this.textHolder.innerHTML = htmlspecialchars(text);
+        }
+    };
+
   /* stubs */
   this.onItemSelected = function (item) {};
   this.onItemClicked  = function (item) {};
@@ -450,8 +730,8 @@ function UIComboBox (opts)
 
   /* List for displaying items in puplist */
   this.list = new UIList ({'transparent': true,
-                           'binding': opts['binding'],
-                           'active': opts['active']});
+                            'binding': opts['binding'],
+                            'active': opts['active']});
 
   this.list.onItemSelected = function (comboBox) { return function (itemIndex) {
         comboBox.onListItemSelected (itemIndex);
@@ -473,6 +753,12 @@ function UIComboBox (opts)
     }
 
   this.title = defVal (opts['title'], '');
+
+  /* Could text be edited */
+  this.editable = defVal (opts['editable'], false);
+
+  /* internal use: disable text update when setting active list element */
+  this.textUpdateDisabled = false;
 
   /* DOM element, which holds text */
   this.textHolder = null;
