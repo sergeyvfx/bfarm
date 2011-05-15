@@ -302,6 +302,13 @@ function _UIComboBox ()
     {
       var input = this.textHolder;
       var prefix = input.value.toLowerCase ();
+      var code = event.keyCode;
+
+      if (code == KEY_UP || code == KEY_DOWN)
+        {
+          /* This keys were handled in keyDown event */
+          return;
+        }
 
       /* Notfing to do with empty text aera */
       if (prefix.length == 0)
@@ -314,7 +321,7 @@ function _UIComboBox ()
 
       if (input.autoGuessed)
         {
-          if (event.keyCode == KEY_ESCAPE)  /* Cancel auto-guessed text */
+          if (code == KEY_ESCAPE)  /* Cancel auto-guessed text */
             {
               input.value = this.stripAutoGuess ();
 
@@ -329,7 +336,7 @@ function _UIComboBox ()
               stopEvent (event);
               return;
             }
-          else if (event.keyCode == KEY_RETURN)  /* Accept auto-guessed text */
+          else if (code == KEY_RETURN)  /* Accept auto-guessed text */
             {
               input.selectionStart = input.selectionEnd = input.value.length;
               input.tmpSelectionStart = input.tmpSelectionEnd = -1;
@@ -339,6 +346,14 @@ function _UIComboBox ()
 
               stopEvent (event);
               return;
+            }
+        }
+      else
+        {
+          if (code == KEY_RETURN)
+            {
+              this.hidePopup ();
+              this.updateBindingFromText ();
             }
         }
 
@@ -363,6 +378,54 @@ function _UIComboBox ()
       this.updateBindingFromText ();
     };
 
+  this.onInputKeyDown = function (event)
+    {
+      var input = this.textHolder;
+      var code = event.keyCode;
+
+      input.tmpSelectionStart = input.selectionStart;
+      input.tmpSelectionEnd = input.selectionEnd;
+      input.tmpAutoValue = this.stripAutoGuess ();
+      input.tmpValue = input.value
+
+      if (code == KEY_UP || code == KEY_DOWN)
+        {
+          if (!this.isPupListShown ())
+            {
+              this.showPopup ();
+            }
+          else
+            {
+              var list = this.popupList.list;
+              var index = list.getActiveIndex ();
+
+              if (code == KEY_DOWN)
+                {
+                  index++;
+                  if (index >= list.length ())
+                    {
+                      index = 0;
+                    }
+                }
+              else
+                {
+                  index--;
+                  if (index < 0)
+                    {
+                      index = list.length () - 1;
+                    }
+                }
+
+              input.internalChange = true;
+              list.setActiveIndex (index);
+              input.internalChange = false;
+            }
+
+          stopEvent (event);
+          return false;
+        }
+    };
+
   /**
    * Build DOM tree for editable container
    */
@@ -376,19 +439,24 @@ function _UIComboBox ()
       $(input).blur (function (e) { this.tmpSelectionStart = this.tmpSelectionEnd = -1; });
 
       $(input).keydown (function (self) { return function (e) {
-            this.tmpSelectionStart = this.selectionStart;
-            this.tmpSelectionEnd = this.selectionEnd;
-            this.tmpAutoValue = self.stripAutoGuess ();
-            this.tmpValue = this.value
+
+            return self.onInputKeyDown (e);
           }} (this));
 
       $(input).keyup (function (self) { return function (e) {
-            self.onInputKeyUp (e);
+            var result = self.onInputKeyUp (e);
             this.tmpSelectionStart = this.tmpSelectionEnd = -1;
+
+            return result;
           }
         } (this));
 
       $(input).change (function (self) { return function (e) {
+            if (this.internalChange)
+              {
+                return;
+              }
+
             self.updateBindingFromText ();
             this.tmpSelectionStart = this.tmpSelectionEnd = -1;
           }
@@ -508,7 +576,7 @@ function _UIComboBox ()
       var pos = this.getPupPos ();
 
       this.popupList = puplist;
-      this.popupList.list = list;
+      this.popupList.list = list || this.list;
 
       uiPopupManager.popup (puplist, {'pos': pos},
           {'onHide': function (self) {return function () {
