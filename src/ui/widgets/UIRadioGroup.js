@@ -138,6 +138,8 @@ function UIRadioGroup (opts)
   this.buttons = [];
 
   this.events = this.events.concat (['onChanged']);
+
+  this.updateBinding (this.value);
 }
 
 UIRadioGroup.prototype = new _UIRadioGroup;
