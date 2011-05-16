@@ -128,9 +128,11 @@ DIV.UIComboboxInputHolder {
   background: #e7e7e7 url(../../pics/ui/entry_bg.gif) 0 0 repeat-x;
 
   height: 18px;
-  position: relative;
+  padding-left: 4px;
+  padding-right: 2px;
   overflow: hidden;
 
+  position: relative;
   cursor: default;
 
   -moz-border-radius: 6px 0 0 6px;
@@ -143,6 +145,18 @@ DIV.UIComboboxInputHolder:hover {
   background: #ebebeb url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
 }
 
+DIV.UIComboboxInputHolder_Image {
+  padding-left: 24px;
+}
+
+IMG.UIComboboxImage {
+  position: absolute;
+  top: 1px;
+  left: 6px;
+  max-height: 16px;
+  max-width: 16px;
+}
+
 INPUT.UIComboboxInput {
   border: 0;
   margin: 0 4px;
@@ -151,10 +165,7 @@ INPUT.UIComboboxInput {
   color: #333;
   background:  transparent;
 
-  position: absolute;
-  top: 1px;
-  left: 0;
-  width: 98%;
+  width: 100%;
 
   font-size: 8pt;
   font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";

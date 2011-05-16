@@ -315,6 +315,7 @@ function _UIComboBox ()
         {
           input.autoGuessed = false;
           this.updateBindingFromText ();
+          this.updateEditableImage ();
           this.hidePopup ();
           return;
         }
@@ -326,6 +327,8 @@ function _UIComboBox ()
               input.value = this.stripAutoGuess ();
 
               this.updateBindingFromText ();
+              this.updateEditableImage ();
+
               input.autoGuessed = false;
 
               input.selectionStart = input.selectionEnd = input.value.length;
@@ -426,6 +429,44 @@ function _UIComboBox ()
         }
     };
 
+  this.updateEditableImage = function ()
+    {
+      var inputHolder = this.textHolder.parentNode;
+      var index = this.list.getActiveIndex ();
+      var src = null, img = null;
+
+      if (index >= 0)
+        {
+          var item = this.list.get (index);
+          src = item.image;
+        }
+
+      img = $(inputHolder).find ('IMG.UIComboboxImage') [0];
+
+      if (src)
+        {
+          if (!img)
+            {
+              img = createElement ('IMG');
+              img.className = 'UIComboboxImage';
+            }
+
+          img.src = src;
+
+          inputHolder.appendChild (img);
+          inputHolder.addClass ('UIComboboxInputHolder_Image');
+        }
+      else
+        {
+          inputHolder.removeClass ('UIComboboxInputHolder_Image');
+
+          if (img)
+            {
+              removeNode (img);
+            }
+        }
+    };
+
   /**
    * Build DOM tree for editable container
    */
@@ -466,6 +507,7 @@ function _UIComboBox ()
       inputHolder.appendChild (input);
 
       this.textHolder = input;
+
       this.updateText ();
 
       return inputHolder;
@@ -700,6 +742,7 @@ function _UIComboBox ()
       if (this.editable)
         {
           this.textHolder.value = text;
+          this.updateEditableImage ();
         }
       else
         {
