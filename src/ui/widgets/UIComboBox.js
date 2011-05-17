@@ -507,6 +507,7 @@ function _UIComboBox ()
       inputHolder.appendChild (input);
 
       this.textHolder = input;
+      this.focusDOM = input;
 
       this.updateText ();
 
