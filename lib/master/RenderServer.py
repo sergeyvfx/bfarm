@@ -135,6 +135,9 @@ class RenderServer(SignalThread):
             self.nodes.append(node)
             self.nodes_hash[node.getUUID()] = node
 
+            log_server = master.Master().getLogServer()
+            log_server.addSource('node-' + node.getUUID())
+
         Logger.log('Registered new render node {0} at {1}' . \
                 format(node.getUUID(), node.getIP()))
 
@@ -155,6 +158,8 @@ class RenderServer(SignalThread):
                 job.restartTask(task_nr)
 
         with self.nodes_lock:
+            log_server = master.Master().getLogServer()
+            log_server.removeSource('node-' + node.getUUID())
             self.nodes.remove(node)
             del self.nodes_hash[node.getUUID()]
 

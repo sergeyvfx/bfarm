@@ -138,7 +138,7 @@ def get_icon(fname):
 
     icon = mime.split('/') [0]
 
-    if icon not in ['image', 'audio', 'video']:
+    if icon not in ['image', 'audio', 'video', 'text']:
         icon = 'file'
 
     return icon

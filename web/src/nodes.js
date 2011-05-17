@@ -31,6 +31,10 @@ var nodes = new function () {
     return headerItems;
   };
 
+  function browseLogs(node) {
+    window.open('/logs/node-' + node['uuid'] + '.txt');
+  };
+
   function createNodeBox(node, collapsed) {
     /* XXX: replace with form template */
 
@@ -71,7 +75,14 @@ var nodes = new function () {
       }
     }
 
-    attrGrid.setRows(index);
+    attrGrid.add (new UIButton({'title': 'View logs',
+                                'image': '/pics/buttons/text.gif',
+                                'click': function (node) { return function () {
+                                           browseLogs (node);
+                                         };
+                                       } (node)}));
+    attrGrid.setCellStyle(index, 0, {'colspan': 2});
+    attrGrid.setRows(index + 1);
 
     box.add(attrGrid);
 
@@ -134,10 +145,23 @@ var nodes = new function () {
     var nodesButtons = $('#nodesButtons');
 
     if (nodesButtons.length) {
+      var grid = new UIGrid({"rows": 1,
+                             "cols": 2,
+                             "cellStyles": [[{"padding": [0, 2, 0, 0]}, {"padding": [0, 0, 0, 2]}]]});
+
       var reloadBtn = new UIButton({"title": "Reload nodes",
                                     'image': '/pics/buttons/refresh.gif',
                                     "click": reloadNodes});
-      nodesButtons.append(reloadBtn.build());
+      grid.add(reloadBtn);
+
+      var registerBtn = new UIButton({"title": "View server log",
+                                      'image': '/pics/buttons/text.gif',
+                                      "click": function () {
+                                            window.open('/logs/server.txt');
+                                          }});
+      grid.add(registerBtn);
+
+      nodesButtons.append(grid.build());
     }
   };
 

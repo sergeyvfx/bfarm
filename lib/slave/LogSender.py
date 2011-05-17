@@ -27,7 +27,9 @@
 # ***** END GPL LICENSE BLOCK *****
 #
 
+import socket
 import threading
+import time
 
 try:
     # python 3.0 and newer
@@ -40,32 +42,66 @@ except ImportError:
     class xmlrpc:
         client = xmlrpclib
 
+    setattr(xmlrpc.client, 'Binary', xmlrpclib.Binary)
 
-class LockingServerProxy(xmlrpc.client.ServerProxy):
+import slave
+import Logger
+
+from config import Config
+
+from SignalThread import SignalThread
+
+
+class LogSender(SignalThread):
     """
-    ServerProxy implementeation with lock when request is executing
+    Sender of ready tasks to master
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, node):
         """
-        Initialize new proxy for server
-        """
-
-        self.lock = threading.Lock()
-        xmlrpc.client.ServerProxy.__init__(self, *args, **kwargs)
-
-    def __request(self, *args, **kwargs):
-        """
-        Call method on server side
+        Initialize sender
         """
 
-        with self.lock:
-            parent = xmlrpc.client.ServerProxy
-            return parent._ServerProxy__request(self, *args, **kwargs)
+        SignalThread.__init__(self, name='LogSenderThread')
 
-    def __getattr__(self, *args, **kwargs):
+        self.buffer = ''
+        self.buffer_lock = threading.Lock()
+        self.stop_flag = False
+
+        self.node = node
+
+    def logMessage(self, message):
         """
-        Magic method dispatcher
+        Add message to queue to send to master
         """
 
-        return xmlrpc.client._Method(self.__request, *args, **kwargs)
+        with self.buffer_lock:
+            self.buffer += message
+
+    def sendMessages(self):
+        """
+        Send specified task to master
+        """
+
+        proxy = slave.Slave().getProxy()
+        nodeUUID = self.node.getUUID()
+
+        if self.buffer and nodeUUID is not None:
+            if proxy.node.logMessage(nodeUUID, self.buffer):
+                self.buffer = ''
+
+    def requestStop(self):
+        """
+        Stop sender
+        """
+
+        self.stop_flag = True
+
+    def run(self):
+        """
+        Thread body of sending stuff
+        """
+
+        while not self.stop_flag:
+            self.sendMessages()
+            time.sleep(0.7)

@@ -30,7 +30,37 @@
 import threading
 from datetime import datetime
 
+logger_buffer = ''
 logger_lock = threading.Lock()
+logger_handlers = []
+
+
+def addLoggerHandler(handler):
+    """
+    Add new logging handler
+    """
+
+    global logger_handlers
+
+    logger_handlers.append(handler)
+
+
+def runLoggerHandlers():
+    """
+    Run all logging handlers
+    """
+
+    global logger_handlers
+    global logger_buffer
+
+    ok = False
+
+    for handler in logger_handlers:
+        ok = True
+        handler(logger_buffer)
+
+    if ok:
+        logger_buffer = ''
 
 
 def log(text, time_stamp=True):
@@ -39,11 +69,25 @@ def log(text, time_stamp=True):
     """
 
     global logger_lock
+    global logger_buffer
+
+    message = ''
+    if time_stamp:
+        d = datetime.now()
+        strd = d.strftime('%Y-%m-%d %H:%M:%S')
+        message = '[{0}] {1}' . format(strd, text)
+    else:
+        message = text
 
     with logger_lock:
-        if time_stamp:
-            d = datetime.now()
-            strd = d.strftime('%Y-%m-%d %H:%M:%S')
-            print('[{0}] {1}' . format(strd, text))
-        else:
-            print(text)
+        logger_buffer += message + '\n'
+        runLoggerHandlers()
+        print(message)
+
+
+def getBuffer():
+    """
+    Get logger buffer
+    """
+
+    return logger_buffer

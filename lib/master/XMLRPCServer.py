@@ -112,6 +112,22 @@ class XMLRPCHandlers:
 
             return render_server.touchNode(node)
 
+        def logMessage(self, nodeUUID, message, client_info):
+            """
+            Log message from node
+            """
+
+            log_server = master.Master().getLogServer()
+
+            source = 'node-' + nodeUUID
+
+            if not log_server.hasSource(source):
+                return False
+
+            log_server.logMessage(source, message)
+
+            return True
+
     class XMLRPCJob:
         def __init__(self):
             """

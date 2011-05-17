@@ -93,6 +93,7 @@ from master.HTTPHandlers import FileHandler
 from master.HTTPHandlers import AjaxHandler
 from master.HTTPHandlers import PackHandler
 from master.HTTPHandlers import RendersHandler
+from master.HTTPHandlers import LogsHandler
 from master.HTTPActions import RegisterJob
 from master.Multipart import parseMultipart
 import Version
@@ -218,6 +219,9 @@ class HTTPRequestHandler(http.server.BaseHTTPRequestHandler):
                 ok = True
             elif path[0] == 'renders':
                 RendersHandler.execute(self)
+                ok = True
+            elif path[0] == 'logs':
+                LogsHandler.execute(self)
                 ok = True
 
         if not ok:

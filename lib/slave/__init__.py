@@ -48,6 +48,7 @@ from config import Config
 from Singleton import Singleton
 from LockingServerProxy import LockingServerProxy
 from slave.RenderNode import RenderNode
+from slave.LogSender import LogSender
 
 
 class Slave(Singleton):
@@ -60,17 +61,34 @@ class Slave(Singleton):
         Initialize slave
         """
 
-        self.render_node = RenderNode()
+        # Set signal handlers
+        self.setSignals()
 
         address = Config.slave['master_address']
         port = Config.slave['master_port']
         url = 'http://{0}:{1}/'.format(address, port)
 
+        self.render_node = RenderNode()
         self.proxy = LockingServerProxy(url)
         self.proxy_addr = (address, port)
 
-        # Set signal handlers
-        self.setSignals()
+        self.setupLogger()
+
+    def loggerHandler(self, message):
+        """
+        Handler of new incoming logging message
+        """
+
+        self.log_sender.logMessage(message)
+
+    def setupLogger(self):
+        """
+        Setup logging infrastructure
+        """
+
+        self.log_sender = LogSender(self.render_node)
+
+        Logger.addLoggerHandler(self.loggerHandler)
 
     def sigint_handler(self, sig, frame):
         """
@@ -79,7 +97,8 @@ class Slave(Singleton):
 
         Logger.log('Caught SIGINT signal, terminating...')
         self.render_node.requestStop()
-        sys.exit(1)
+        self.log_sender.requestStop()
+        sys.exit(0)
 
     def setSignals(self):
         """
@@ -94,6 +113,7 @@ class Slave(Singleton):
         Run slave logic
         """
 
+        self.log_sender.start()
         self.render_node.start()
         self.render_node.join()
 

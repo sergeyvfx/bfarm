@@ -37,6 +37,7 @@ from master.RenderServer import RenderServer
 from master.HTTPServer import HTTPServer
 from master.XMLRPCServer import XMLRPCServer
 from master.Mapper import Mapper
+from master.LogServer import LogServer
 
 
 class Master(Singleton):
@@ -52,6 +53,8 @@ class Master(Singleton):
         # Set signal handlers
         self.setSignals()
 
+        self.setupLogger()
+
         # Create servers
         xmlrpc_address = (Config.master['address'], Config.master['port'])
         http_address = (Config.master['http_address'],
@@ -65,6 +68,23 @@ class Master(Singleton):
         self.mapper = Mapper(Config.master['database_path'])
 
         self.unwind(self.mapper)
+
+    def loggerHandler(self, message):
+        """
+        Handler of new incoming logging message
+        """
+
+        self.log_server.logMessage('server', message)
+
+    def setupLogger(self):
+        """
+        Setup logging infrastructure
+        """
+
+        self.log_server = LogServer()
+        self.log_server.addSource('server')
+
+        Logger.addLoggerHandler(self.loggerHandler)
 
     def unwind(self, mapper):
         """
@@ -139,3 +159,10 @@ class Master(Singleton):
         """
 
         return self.mapper
+
+    def getLogServer(self):
+        """
+        Get logging server
+        """
+
+        return self.log_server
