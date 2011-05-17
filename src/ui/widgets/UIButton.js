@@ -51,8 +51,6 @@ function _UIButton ()
 
       result.appendChild (text);
 
-      this.focusDOM = text;
-
       this.attachEvent (result, 'click', 'onClickHandler');
 
       $(result).disableTextSelect ();

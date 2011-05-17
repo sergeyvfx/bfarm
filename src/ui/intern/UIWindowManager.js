@@ -106,8 +106,8 @@ function _UIWindowManager ()
           window.onShow ();
           this.onWindowShown (window);
 
-          this.focusWindow (window);
           this.raiseWindow (window);
+          window.setFocus ();
 
           return;
         }
@@ -147,6 +147,7 @@ function _UIWindowManager ()
       this.onWindowShown (window);
 
       this.raiseWindow (window);
+      window.setFocus ();
     };
 
   /**
@@ -157,6 +158,7 @@ function _UIWindowManager ()
   this.focusWindow = function (window)
     {
       var lastFocused = this.getLastFocused ();
+
       if (this.raiseOnFocus)
         {
           this.raiseWindow (window);
