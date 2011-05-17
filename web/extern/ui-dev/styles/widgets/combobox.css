@@ -56,8 +56,8 @@ DIV.UIComboBoxInsensitive DIV.UIComboBoxButton {
   border-color: #666;
 }
 
-DIV.UIComboboxDropdown DIV.UIComboBoxContainer,
-DIV.UIComboboxDropdown DIV.UIComboBoxButton {
+DIV.UIComboboxPopup DIV.UIComboBoxContainer,
+DIV.UIComboboxPopup DIV.UIComboBoxButton {
   background: #c0c0c0 url(../../pics/button_t_bg.gif) 0 0 repeat-x;
 }
 
@@ -66,8 +66,8 @@ DIV.UIComboBox:hover DIV.UIComboBoxButton {
     background: #c0c0c0 url(../../pics/button_s_bg.gif) 0 0 repeat-x;
 }
 
-DIV.UIComboboxDropdown:hover DIV.UIComboBoxContainer,
-DIV.UIComboboxDropdown:hover DIV.UIComboBoxButton {
+DIV.UIComboboxPopup:hover DIV.UIComboBoxContainer,
+DIV.UIComboboxPopup:hover DIV.UIComboBoxButton {
   background: #c0c0c0 url(../../pics/button_t_s_bg.gif) 0 0 repeat-x;
 }
 
@@ -122,4 +122,53 @@ DIV.UIComboBoxPupListBLayer {
   -moz-opacity: 0.9;
   -khtml-opacity: 0.9;
   opacity: 0.9;
+}
+
+DIV.UIComboboxInputHolder {
+  background: #e7e7e7 url(../../pics/ui/entry_bg.gif) 0 0 repeat-x;
+
+  height: 18px;
+  padding-left: 4px;
+  padding-right: 2px;
+  overflow: hidden;
+
+  position: relative;
+  cursor: default;
+
+  -moz-border-radius: 6px 0 0 6px;
+  border-radius: 6px 0 0 6px;
+  -webkit-border-radius: 6px 0 0 6px;
+  -khtml-border-radius: 6px 0 0 6px;
+}
+
+DIV.UIComboboxInputHolder:hover {
+  background: #ebebeb url(../../pics/ui/entry_s_bg.gif) 0 0 repeat-x;
+}
+
+DIV.UIComboboxInputHolder_Image {
+  padding-left: 24px;
+}
+
+IMG.UIComboboxImage {
+  position: absolute;
+  top: 1px;
+  left: 6px;
+  max-height: 16px;
+  max-width: 16px;
+}
+
+INPUT.UIComboboxInput {
+  border: 0;
+  margin: 0 4px;
+  padding: 0;
+  height: 16px;
+  color: #333;
+  background:  transparent;
+
+  width: 100%;
+
+  font-size: 8pt;
+  font-family: Verdana, "Bitstream Vera Sans", Arial, Helvetica, Sans, "Bitstream Vera Serif";
+
+  outline-width: 0;
 }

@@ -291,6 +291,28 @@ function _UIWidget ()
   this.onFocus = function () {};
 
   /**
+   * Check is widget is already focused
+   */
+  this.isFocused = function ()
+    {
+      if (!this.focusDOM)
+        {
+          return false;
+        }
+
+      return document.activeElement == this.focusDOM;
+    };
+
+  /**
+   * Check if widget could receive focus
+   * (aka could be focused)
+   */
+  this.canReceiveFocus = function ()
+    {
+      return this.focusDOM != null;
+    };
+
+  /**
    * Set focus to widget
    */
   this.setFocus = function () {
@@ -488,6 +510,18 @@ function _UIWidget ()
           var binding = $(this.binding);
           binding.val (data);
         }
+    };
+
+  this.toString = function ()
+    {
+      var cls = getObjectClass (this);
+
+      if (cls != undefined)
+        {
+          return '[instance of ' + cls + ']';
+        }
+
+      return '[UIWidget]';
     };
 }
 

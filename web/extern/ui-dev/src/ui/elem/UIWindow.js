@@ -302,7 +302,12 @@ function _UIWindow ()
       this.buildDefaultButtons ();
 
       uiManager.registerContext (result);
-      $(result).click (function (self) { return function () { self.setFocus (); } } (this));
+      $(result).click (function (self) { return function () {
+            if (uiWindowManager.getLastFocused () != self)
+              {
+                self.setFocus ();
+              }
+          } } (this));
 
       /* Build widgets */
       this.buildWidgets ();
@@ -316,6 +321,8 @@ function _UIWindow ()
   this.setFocus = function ()
     {
       uiWindowManager.focusWindow (this);
+
+      UIContainer.prototype.setFocus.call (this);
     };
 
   /**
@@ -619,7 +626,10 @@ function UIWindow (opts)
     return function (userData) {
       if (userData['context'] == self.dom)
         {
-          self.setFocus ();
+          if (uiWindowManager.getLastFocused () != self)
+            {
+              self.setFocus ();
+            }
         }
     };
   } (this));

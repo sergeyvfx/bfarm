@@ -171,6 +171,105 @@ function _UIContainer ()
 
       return null;
     };
+
+  /**
+   * Get widget with given index
+   */
+  this.getWidget = function (index)
+    {
+      var item = this.get (index);
+
+      if (this.widgetField)
+        {
+          return item[this.widgetField];
+        }
+
+      return item;
+    };
+
+  /**
+   * Check if widget could receive focus
+   */
+  this.canReceiveFocus = function ()
+    {
+      for (var i = 0; i < this.length (); i++)
+        {
+          var widget = this.getWidget (i);
+
+          if (!isInstance (widget, UIWidget))
+            {
+              continue;
+            }
+
+          if (widget.canReceiveFocus ())
+            {
+              return true;
+            }
+        }
+
+      return false;
+    };
+
+  /**
+   * Set focus to widget
+   */
+  this.setFocus = function ()
+    {
+
+      for (var i = 0; i < this.length (); i++)
+        {
+          var widget = this.getWidget (i);
+
+          if (!isInstance (widget, UIWidget))
+            {
+              continue;
+            }
+
+          if (widget.canReceiveFocus ())
+            {
+              widget.setFocus ();
+              break;
+            }
+        }
+    };
+
+  /**
+   * Check if widget is already focused
+   */
+  this.isFocused = function ()
+    {
+      return this.getFocusedWidget () != null;
+    };
+
+  /**
+   * Get widget which received focus
+   */
+  this.getFocusedWidget = function ()
+    {
+      for (var i = 0; i < this.length (); i++)
+        {
+          var widget = this.getWidget (i);
+
+          if (!isInstance (widget, UIWidget))
+            {
+              continue;
+            }
+
+          if (isInstance (widget, UIContainer))
+            {
+              var w = widget.getFocusedWidget ();
+
+              if (w)
+                {
+                  return w;
+                }
+            }
+          else if (widget.isFocused ())
+            {
+              return widget;
+            }
+        }
+    };
 }
 
 /***

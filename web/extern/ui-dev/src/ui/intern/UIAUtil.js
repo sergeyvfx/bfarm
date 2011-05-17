@@ -181,6 +181,43 @@ function _UIUtil ()
 
       return handler;
     };
+
+  this.findWidgets = function (where)
+    {
+      var widgets = [];
+
+      if (where.uiWidget)
+        {
+          return [where.uiWidget];
+        }
+      else if (isInstance (where, UIWidget))
+        {
+          return [where];
+        }
+      else if (isInstance (where, Element))
+        {
+          for (var i = 0; i < where.childNodes.length; i++)
+            {
+              var c = where.childNodes[i];
+
+              if (c.uiWidget)
+                {
+                  widgets.push (c.uiWidget)
+                }
+              else
+                {
+                  var tmp = this.findWidgets (c);
+
+                  if (tmp.length)
+                    {
+                      widgets = widgets.concat (tmp);
+                    }
+                }
+            }
+        }
+
+      return widgets;
+    };
 }
 
 function UIUtil ()

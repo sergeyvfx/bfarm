@@ -242,3 +242,78 @@ function htmlspecialchars(value)
 {
   return $('<div/>').text(value).html();
 }
+
+/**
+ * Return the class name of the argument or undefined if
+ * it's not a valid JavaScript object.
+ */
+function getObjectClass (obj)
+{
+  if (obj && obj.constructor && obj.constructor.toString)
+    {
+      var arr = obj.constructor.toString().match(/function\s*(\w+)/);
+
+      if (arr && arr.length == 2)
+        {
+          return arr[1];
+        }
+    }
+
+  return undefined;
+}
+
+function isInstanceIter (c, instance)
+{
+  var classes = c.toString ().match (/^\s*([A-z0-9_]+)\.call/mg);
+
+  if (!classes)
+    {
+      return false;
+    }
+
+  for (var i = 0; i < classes.length; i++)
+    {
+      var cls = classes[i].replace (/^\s*([A-z0-9_]+)\.call.*$/, '$1');
+
+      if (cls == instance)
+        {
+          return true;
+        }
+
+      if (window[cls] && window[cls].prototype)
+        {
+          var proto = window[cls].prototype;
+
+          if (proto && proto.constructor)
+            {
+              if (isInstanceIter (proto.constructor, instance))
+                {
+                  return true;
+                }
+            }
+        }
+    }
+
+  return false;
+}
+
+function isInstance (obj, instance)
+{
+  var cls = getObjectClass (obj);
+
+  if (cls != undefined)
+    {
+      var proto = window[cls].prototype;
+
+      if (proto && proto.constructor)
+        {
+          var inst = getObjectClass (instance.prototype);
+          if (isInstanceIter (proto.constructor, inst))
+            {
+              return true;
+            }
+        }
+    }
+
+  return obj instanceof instance;
+}

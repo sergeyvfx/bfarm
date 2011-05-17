@@ -62,6 +62,22 @@ function _UIPopupManager ()
         } (this, item, handler), 5)
     };
 
+  this.setFocusAfterPopup = function (item)
+    {
+      var widgets = uiUtil.findWidgets (item['object']);
+
+      for (var i = 0; i < widgets.length; i++)
+        {
+          var widget = widgets[i];
+
+          if (widget.canReceiveFocus ())
+            {
+              widget.setFocus ();
+              break;
+            }
+        }
+    };
+
   /**
    * Show new popup object
    */
@@ -104,6 +120,7 @@ function _UIPopupManager ()
 
           args['this'].isPupping = false;
 
+          args['this'].setFocusAfterPopup (item);
         }, mkargs (['object', 'point', 'opts'], arguments, {'this': this}));
     }
 
